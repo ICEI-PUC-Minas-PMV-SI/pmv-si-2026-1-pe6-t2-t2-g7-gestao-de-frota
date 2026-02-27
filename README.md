@@ -1,4 +1,4 @@
-# TÍTULO DO PROJETO
+# GESTÃO DE FROTA
 
 `CURSO: Sistemas de Informação`
 
@@ -10,12 +10,11 @@ Descrever resumidamente, em um ou dois parágrafos, o projeto que está sendo de
 
 ## Integrantes
 
-* [Nome completo do aluno 1](docs/atas/aluno1.md)
-* [Nome completo do aluno 2](docs/atas/aluno2.md)
-* [Nome completo do aluno 3](docs/atas/aluno3.md)
-* [Nome completo do aluno 4](docs/atas/aluno4.md)
-* [Nome completo do aluno 5](docs/atas/aluno5.md)
-* [Nome completo do aluno 6](docs/atas/aluno6.md)
+* [Gregory Stevao Amilar Costa](docs/atas/aluno1.md)
+* [João Alberto Raymundo Borges](docs/atas/aluno2.md)
+* [Joao Pedro Reis Martins](docs/atas/aluno3.md)
+* [Nicolas Cleiton Basilio Viana](docs/atas/aluno4.md)
+* [Vitor Luz de Sales](docs/atas/aluno5.md)
 
 ## Orientador
 
