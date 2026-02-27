@@ -1,4 +1,4 @@
-# ATA de Acompanhamento - Nome completo do aluno 2
+# ATA de Acompanhamento - João Alberto Raymundo Borges
 
 ## Registro de Atividades Semanais
 
