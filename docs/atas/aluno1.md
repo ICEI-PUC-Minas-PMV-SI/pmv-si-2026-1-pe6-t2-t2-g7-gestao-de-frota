@@ -1,4 +1,4 @@
-# ATA de Acompanhamento - Nome completo do aluno 1
+# ATA de Acompanhamento - Gregory Stevao Amilar Costa
 
 ## Registro de Atividades Semanais
 
