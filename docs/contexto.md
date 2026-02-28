@@ -1,49 +1,106 @@
 # Introdução
 
-Texto descritivo com a visão geral do projeto abordado. Inclui o contexto, o problema, os objetivos, a justificativa e o público-alvo do projeto.
+Este projeto propõe o desenvolvimento de uma aplicação distribuída para gestão de frota da empresa Unitech, organização fictícia que utiliza veículos próprios para transporte de materiais, equipamentos e colaboradores entre unidades, centros logísticos, fornecedores e clientes.
+
+No cenário atual, empresas que dependem de frota própria enfrentam desafios relacionados ao controle operacional, custos elevados, manutenção preventiva, rastreamento de veículos e tomada de decisão baseada em dados. A ausência de um sistema integrado e centralizado pode resultar em desperdícios, falhas de comunicação, atrasos logísticos e aumento de riscos operacionais.
+
+A proposta consiste em analisar o contexto organizacional da Unitech e estruturar uma solução tecnológica distribuída capaz de apoiar a gestão eficiente da frota, promovendo maior controle, transparência e escalabilidade dos processos.
+
+O público-alvo do sistema inclui gestores administrativos, setor financeiro, setor de T.I, responsáveis pela manutenção, motoristas e equipe de logística da empresa.
 
 ## Problema
-Nesse momento você deve apresentar o problema que a sua aplicação deve  resolver. No entanto, não é a hora de comentar sobre a aplicação.
+A Unitech é uma empresa de produção de eletrônicos que utiliza frota própria para transporte de materiais, equipamentos e colaboradores entre unidades, centros de distribuição, fornecedores e clientes. A frota não está diretamente vinculada ao processo produtivo dos eletrônicos, mas exerce papel estratégico no suporte logístico e administrativo da organização.
 
-Descreva também o contexto em que essa aplicação será usada, se  houver: empresa, tecnologias, etc. Novamente, descreva apenas o que de  fato existir, pois ainda não é a hora de apresentar requisitos  detalhados ou projetos.
+Atualmente, o gerenciamento dessa frota ocorre de forma descentralizada, com controles realizados por meio de planilhas, registros manuais e comunicações informais entre setores. Esse modelo gera fragmentação das informações e limita a visibilidade gerencial sobre o uso dos veículos.
 
-Nesse momento, o grupo pode optar por fazer uso  de ferramentas como Design Thinking, que permite um olhar de ponta a ponta para o problema.
+Entre os principais problemas identificados no contexto atual, destacam-se:
 
-> **Links Úteis**:
-> - [Objetivos, Problema de pesquisa e Justificativa](https://medium.com/@versioparole/objetivos-problema-de-pesquisa-e-justificativa-c98c8233b9c3)
-> - [Matriz Certezas, Suposições e Dúvidas](https://medium.com/educa%C3%A7%C3%A3o-fora-da-caixa/matriz-certezas-suposi%C3%A7%C3%B5es-e-d%C3%BAvidas-fa2263633655)
-> - [Brainstorming](https://www.euax.com.br/2018/09/brainstorming/)
+- Ausência de um sistema centralizado para controle de disponibilidade e alocação dos veículos;
+- Dificuldade no planejamento e acompanhamento de rotas para transporte de materiais e colaboradores;
+- Controle ineficiente de manutenções preventivas e corretivas, aumentando o risco de indisponibilidade inesperada;
+- Baixa rastreabilidade dos custos associados à frota (combustível, manutenção, depreciação, seguros e multas);
+- Falta de indicadores consolidados que apoiem decisões estratégicas relacionadas à renovação da frota ou otimização de recursos;
+- Comunicação pouco estruturada entre setores solicitantes, gestores de frota e motoristas.
+
+Esse cenário impacta diretamente a eficiência logística da empresa, podendo gerar atrasos no deslocamento de equipes, dificuldades na movimentação de materiais e aumento de custos operacionais indiretos. Ainda que a frota não esteja envolvida na linha de produção dos eletrônicos, sua má gestão compromete o suporte às atividades corporativas e logísticas da organização.
+
+O problema central, portanto, consiste na inexistência de um mecanismo integrado e estruturado que permita controle, monitoramento e análise das informações relacionadas à frota, garantindo maior confiabilidade, transparência e eficiência na gestão desses recursos.
 
 ## Objetivos
 
-Aqui você deve descrever os objetivos do trabalho indicando que o objetivo geral é desenvolver um software para solucionar o problema apresentado acima. 
+Objetivo Geral
 
-Apresente também alguns (pelo menos 2) objetivos específicos dependendo de onde você vai querer concentrar a sua prática investigativa, ou como você vai aprofundar no seu trabalho.
- 
-> **Links Úteis**:
-> - [Objetivo geral e objetivo específico: como fazer e quais verbos utilizar](https://blog.mettzer.com/diferenca-entre-objetivo-geral-e-objetivo-especifico/)
+Desenvolver uma aplicação distribuída para gestão da frota da Unitech, destinada ao controle e monitoramento do transporte de materiais, equipamentos e colaboradores, visando aumentar a eficiência logística e a confiabilidade das informações gerenciais.
+
+Objetivos Específicos
+
+- Modelar uma arquitetura distribuída que permita integração entre diferentes módulos do sistema (cadastro de veículos, controle de utilização, manutenção e relatórios).
+- Implementar um mecanismo centralizado de registro e acompanhamento das solicitações de transporte de materiais e colaboradores entre unidades da empresa.
+- Desenvolver um módulo de controle de manutenções preventivas e corretivas, permitindo planejamento e redução de indisponibilidades inesperadas.
+- Estruturar o registro e a consolidação de custos operacionais da frota, possibilitando análise comparativa e apoio à tomada de decisão estratégica.
+- Definir e implementar indicadores de desempenho (KPIs) relacionados à utilização, disponibilidade e custos da frota.
+- Garantir requisitos não funcionais compatíveis com sistemas distribuídos, como escalabilidade, disponibilidade, segurança e integridade dos dados.
 
 ## Justificativa
 
-Descreva a importância ou a motivação para trabalhar com esta aplicação que você escolheu. Indique as razões pelas quais você escolheu seus objetivos específicos ou as razões para aprofundar em certos aspectos do software.
+A gestão de frotas corporativas constitui um elemento estratégico para organizações que dependem de deslocamento de recursos físicos e humanos para sustentar suas operações administrativas e logísticas. No contexto da Unitech, empresa do setor de produção de eletrônicos, a frota própria não está diretamente ligada à linha de produção, porém exerce papel fundamental no transporte de materiais, equipamentos e colaboradores entre unidades, fornecedores e centros de distribuição.
 
-O grupo de trabalho pode fazer uso de questionários, entrevistas e dados estatísticos, que podem ser apresentados, com o objetivo de esclarecer detalhes do problema que será abordado pelo grupo.
+A ausência de um sistema estruturado e integrado para gerenciamento desses recursos pode gerar impactos indiretos significativos, como aumento de custos operacionais, falhas de planejamento logístico, indisponibilidade de veículos e dificuldade na consolidação de informações para análise gerencial. Mesmo não interferindo diretamente na fabricação dos produtos, a ineficiência no suporte logístico compromete a organização como um todo.
 
-> **Links Úteis**:
-> - [Como montar a justificativa](https://guiadamonografia.com.br/como-montar-justificativa-do-tcc/)
+A escolha deste tema justifica-se tanto pela relevância prática quanto pelo potencial acadêmico. Sob a perspectiva organizacional, a proposta contribui para a melhoria da eficiência, transparência e controle dos recursos da empresa. Sob a perspectiva técnica, o projeto possibilita a aplicação de conceitos fundamentais de sistemas distribuídos, como comunicação entre serviços, sincronização de dados, tolerância a falhas, escalabilidade e segurança.
+
+Além disso, o desenvolvimento da aplicação permite explorar boas práticas de engenharia de software, incluindo levantamento e análise de requisitos, modelagem arquitetural, definição de requisitos não funcionais e implementação orientada a serviços. Dessa forma, o trabalho integra teoria e prática, proporcionando experiência em um cenário realista e alinhado às demandas do mercado tecnológico atual.
 
 ## Público-Alvo
 
-Descreva quem serão as pessoas que usarão a sua aplicação indicando os diferentes perfis. O objetivo aqui não é definir quem serão os clientes ou quais serão os papéis dos usuários na aplicação. A ideia é, dentro do possível, conhecer um pouco mais sobre o perfil dos usuários: conhecimentos prévios, relação com a tecnologia, relações
-hierárquicas, etc.
+A aplicação será utilizada por diferentes perfis internos da Unitech, empresa do setor de produção de eletrônicos, cujas atividades envolvem transporte de materiais, equipamentos e colaboradores entre unidades. Os usuários possuem níveis distintos de familiaridade com tecnologia, diferentes responsabilidades organizacionais e variadas necessidades informacionais.
 
-Adicione informações sobre o público-alvo por meio de uma descrição textual, diagramas de personas e mapa de stakeholders.
+De modo geral, trata-se de um público corporativo, com experiência prévia no uso de sistemas administrativos (ERPs, planilhas eletrônicas, sistemas internos), porém com diferentes níveis de profundidade técnica. Parte dos usuários desempenha funções estratégicas e analíticas, enquanto outros atuam em nível operacional.
 
-> **Links Úteis**:
-> - [Público-alvo](https://blog.hotmart.com/pt-br/publico-alvo/)
-> - [Como definir o público alvo](https://exame.com/pme/5-dicas-essenciais-para-definir-o-publico-alvo-do-seu-negocio/)
-> - [Público-alvo: o que é, tipos, como definir seu público e exemplos](https://klickpages.com.br/blog/publico-alvo-o-que-e/)
-> - [Qual a diferença entre público-alvo e persona?](https://rockcontent.com/blog/diferenca-publico-alvo-e-persona/)
+### Perfis de Usuários
+
+**Gestores Administrativos**
+Profissionais com visão estratégica e responsabilidade pela supervisão da frota. Possuem conhecimento intermediário em ferramentas digitais e utilizam sistemas para apoio à tomada de decisão. Valorizam relatórios consolidados, indicadores de desempenho e informações confiáveis. Exercem posição hierárquica de coordenação ou gerência.
+
+**Setor Financeiro**
+Usuários com perfil analítico, familiarizados com planilhas, relatórios e sistemas de controle orçamentário. Necessitam de dados estruturados sobre custos operacionais da frota, despesas recorrentes e projeções financeiras. Geralmente apresentam alto nível de organização e foco em precisão das informações.
+
+**Setor de Tecnologia da Informação (TI)**
+Profissionais com conhecimento técnico avançado, responsáveis por manter a infraestrutura tecnológica da empresa. Interagem com o sistema sob a perspectiva de administração, suporte, integração e segurança. Possuem elevada familiaridade com arquitetura de sistemas, redes e bancos de dados.
+
+**Equipe de Logística**
+Usuários responsáveis pelo planejamento de transporte de materiais e colaboradores. Utilizam o sistema para registrar solicitações, acompanhar disponibilidade de veículos e organizar rotas. Possuem conhecimento intermediário em tecnologia e experiência prática em operações logísticas.
+
+**Responsáveis pela Manutenção**
+Profissionais com perfil técnico-operacional, encarregados do controle de revisões, manutenções preventivas e corretivas. Podem apresentar conhecimento limitado em sistemas complexos, demandando interfaces objetivas e fluxos simplificados.
+
+**Motoristas**
+Usuários com foco operacional, responsáveis pela execução do transporte. Apresentam diferentes níveis de familiaridade com tecnologia, geralmente restrita ao uso de smartphones e aplicativos básicos. Necessitam de interfaces simples, diretas e de fácil interação.
+
+## Personas
+
+### Persona 1 – Gestor Administrativo
+
+![Carlos Mendes](../docs/img/Gestao-frotas-imagens/Carlos%20Mendes.png)
+
+---
+
+### Persona 2 – Analista de Logística
+
+![Mariana Souza](../docs/img/Gestao-frotas-imagens/Mariana%20Souza.png)
+
+---
+
+### Persona 3 – Analista de T.I
+
+![Roberto Lima](../docs/img/Gestao-frotas-imagens/Felipe%20Andrade.png)
+
+---
+
+## Mapa de Stakeholders
+
+![Roberto Lima](../docs/img/Gestao-frotas-imagens/Mapa%20Stackholders.png)
+
 
 # Especificações do Projeto
 
