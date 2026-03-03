@@ -6,7 +6,7 @@ No cenário atual, empresas que dependem de frota própria enfrentam desafios re
 
 A proposta consiste em analisar o contexto organizacional da Unitech e estruturar uma solução tecnológica distribuída capaz de apoiar a gestão eficiente da frota, promovendo maior controle, transparência e escalabilidade dos processos.
 
-O público-alvo do sistema inclui gestores administrativos, setor financeiro, setor de T.I, responsáveis pela manutenção, motoristas e equipe de logística da empresa.
+O público-alvo do sistema inclui principalmente gestores administrativos e motoristas.
 
 ## Problema
 A Unitech é uma empresa de produção de eletrônicos que utiliza frota própria para transporte de materiais, equipamentos e colaboradores entre unidades, centros de distribuição, fornecedores e clientes. A frota não está diretamente vinculada ao processo produtivo dos eletrônicos, mas exerce papel estratégico no suporte logístico e administrativo da organização.
@@ -37,9 +37,7 @@ Objetivos Específicos
 - Modelar uma arquitetura distribuída que permita integração entre diferentes módulos do sistema (cadastro de veículos, controle de utilização, manutenção e relatórios).
 - Implementar um mecanismo centralizado de registro e acompanhamento das solicitações de transporte de materiais e colaboradores entre unidades da empresa.
 - Desenvolver um módulo de controle de manutenções preventivas e corretivas, permitindo planejamento e redução de indisponibilidades inesperadas.
-- Estruturar o registro e a consolidação de custos operacionais da frota, possibilitando análise comparativa e apoio à tomada de decisão estratégica.
 - Definir e implementar indicadores de desempenho (KPIs) relacionados à utilização, disponibilidade e custos da frota.
-- Garantir requisitos não funcionais compatíveis com sistemas distribuídos, como escalabilidade, disponibilidade, segurança e integridade dos dados.
 
 ## Justificativa
 
@@ -48,8 +46,6 @@ A gestão de frotas corporativas constitui um elemento estratégico para organiz
 A ausência de um sistema estruturado e integrado para gerenciamento desses recursos pode gerar impactos indiretos significativos, como aumento de custos operacionais, falhas de planejamento logístico, indisponibilidade de veículos e dificuldade na consolidação de informações para análise gerencial. Mesmo não interferindo diretamente na fabricação dos produtos, a ineficiência no suporte logístico compromete a organização como um todo.
 
 A escolha deste tema justifica-se tanto pela relevância prática quanto pelo potencial acadêmico. Sob a perspectiva organizacional, a proposta contribui para a melhoria da eficiência, transparência e controle dos recursos da empresa. Sob a perspectiva técnica, o projeto possibilita a aplicação de conceitos fundamentais de sistemas distribuídos, como comunicação entre serviços, sincronização de dados, tolerância a falhas, escalabilidade e segurança.
-
-Além disso, o desenvolvimento da aplicação permite explorar boas práticas de engenharia de software, incluindo levantamento e análise de requisitos, modelagem arquitetural, definição de requisitos não funcionais e implementação orientada a serviços. Dessa forma, o trabalho integra teoria e prática, proporcionando experiência em um cenário realista e alinhado às demandas do mercado tecnológico atual.
 
 ## Público-Alvo
 
@@ -62,17 +58,8 @@ De modo geral, trata-se de um público corporativo, com experiência prévia no 
 **Gestores Administrativos**
 Profissionais com visão estratégica e responsabilidade pela supervisão da frota. Possuem conhecimento intermediário em ferramentas digitais e utilizam sistemas para apoio à tomada de decisão. Valorizam relatórios consolidados, indicadores de desempenho e informações confiáveis. Exercem posição hierárquica de coordenação ou gerência.
 
-**Setor Financeiro**
-Usuários com perfil analítico, familiarizados com planilhas, relatórios e sistemas de controle orçamentário. Necessitam de dados estruturados sobre custos operacionais da frota, despesas recorrentes e projeções financeiras. Geralmente apresentam alto nível de organização e foco em precisão das informações.
-
-**Setor de Tecnologia da Informação (TI)**
-Profissionais com conhecimento técnico avançado, responsáveis por manter a infraestrutura tecnológica da empresa. Interagem com o sistema sob a perspectiva de administração, suporte, integração e segurança. Possuem elevada familiaridade com arquitetura de sistemas, redes e bancos de dados.
-
 **Equipe de Logística**
 Usuários responsáveis pelo planejamento de transporte de materiais e colaboradores. Utilizam o sistema para registrar solicitações, acompanhar disponibilidade de veículos e organizar rotas. Possuem conhecimento intermediário em tecnologia e experiência prática em operações logísticas.
-
-**Responsáveis pela Manutenção**
-Profissionais com perfil técnico-operacional, encarregados do controle de revisões, manutenções preventivas e corretivas. Podem apresentar conhecimento limitado em sistemas complexos, demandando interfaces objetivas e fluxos simplificados.
 
 **Motoristas**
 Usuários com foco operacional, responsáveis pela execução do transporte. Apresentam diferentes níveis de familiaridade com tecnologia, geralmente restrita ao uso de smartphones e aplicativos básicos. Necessitam de interfaces simples, diretas e de fácil interação.
@@ -97,6 +84,12 @@ Usuários com foco operacional, responsáveis pela execução do transporte. Apr
 
 ---
 
+### Persona 4 - Motorista
+
+![Roberto Lima](../docs/img/Gestao-frotas-imagens/Felipe%20Andrade.png)
+
+---
+
 ## Mapa de Stakeholders
 
 ![Roberto Lima](../docs/img/Gestao-frotas-imagens/Mapa%20Stackholders.png)
@@ -112,26 +105,27 @@ As tabelas que se seguem apresentam os requisitos funcionais e não funcionais q
 
 |ID    | Descrição do Requisito  | Prioridade |
 |------|-----------------------------------------|----|
-|RF-001| Sistema deve permitir acesso somente a usuários cadastrados | ALTA | 
-|RF-002| Cadastrar e gerenciar veículos da frota   | ALTA |
-|RF-003| Registrar e manter histórico de manutenção e custos relacionados   | MÉDIA |
-|RF-004| Registrar e manter histórico de consumo de combustível   | MÉDIA |
-|RF-005| Disponibilizar a localização do usuário para rastreamento do veículo   | MÉDIA |
-|RF-006| Cadastrar e gerenciar motoristas e permissões para uso dos veículos   | MÉDIA |
-|RF-007| Registrar e gerenciar multas e sinistros   | MÉDIA |
-|RF-008| Disponibilizar dashboard para gestão da frota   | ALTA |
+|RF-001| O sistema deve permitir acesso somente a usuários cadastrados | ALTA | 
+|RF-002| O sistema deve permitir a gestão veículos da frota através de criações, remoções e atualizações   | ALTA |
+|RF-003| O sistema deve permitir gerenciar histórico de manutenção e custos relacionados através de criação/atualização de registros de rotinas de manutenções   | MÉDIA |
+|RF-004| O sistema deve permitir gerenciar o histórico de consumo de combustível registrando o gasto de cada jornada do motorista   | MÉDIA |
+|RF-005| O sistema deve disponibilizar a localização do usuário para rastreamento do veículo   | MÉDIA |
+|RF-006| O sistema deve permitir gerenciar contas de motoristas e permissões para uso dos veículos   | MÉDIA |
+|RF-007| O sistema deve permitir gerenciar multas e sinistros registrando-as   | MÉDIA |
+|RF-008| O sistema deve disponibilizar dashboard para gestão da frota, contendo métricas e KPIs para a análise de dados e tomadas de decisões   | ALTA |
+|RF-009| O sistema deve permitir a gestão de pedidos de entregas de eletrônicos   | ALTA |
 
 ### Requisitos não Funcionais
 
 |ID     | Descrição do Requisito  |Prioridade |
 |-------|-------------------------|----|
 |RNF-001| O sistema deve ser responsivo para rodar em um dispositivos móvel e navegadores | ALTA | 
-|RNF-002| Deve processar requisições do usuário em no máximo 3s |  MÉDIA | 
-|RNF-003| Utilizar API do Google Maps para localização do dispositivo |  ALTA | 
-|RNF-004| Centralizar os servidores, banco de dados e serviços na infraestrutura do GCP |  ALTA | 
+|RNF-002| O sistema deve processar requisições do usuário em no máximo 3s |  MÉDIA | 
+|RNF-003| O sistema deve utilizar API do Google Maps para localização do dispositivo |  ALTA | 
+|RNF-004| O sistema deve ter seus servidores, banco de dados e serviços centralizados na infraestrutura do GCP |  ALTA | 
 |RNF-005| O servidor deve utilizar obrigatoriamente HTTPS |  ALTA | 
 |RNF-006| Para dados confidenciais o servidor deve utilizar algorítmos de criptografia |  ALTA |
-|RNF-007| Deve-se realizar rotina de backups com ferramentas confiáveis como WALL-G |  ALTA |
+|RNF-007| Deve-se realizar rotina de backups com ferramentas robustas como WALL-G para os bancos de dados relacionais |  ALTA |
 
 Com base nas Histórias de Usuário, enumere os requisitos da sua solução. Classifique esses requisitos em dois grupos:
 
