@@ -112,15 +112,26 @@ As tabelas que se seguem apresentam os requisitos funcionais e não funcionais q
 
 |ID    | Descrição do Requisito  | Prioridade |
 |------|-----------------------------------------|----|
-|RF-001| Permitir que o usuário cadastre tarefas | ALTA | 
-|RF-002| Emitir um relatório de tarefas no mês   | MÉDIA |
+|RF-001| Sistema deve permitir acesso somente a usuários cadastrados | ALTA | 
+|RF-002| Cadastrar e gerenciar veículos da frota   | ALTA |
+|RF-003| Registrar e manter histórico de manutenção e custos relacionados   | MÉDIA |
+|RF-004| Registrar e manter histórico de consumo de combustível   | MÉDIA |
+|RF-005| Disponibilizar a localização do usuário para rastreamento do veículo   | MÉDIA |
+|RF-006| Cadastrar e gerenciar motoristas e permissões para uso dos veículos   | MÉDIA |
+|RF-007| Registrar e gerenciar multas e sinistros   | MÉDIA |
+|RF-008| Disponibilizar dashboard para gestão da frota   | ALTA |
 
 ### Requisitos não Funcionais
 
 |ID     | Descrição do Requisito  |Prioridade |
 |-------|-------------------------|----|
-|RNF-001| O sistema deve ser responsivo para rodar em um dispositivos móvel | MÉDIA | 
-|RNF-002| Deve processar requisições do usuário em no máximo 3s |  BAIXA | 
+|RNF-001| O sistema deve ser responsivo para rodar em um dispositivos móvel e navegadores | ALTA | 
+|RNF-002| Deve processar requisições do usuário em no máximo 3s |  MÉDIA | 
+|RNF-003| Utilizar API do Google Maps para localização do dispositivo |  ALTA | 
+|RNF-004| Centralizar os servidores, banco de dados e serviços na infraestrutura do GCP |  ALTA | 
+|RNF-005| O servidor deve utilizar obrigatoriamente HTTPS |  ALTA | 
+|RNF-006| Para dados confidenciais o servidor deve utilizar algorítmos de criptografia |  ALTA |
+|RNF-007| Deve-se realizar rotina de backups com ferramentas confiáveis como WALL-G |  ALTA |
 
 Com base nas Histórias de Usuário, enumere os requisitos da sua solução. Classifique esses requisitos em dois grupos:
 
