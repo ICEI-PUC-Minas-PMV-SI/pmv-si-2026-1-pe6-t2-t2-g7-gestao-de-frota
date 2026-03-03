@@ -86,13 +86,13 @@ Usuários com foco operacional, responsáveis pela execução do transporte. Apr
 
 ### Persona 4 - Motorista
 
-![Roberto Lima](../docs/img/Gestao-frotas-imagens/Felipe%20Andrade.png)
+![Marcelo Pereira](../docs/img/Gestao-frotas-imagens/Marcelo%20Pereira.png)
 
 ---
 
 ## Mapa de Stakeholders
 
-![Roberto Lima](../docs/img/Gestao-frotas-imagens/Mapa%20Stackholders.png)
+![Mapa Stackholders](../docs/img/Gestao-frotas-imagens/Mapa%20Stackholders.png)
 
 
 # Especificações do Projeto
