@@ -78,7 +78,7 @@ Usuários com foco operacional, responsáveis pela execução do transporte. Apr
 
 ---
 
-### Persona 4 - Motorista
+### Persona 3 - Motorista
 
 ![Marcelo Pereira](../docs/img/Gestao-frotas-imagens/Marcelo%20Pereira.png)
 
