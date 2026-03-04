@@ -78,12 +78,6 @@ Usuários com foco operacional, responsáveis pela execução do transporte. Apr
 
 ---
 
-### Persona 3 – Analista de T.I
-
-![Roberto Lima](../docs/img/Gestao-frotas-imagens/Felipe%20Andrade.png)
-
----
-
 ### Persona 4 - Motorista
 
 ![Marcelo Pereira](../docs/img/Gestao-frotas-imagens/Marcelo%20Pereira.png)
@@ -126,21 +120,6 @@ As tabelas que se seguem apresentam os requisitos funcionais e não funcionais q
 |RNF-005| O servidor deve utilizar obrigatoriamente HTTPS |  ALTA | 
 |RNF-006| Para dados confidenciais o servidor deve utilizar algorítmos de criptografia |  ALTA |
 |RNF-007| Deve-se realizar rotina de backups com ferramentas robustas como WALL-G para os bancos de dados relacionais |  ALTA |
-
-Com base nas Histórias de Usuário, enumere os requisitos da sua solução. Classifique esses requisitos em dois grupos:
-
-- [Requisitos Funcionais
- (RF)](https://pt.wikipedia.org/wiki/Requisito_funcional):
- correspondem a uma funcionalidade que deve estar presente na
-  plataforma (ex: cadastro de usuário).
-- [Requisitos Não Funcionais
-  (RNF)](https://pt.wikipedia.org/wiki/Requisito_n%C3%A3o_funcional):
-  correspondem a uma característica técnica, seja de usabilidade,
-  desempenho, confiabilidade, segurança ou outro (ex: suporte a
-  dispositivos iOS e Android).
-Lembre-se que cada requisito deve corresponder à uma e somente uma
-característica alvo da sua solução. Além disso, certifique-se de que
-todos os aspectos capturados nas Histórias de Usuário foram cobertos.
 
 ## Restrições
 
