@@ -99,15 +99,14 @@ As tabelas que se seguem apresentam os requisitos funcionais e não funcionais q
 
 |ID    | Descrição do Requisito  | Prioridade |
 |------|-----------------------------------------|----|
-|RF-001| O sistema deve permitir acesso somente a usuários cadastrados | ALTA | 
-|RF-002| O sistema deve permitir a gestão veículos da frota através de criações, remoções e atualizações   | ALTA |
-|RF-003| O sistema deve permitir gerenciar histórico de manutenção e custos relacionados através de criação/atualização de registros de rotinas de manutenções   | MÉDIA |
-|RF-004| O sistema deve permitir gerenciar o histórico de consumo de combustível registrando o gasto de cada jornada do motorista   | MÉDIA |
-|RF-005| O sistema deve disponibilizar a localização do usuário para rastreamento do veículo   | MÉDIA |
-|RF-006| O sistema deve permitir gerenciar contas de motoristas e permissões para uso dos veículos   | MÉDIA |
-|RF-007| O sistema deve permitir gerenciar multas e sinistros registrando-as   | MÉDIA |
-|RF-008| O sistema deve disponibilizar dashboard para gestão da frota, contendo métricas e KPIs para a análise de dados e tomadas de decisões   | ALTA |
-|RF-009| O sistema deve permitir a gestão de pedidos de entregas de eletrônicos   | ALTA |
+|RF-001| O sistema deve permitir a gestão veículos da frota através de criações, remoções e atualizações   | ALTA |
+|RF-002| O sistema deve permitir gerenciar histórico de manutenção e custos relacionados através de criação/atualização de registros de rotinas de manutenções   | MÉDIA |
+|RF-003| O sistema deve permitir gerenciar o histórico de consumo de combustível registrando o gasto de cada jornada do motorista   | MÉDIA |
+|RF-004| O sistema deve disponibilizar a localização do usuário para rastreamento do veículo   | MÉDIA |
+|RF-005| O sistema deve permitir gerenciar contas de motoristas e permissões para uso dos veículos   | MÉDIA |
+|RF-006| O sistema deve permitir gerenciar multas e sinistros registrando-as   | MÉDIA |
+|RF-007| O sistema deve disponibilizar dashboard para gestão da frota, contendo métricas e KPIs para a análise de dados e tomadas de decisões   | ALTA |
+|RF-008| O sistema deve permitir a gestão de pedidos de entregas de eletrônicos   | ALTA |
 
 ### Requisitos não Funcionais
 
@@ -115,11 +114,9 @@ As tabelas que se seguem apresentam os requisitos funcionais e não funcionais q
 |-------|-------------------------|----|
 |RNF-001| O sistema deve ser responsivo para rodar em um dispositivos móvel e navegadores | ALTA | 
 |RNF-002| O sistema deve processar requisições do usuário em no máximo 3s |  MÉDIA | 
-|RNF-003| O sistema deve utilizar API do Google Maps para localização do dispositivo |  ALTA | 
-|RNF-004| O sistema deve ter seus servidores, banco de dados e serviços centralizados na infraestrutura do GCP |  ALTA | 
-|RNF-005| O servidor deve utilizar obrigatoriamente HTTPS |  ALTA | 
-|RNF-006| Para dados confidenciais o servidor deve utilizar algorítmos de criptografia |  ALTA |
-|RNF-007| Deve-se realizar rotina de backups com ferramentas robustas como WALL-G para os bancos de dados relacionais |  ALTA |
+|RNF-003| O servidor deve utilizar obrigatoriamente HTTPS |  ALTA | 
+|RNF-004| Para dados confidenciais o servidor deve utilizar algorítmos de criptografia |  ALTA |
+|RNF-005| Deve-se realizar rotina de backups semanais |  ALTA |
 
 ## Restrições
 
