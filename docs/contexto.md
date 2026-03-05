@@ -117,6 +117,7 @@ As tabelas que se seguem apresentam os requisitos funcionais e não funcionais q
 |RNF-003| O servidor deve utilizar obrigatoriamente HTTPS |  ALTA | 
 |RNF-004| Para dados confidenciais o servidor deve utilizar algorítmos de criptografia |  ALTA |
 |RNF-005| Deve-se realizar rotina de backups semanais |  ALTA |
+|RNF-006| O sistema deve permitir acesso somente a usuários cadastrados | ALTA |
 
 ## Restrições
 
