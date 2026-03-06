@@ -1,15 +1,20 @@
 # Introdução
 
-Este projeto propõe o desenvolvimento de uma aplicação distribuída para gestão de frota da empresa Unitech, organização fictícia que utiliza veículos próprios para transporte de materiais, equipamentos e colaboradores entre unidades, centros logísticos, fornecedores e clientes.
+Fundada com o objetivo de atuar no desenvolvimento e produção de equipamentos eletrônicos, a Unitech é uma empresa fictícia que, ao longo do tempo, expandiu suas operações e passou a atender diferentes regiões por meio de unidades produtivas, centros de distribuição e parcerias com fornecedores e clientes. Para garantir o funcionamento eficiente dessas operações, a empresa estruturou uma frota própria de veículos utilizada no transporte de materiais, equipamentos e colaboradores entre suas diversas unidades e pontos logísticos.
 
-No cenário atual, empresas que dependem de frota própria enfrentam desafios relacionados ao controle operacional, custos elevados, manutenção preventiva, rastreamento de veículos e tomada de decisão baseada em dados. A ausência de um sistema integrado e centralizado pode resultar em desperdícios, falhas de comunicação, atrasos logísticos e aumento de riscos operacionais.
+Embora a frota não esteja diretamente ligada ao processo de fabricação dos eletrônicos produzidos pela empresa, ela desempenha um papel estratégico no suporte logístico e administrativo da organização. A movimentação de insumos, a distribuição de produtos e o deslocamento de equipes dependem diretamente da disponibilidade e da gestão eficiente desses veículos, tornando a frota um elemento fundamental para a continuidade das operações.
 
-A proposta consiste em analisar o contexto organizacional da Unitech e estruturar uma solução tecnológica distribuída capaz de apoiar a gestão eficiente da frota, promovendo maior controle, transparência e escalabilidade dos processos.
+Com o crescimento das atividades da empresa e o aumento da complexidade logística, surgiram desafios relacionados ao controle operacional da frota. Entre esses desafios estão o acompanhamento da utilização dos veículos, o controle de custos operacionais, o planejamento de manutenções preventivas, o rastreamento das rotas realizadas e a obtenção de informações confiáveis que auxiliem na tomada de decisões gerenciais.
 
-O público-alvo do sistema inclui principalmente gestores administrativos e motoristas.
+No cenário atual, muitas organizações que dependem de frota própria enfrentam dificuldades semelhantes, principalmente quando não possuem sistemas integrados capazes de centralizar e organizar as informações operacionais. A ausência de ferramentas adequadas pode resultar em falhas de comunicação, atrasos logísticos, aumento de custos e riscos operacionais decorrentes da falta de controle e visibilidade sobre os recursos da frota.
+
+Diante desse contexto, este projeto propõe o desenvolvimento de uma aplicação distribuída voltada para a gestão da frota da empresa Unitech. A solução busca estruturar um sistema capaz de integrar informações, apoiar o controle das operações e oferecer maior transparência e confiabilidade aos processos relacionados ao uso dos veículos.
+
+A proposta envolve a análise do contexto organizacional da empresa e a definição de uma arquitetura tecnológica distribuída que permita maior escalabilidade, disponibilidade e eficiência no gerenciamento da frota. Dessa forma, o sistema poderá contribuir para a melhoria do controle operacional e para a tomada de decisões baseadas em dados.
+
+O público-alvo da aplicação inclui principalmente gestores administrativos responsáveis pelo planejamento e controle da frota, bem como os motoristas que utilizam os veículos nas atividades operacionais do dia a dia.
 
 ## Problema
-A Unitech é uma empresa de produção de eletrônicos que utiliza frota própria para transporte de materiais, equipamentos e colaboradores entre unidades, centros de distribuição, fornecedores e clientes. A frota não está diretamente vinculada ao processo produtivo dos eletrônicos, mas exerce papel estratégico no suporte logístico e administrativo da organização.
 
 Atualmente, o gerenciamento dessa frota ocorre de forma descentralizada, com controles realizados por meio de planilhas, registros manuais e comunicações informais entre setores. Esse modelo gera fragmentação das informações e limita a visibilidade gerencial sobre o uso dos veículos.
 
