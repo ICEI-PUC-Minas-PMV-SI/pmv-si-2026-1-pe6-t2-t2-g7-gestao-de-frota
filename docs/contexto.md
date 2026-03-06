@@ -140,7 +140,149 @@ Enumere as restrições à sua solução. Lembre-se de que as restrições geral
 
 # Catálogo de Serviços
 
-Descreva aqui todos os serviços que serão disponibilizados pelo seu projeto, detalhando suas características e funcionalidades.
+
+### 1. Serviço de Gestão de Veículos
+
+**Descrição:**  
+Responsável pelo cadastro, atualização e gerenciamento completo dos veículos que compõem a frota.
+
+**Funcionalidades:**  
+- Cadastro de novos veículos.  
+- Edição e remoção de registros.  
+- Consulta geral da frota com filtros.  
+- Controle de status (ativo, em manutenção, reservado, inativo).
+
+**Benefícios:**  
+- Padronização dos dados da frota.  
+- Facilidade na visualização da disponibilidade dos veículos.  
+- Redução de inconsistências cadastrais.
+
+---
+
+### 2. Serviço de Gestão de Manutenções
+
+**Descrição:**  
+Gerencia o ciclo de vida das manutenções preventivas e corretivas da frota, registrando ocorrências e custos.
+
+**Funcionalidades:**  
+- Registro de manutenções preventivas e corretivas.  
+- Histórico completo de serviços realizados.  
+- Notificações para revisões agendadas ou atrasadas.  
+- Acompanhamento de custos de manutenção.
+
+**Benefícios:**  
+- Redução de falhas inesperadas.  
+- Planejamento preventivo da frota.  
+- Suporte para tomada de decisão e auditorias.
+
+---
+
+### 3. Serviço de Controle de Consumo de Combustível
+
+**Descrição:**  
+Controla e registra o consumo de combustível para cada viagem realizada.
+
+**Funcionalidades:**  
+- Registro de consumo por jornada.  
+- Cálculo de gasto por quilômetro.  
+- Histórico consolidado por motorista e por veículo.  
+- Identificação de padrões de consumo.
+
+**Benefícios:**  
+- Visibilidade mais clara dos custos operacionais.  
+- Apoio à gestão financeira da frota.  
+- Auxílio na identificação de anomalias no consumo.
+
+---
+
+### 4. Serviço de Rastreabilidade e Localização
+
+**Descrição:**  
+Fornece recursos de localização geográfica durante o uso operacional, permitindo rastreamento básico do veículo.
+
+**Funcionalidades:**  
+- Captura da localização do usuário durante a rota.  
+- Exibição do veículo em mapa.  
+- Registro de trajetos (em formato simplificado).  
+- Suporte a cenários de baixa conectividade.
+
+**Benefícios:**  
+- Maior segurança operacional.  
+- Melhor acompanhamento de rotas.  
+- Suporte à logística em tempo real.
+
+---
+
+### 5. Serviço de Gestão de Motoristas e Permissões
+
+**Descrição:**  
+Administra informações dos motoristas e suas permissões dentro do sistema.
+
+**Funcionalidades:**  
+- Cadastro e edição de motoristas.  
+- Associação de motoristas aos veículos.  
+- Perfis e níveis de acesso diferenciados.  
+- Controle de autenticação.
+
+**Benefícios:**  
+- Controle adequado de uso da frota.  
+- Melhoria na governança e rastreabilidade.  
+- Responsabilização clara por eventos operacionais.
+
+---
+
+### 6. Serviço de Gestão de Multas e Sinistros
+
+**Descrição:**  
+Registra multas e ocorrências envolvendo os veículos da frota.
+
+**Funcionalidades:**  
+- Cadastro de multas com detalhes.  
+- Registro de sinistros (danos, local, motorista envolvido).  
+- Histórico por veículo e motorista.  
+- Consulta consolidada por período.
+
+**Benefícios:**  
+- Visão clara de riscos e incidentes.  
+- Apoio ao compliance e processos internos.  
+- Suporte a seguros e auditorias.
+
+---
+
+### 7. Serviço de Gestão de Solicitações e Entregas
+
+**Descrição:**  
+Gerencia pedidos internos de transporte de materiais, equipamentos e eletrônicos entre unidades da Unitech.
+
+**Funcionalidades:**  
+- Abertura de solicitações de transporte.  
+- Associação de pedidos a motoristas e veículos.  
+- Controle do status dos pedidos.  
+- Histórico completo das rotas e entregas realizadas.
+
+**Benefícios:**  
+- Redução de falhas de comunicação.  
+- Centralização das demandas logísticas.  
+- Melhor organização e rastreabilidade das entregas.
+
+---
+
+### 8. Serviço de Dashboard e Indicadores (KPIs)
+
+**Descrição:**  
+Oferece visualizações gerenciais e métricas essenciais para monitoramento e tomada de decisão.
+
+**Funcionalidades:**  
+- KPIs de utilização da frota.  
+- Indicadores de disponibilidade e custos.  
+- Métricas de consumo e manutenção.  
+- Relatórios e dashboards consolidados.
+
+**Benefícios:**  
+- Suporte estratégico para gestores.  
+- Maior transparência operacional.  
+- Melhoria contínua baseada em dados.
+
 
 # Arquitetura da Solução
 
