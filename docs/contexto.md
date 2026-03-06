@@ -157,7 +157,6 @@ Responsável pelo cadastro, atualização e gerenciamento completo dos veículos
 - Facilidade na visualização da disponibilidade dos veículos.  
 - Redução de inconsistências cadastrais.
 
----
 
 ### 2. Serviço de Gestão de Manutenções
 
@@ -175,7 +174,6 @@ Gerencia o ciclo de vida das manutenções preventivas e corretivas da frota, re
 - Planejamento preventivo da frota.  
 - Suporte para tomada de decisão e auditorias.
 
----
 
 ### 3. Serviço de Controle de Consumo de Combustível
 
@@ -193,7 +191,6 @@ Controla e registra o consumo de combustível para cada viagem realizada.
 - Apoio à gestão financeira da frota.  
 - Auxílio na identificação de anomalias no consumo.
 
----
 
 ### 4. Serviço de Rastreabilidade e Localização
 
@@ -211,7 +208,6 @@ Fornece recursos de localização geográfica durante o uso operacional, permiti
 - Melhor acompanhamento de rotas.  
 - Suporte à logística em tempo real.
 
----
 
 ### 5. Serviço de Gestão de Motoristas e Permissões
 
@@ -229,7 +225,6 @@ Administra informações dos motoristas e suas permissões dentro do sistema.
 - Melhoria na governança e rastreabilidade.  
 - Responsabilização clara por eventos operacionais.
 
----
 
 ### 6. Serviço de Gestão de Multas e Sinistros
 
@@ -247,7 +242,6 @@ Registra multas e ocorrências envolvendo os veículos da frota.
 - Apoio ao compliance e processos internos.  
 - Suporte a seguros e auditorias.
 
----
 
 ### 7. Serviço de Gestão de Solicitações e Entregas
 
@@ -265,7 +259,6 @@ Gerencia pedidos internos de transporte de materiais, equipamentos e eletrônico
 - Centralização das demandas logísticas.  
 - Melhor organização e rastreabilidade das entregas.
 
----
 
 ### 8. Serviço de Dashboard e Indicadores (KPIs)
 
