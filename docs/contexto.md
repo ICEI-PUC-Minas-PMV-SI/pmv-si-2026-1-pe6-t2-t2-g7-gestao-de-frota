@@ -126,13 +126,10 @@ O projeto está restrito pelos itens apresentados na tabela a seguir.
 
 |ID| Restrição |
 |--|-----------|
-|01| O aplicativo deve obedecer às políticas corporativas de Segurança da Informação, incluindo autenticação, controle de acesso e uso obrigatório de ambientes autorizados, garantindo que informações sensíveis e estratégicas sejam acessadas somente por usuários com permissões apropriadas.|
-|02| A solução não pode utilizar serviços, APIs ou recursos que gerem custos adicionais além dos contratos já estabelecidos pela empresa. Isso veda o uso de APIs pagas (como Google Maps API), exigindo o uso de alternativas gratuitas e de código aberto.|
-|03| O aplicativo deve funcionar mesmo em cenários de baixa conectividade, não podendo depender de internet contínua para suas funções essenciais.|
-|04|  Os dispositivos móveis utilizados pela equipe possuem limitações de hardware e versões do sistema operacional; o aplicativo deve ser leve e compatível com esses requisitos.|
-|05| Atualizações e publicações de novas versões devem ocorrer apenas nas janelas de manutenção aprovadas pela área de Infraestrutura, exceto em casos de emergência onde a falta de uma atualização causaria prejuízo tanto para o usuário quanto para a empresa.|
-|06| Dados críticos (como quilometragem, custos e eventos de manutenção) não podem ser alterados manualmente sem validação ou controles adicionais.|
-|07| A solução deve operar com mecanismos de contingência e continuidade, utilizando exclusivamente as ferramentas homologadas pela empresa para backup e recuperação.|
+| 01 | O tempo disponível para desenvolvimento é curto, limitado ao semestre letivo, o que restringe a quantidade de funcionalidades que podem ser implementadas. |
+| 02 | Não há orçamento disponível para aquisição de ferramentas, APIs pagas ou infraestrutura adicional, limitando o projeto ao uso de tecnologias gratuitas e open‑source. |
+| 03 | A equipe é pequena e possui nível técnico limitado, o que reduz a complexidade possível da solução e impede o uso de tecnologias avançadas ou de difícil implementação. |
+
 
 
 Enumere as restrições à sua solução. Lembre-se de que as restrições geralmente limitam a solução candidata.
