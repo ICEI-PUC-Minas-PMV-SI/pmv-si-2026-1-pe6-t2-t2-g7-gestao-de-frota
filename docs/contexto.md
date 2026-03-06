@@ -135,14 +135,6 @@ O projeto está restrito pelos itens apresentados na tabela a seguir.
 | 02 | Não há orçamento disponível para aquisição de ferramentas, APIs pagas ou infraestrutura adicional, limitando o projeto ao uso de tecnologias gratuitas e open‑source. |
 | 03 | A equipe é pequena e possui nível técnico limitado, o que reduz a complexidade possível da solução e impede o uso de tecnologias avançadas ou de difícil implementação. |
 
-
-
-Enumere as restrições à sua solução. Lembre-se de que as restrições geralmente limitam a solução candidata.
-
-> **Links Úteis**:
-> - [O que são Requisitos Funcionais e Requisitos Não Funcionais?](https://codificar.com.br/requisitos-funcionais-nao-funcionais/)
-> - [O que são requisitos funcionais e requisitos não funcionais?](https://analisederequisitos.com.br/requisitos-funcionais-e-requisitos-nao-funcionais-o-que-sao/)
-
 # Catálogo de Serviços
 
 
