@@ -324,3 +324,10 @@ Para o desenvolvimento da solução proposta serão utilizadas tecnologias volta
 
 ## Hospedagem
 
+<img width="1225" height="380" alt="Diagrama sem nome drawio" src="https://github.com/user-attachments/assets/f15ee465-59ae-4ee6-8273-0ee6f1cf522f" />
+
+A arquitetura dos componentes a serem utilizados no processo de hospedagem visa otimizar ao máximo os gastos financeiros do projeto, trazendo inúmeros sistemas que, além de serem altamente escaláveis, possuem um plano gratuito relativamente generoso. Segue abaixo a lista dos componentes propostos:
+- App Engine: o App Engine é um produto serverless oferecido no GCP que possui a capacidade de hospedar servidores Next.js/React.js de maneira ininterrupta e com um controle refinado de rollout, rollback e versionamento;
+- Cloud Run: além do App Engine, o Cloud Run é um serviço oferecido no GCP que visa trazer uma alta customização através da injeção de containers dockers em seus servidores de maneira prática e rápida, permitindo uma configuração avançada para sistemas de backend;
+- Firebase Authentication: visando agilizar o processo de desenvolvimento, escolhemos o Firebase Authentication para lidar com o módulo de autenticação e autorização do sistema de maneira otimizada e confiável.
+- CockroachDB: ainda utilizando a infraestrutura do GCP, o banco de dados CockroachDB foi escolhido justamente por ser uma solução projetada para ser executada em nuvem e ser um fork do PostgreSQL, trazendo features excelentes e permitindo uma configuração de clusters e backups de maneira rápida e nativa da própria plataforma.
