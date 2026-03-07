@@ -283,9 +283,44 @@ Definição de como o software é estruturado em termos dos componentes que faze
 
 ## Tecnologias Utilizadas
 
-Descreva aqui qual(is) tecnologias você vai usar para resolver o seu problema, ou seja, implementar a sua solução. Liste todas as tecnologias envolvidas, linguagens a serem utilizadas, serviços web, frameworks, bibliotecas, IDEs de desenvolvimento, e ferramentas.
+### Tecnologias Utilizadas
 
-Apresente também uma figura explicando como as tecnologias estão relacionadas ou como uma interação do usuário com o sistema vai ser conduzida, por onde ela passa até retornar uma resposta ao usuário.
+Para o desenvolvimento da solução proposta serão utilizadas tecnologias voltadas para aplicações web, mobile e backend, organizadas em uma arquitetura cliente-servidor.
+
+**Aplicação Web (Frontend):**
+
+* **HTML** – linguagem de marcação utilizada para estruturar as páginas da aplicação.
+* **CSS** – utilizada para estilização e layout da interface.
+* **Tailwind CSS** – framework utilitário para construção de interfaces responsivas.
+* **React** – biblioteca JavaScript para construção de interfaces baseadas em componentes.
+* **Vite** – ferramenta de build e servidor de desenvolvimento para aplicações frontend.
+
+**Aplicação Mobile:**
+
+* **React Native** – framework para desenvolvimento de aplicativos móveis multiplataforma utilizando JavaScript.
+* **Expo** – plataforma e conjunto de ferramentas que facilita o desenvolvimento, execução e testes de aplicações React Native.
+
+**Backend (API):**
+
+* **Node.js** – ambiente de execução JavaScript no servidor.
+* **NestJS** – framework para desenvolvimento de APIs estruturadas e escaláveis.
+
+**Banco de Dados:**
+
+* **PostgreSQL** – sistema gerenciador de banco de dados relacional utilizado para armazenamento persistente das informações do sistema.
+
+**Infraestrutura e Contêineres:**
+
+* **Docker** – plataforma utilizada para criação e execução de contêineres, permitindo padronização do ambiente e facilidade de implantação da aplicação.
+
+**Ferramentas de Desenvolvimento:**
+
+* **Visual Studio Code** – ambiente de desenvolvimento utilizado para implementação do sistema.
+* **Git** – sistema de controle de versão para gerenciamento do código-fonte.
+
+
+![Tecnologias Utilizadas](../docs/img/Gestao-frotas-imagens/TecnologiasUtilizadas.jpg)
+
 
 ## Hospedagem
 
