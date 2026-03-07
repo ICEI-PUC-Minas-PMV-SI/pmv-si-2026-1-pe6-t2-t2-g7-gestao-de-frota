@@ -324,4 +324,3 @@ Para o desenvolvimento da solução proposta serão utilizadas tecnologias volta
 
 ## Hospedagem
 
-Explique como a hospedagem e o lançamento da plataforma foi feita.
