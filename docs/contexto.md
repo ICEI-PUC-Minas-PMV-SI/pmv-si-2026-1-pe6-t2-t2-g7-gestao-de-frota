@@ -278,7 +278,7 @@ Oferece visualizações gerenciais e métricas essenciais para monitoramento e t
 
 Definição de como o software é estruturado em termos dos componentes que fazem parte da solução e do ambiente de hospedagem da aplicação.
 
-![arq](https://github.com/user-attachments/assets/b9402e05-8445-47c3-9d47-f11696e38a3d)
+![Tecnologias Utilizadas](../docs/img/Gestao-frotas-imagens/TecnologiasUtilizadas.jpg)
 
 
 ## Tecnologias Utilizadas
@@ -294,11 +294,13 @@ Para o desenvolvimento da solução proposta serão utilizadas tecnologias volta
 * **Tailwind CSS** – framework utilitário para construção de interfaces responsivas.
 * **React** – biblioteca JavaScript para construção de interfaces baseadas em componentes.
 * **Vite** – ferramenta de build e servidor de desenvolvimento para aplicações frontend.
+* **Firebase Authentication** - ferramenta de gestão de cadastro, autenticação e autorização de contas via OAuth ou através de email e senha.
 
 **Aplicação Mobile:**
 
 * **React Native** – framework para desenvolvimento de aplicativos móveis multiplataforma utilizando JavaScript.
 * **Expo** – plataforma e conjunto de ferramentas que facilita o desenvolvimento, execução e testes de aplicações React Native.
+* **Firebase Authentication** - ferramenta de gestão de cadastro, autenticação e autorização de contas via OAuth ou através de email e senha.
 
 **Backend (API):**
 
@@ -317,10 +319,6 @@ Para o desenvolvimento da solução proposta serão utilizadas tecnologias volta
 
 * **Visual Studio Code** – ambiente de desenvolvimento utilizado para implementação do sistema.
 * **Git** – sistema de controle de versão para gerenciamento do código-fonte.
-
-
-![Tecnologias Utilizadas](../docs/img/Gestao-frotas-imagens/TecnologiasUtilizadas.jpg)
-
 
 ## Hospedagem
 
