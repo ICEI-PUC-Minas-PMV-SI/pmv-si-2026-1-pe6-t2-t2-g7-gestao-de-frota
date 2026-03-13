@@ -4,7 +4,7 @@
 
 | Período | Microfundamento | Estudou? | Atividade Prevista | Atividade Realizada |
 |:-------:|:---------------:|:--------:|:------------------:|:-------------------:|
-| 09/02 - 15/02 | Gestão de Serviços de TI - Unidade 1 | ⬜ |  |  |
+| 09/02 - 15/02 | Gestão de Serviços de TI - Unidade 1 | ✅ | Primeira reunião geral de apresentação do projeto  | Participação na reunião e envio do resumo para o grupo  |
 | 16/02 - 22/02 | Gestão de Serviços de TI - Unidade 2 | ✅ | Organização do grupo e definição do tema  | Liderança do grupo na escolha do tema e contexto inicial  |
 | 23/02 - 01/03 | Arquitetura de Software Distribuído - Unidade 1 e 2 | ✅ | Especificações do Projeto  | Estruturação inicial do Github e listagem de requisitos funcionais/não funcionais  |
 | 02/03 - 08/03 | Arquitetura de Software Distribuído - Unidade 3 | ✅ | Definição da arquitetura da solução   | Reunião com os integrantes do grupo para finalizar arquitetura proposta para o projeto  |
