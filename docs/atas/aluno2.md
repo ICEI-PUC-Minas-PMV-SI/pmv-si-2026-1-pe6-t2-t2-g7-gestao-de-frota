@@ -4,10 +4,10 @@
 
 | Período | Microfundamento | Estudou? | Atividade Prevista | Atividade Realizada |
 |:-------:|:---------------:|:--------:|:------------------:|:-------------------:|
-| 09/02 - 15/02 | Gestão de Serviços de TI - Unidade 1 | ⬜ |  |  |
-| 16/02 - 22/02 | Gestão de Serviços de TI - Unidade 2 | ⬜ |  |  |
-| 23/02 - 01/03 | Arquitetura de Software Distribuído - Unidade 1 e 2 | ⬜ |  |  |
-| 02/03 - 08/03 | Arquitetura de Software Distribuído - Unidade 3 | ⬜ |  |  |
+| 09/02 - 15/02 | Gestão de Serviços de TI - Unidade 1 | ✅ | Formação do grupo | Formação do grupo |
+| 16/02 - 22/02 | Gestão de Serviços de TI - Unidade 2 | ✅ | Discussão e elaboração do tema | Discussão e elaboração do tema |
+| 23/02 - 01/03 | Arquitetura de Software Distribuído - Unidade 1 e 2 | ✅ | Estruturar as restrições do tema | Estruturar as restrições do tema |
+| 02/03 - 08/03 | Arquitetura de Software Distribuído - Unidade 3 | ✅ | Corrigir as restrições e discutir os próximos passos | Corrigir as restrições e discutir os próximos passos |
 | 09/03 - 15/03 | APIs e Web Services - Unidade 1 | ⬜ |  |  |
 | 16/03 - 22/03 | APIs e Web Services - Unidade 2 | ⬜ |  |  |
 | 23/03 - 29/03 | APIs e Web Services - Unidade 2 | ⬜ |  |  |
