@@ -8,6 +8,8 @@ import { DeleteUserService } from '../services/DeleteUser.service';
 import { UpdateUserService } from '../services/UpdateUser.service';
 import { CreateUserService } from '../services/CreateUser.service';
 import { AuthRepoModule } from '../repositories/authRepo.module';
+import { FindAllUsersController } from './user/FindAllUsers.controller';
+import { FindAllUsersService } from '../services/FindAllUsers.service';
 
 @Module({
   imports: [AuthRepoModule],
@@ -16,12 +18,14 @@ import { AuthRepoModule } from '../repositories/authRepo.module';
     DeleteUserController,
     UpdateUserController,
     CreateUserController,
+    FindAllUsersController,
   ],
   providers: [
     FindUserService,
     DeleteUserService,
     UpdateUserService,
     CreateUserService,
+    FindAllUsersService,
   ],
 })
 export class AuthModule {}

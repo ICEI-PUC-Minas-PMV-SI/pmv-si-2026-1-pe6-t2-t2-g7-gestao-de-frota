@@ -5,7 +5,7 @@ import { CreateUserRequestDto } from '../../dtos/user/CreateRequest.dto';
 import { TUserProviderType } from '../../models/User.model';
 import { GetUserResponseDto } from '../../dtos/user/GetResponse.dto';
 
-@Controller()
+@Controller('user')
 export class CreateUserController {
   constructor(private readonly createUser: CreateUserService) {}
 
@@ -17,6 +17,7 @@ export class CreateUserController {
   async exec(@Body() body: CreateUserRequestDto): Promise<GetUserResponseDto> {
     const user = await this.createUser.exec({
       email: body.email,
+      name: body.name,
       provider: body.provider as TUserProviderType,
     });
     return user.toJSON();

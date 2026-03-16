@@ -5,7 +5,7 @@ import { TUserProviderType } from '../../models/User.model';
 import { GetUserResponseDto } from '../../dtos/user/GetResponse.dto';
 import { UpdateUserService } from '../../services/UpdateUser.service';
 
-@Controller()
+@Controller('user')
 export class UpdateUserController {
   constructor(private readonly updateUser: UpdateUserService) {}
 

@@ -42,4 +42,9 @@ export class UserRepoImpl implements UserRepo {
       .findOneBy({ id });
     return result;
   }
+
+  async findAll() {
+    const result = await this.dataSource.getRepository(UserModel).find();
+    return result;
+  }
 }

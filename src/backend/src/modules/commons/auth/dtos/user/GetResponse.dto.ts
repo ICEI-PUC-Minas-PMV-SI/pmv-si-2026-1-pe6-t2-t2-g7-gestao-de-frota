@@ -15,6 +15,11 @@ export class GetUserResponseDto {
   @IsUUID()
   id: string;
 
+  @ApiProperty({ example: 'John Doe' })
+  @IsString()
+  @MaxLength(255)
+  name: string;
+
   @ApiProperty({ example: 'johndoe@email.com' })
   @IsString()
   @IsEmail()

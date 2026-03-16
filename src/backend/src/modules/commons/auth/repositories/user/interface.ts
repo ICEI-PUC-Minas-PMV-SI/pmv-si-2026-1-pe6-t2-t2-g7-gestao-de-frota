@@ -5,4 +5,5 @@ export abstract class UserRepo {
   abstract update(user: UserModel): Promise<UserModel>;
   abstract delete(id: string): Promise<void>;
   abstract findById(id: string): Promise<UserModel | null>;
+  abstract findAll(): Promise<UserModel[]>;
 }

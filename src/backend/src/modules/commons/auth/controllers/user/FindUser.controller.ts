@@ -3,7 +3,7 @@ import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { FindUserService } from '../../services/FindUser.service';
 import { GetUserResponseDto } from '../../dtos/user/GetResponse.dto';
 
-@Controller()
+@Controller('user')
 export class FindUserController {
   constructor(private readonly findUser: FindUserService) {}
 
