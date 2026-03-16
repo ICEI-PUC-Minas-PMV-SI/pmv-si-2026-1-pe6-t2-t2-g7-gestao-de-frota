@@ -280,6 +280,8 @@ Definição de como o software é estruturado em termos dos componentes que faze
 
 ![Tecnologias Utilizadas](../docs/img/Gestao-frotas-imagens/TecnologiasUtilizadas.jpg)
 
+![Arquitetura da Solução](../docs/img/Gestao-frotas-imagens/modulos-api.jpg)
+
 
 ## Tecnologias Utilizadas
 
