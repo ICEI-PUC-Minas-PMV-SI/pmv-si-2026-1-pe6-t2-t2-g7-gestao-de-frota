@@ -1,0 +1,12 @@
+packages:
+  - src/frontend
+  - src/backend
+  - src/mobile
+
+ignoredBuiltDependencies:
+  - esbuild
+
+onlyBuiltDependencies:
+  - '@scarf/scarf'
+  - '@swc/core'
+  - sqlite3
