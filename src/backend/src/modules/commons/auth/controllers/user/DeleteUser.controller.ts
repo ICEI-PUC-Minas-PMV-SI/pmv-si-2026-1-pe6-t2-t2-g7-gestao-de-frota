@@ -1,17 +1,22 @@
-import { Controller, Delete, HttpCode, Param } from '@nestjs/common';
-import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
-import { DeleteUserService } from '../../services/DeleteUser.service';
+import { Controller, Delete, HttpCode } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { DeleteUserService } from '../../services/user/DeleteUser.service';
+import { UserContainer } from '../../../utils/getUserContainer';
+import { AuthTypes, type IUserContainer } from '../../auth.types';
 
-@Controller()
+@ApiBearerAuth(AuthTypes.ID_TOKEN)
+@Controller('/account')
 export class DeleteUserController {
   constructor(private readonly deleteUser: DeleteUserService) {}
 
   @Delete('/:id')
-  @ApiOperation({ summary: 'Deletar um usuário', tags: ['Auth'] })
+  @ApiOperation({ summary: 'Deletar usuário', tags: ['Auth'] })
   @ApiResponse({ status: 204 })
-  @ApiParam({ name: 'id', required: true })
   @HttpCode(204)
-  async exec(@Param('id') id: string): Promise<void> {
-    await this.deleteUser.exec(id);
+  async exec(@UserContainer() container: IUserContainer): Promise<void> {
+    await this.deleteUser.exec({
+      id: container.user.id,
+      externalUid: container.payload.uid,
+    });
   }
 }

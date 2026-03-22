@@ -2,7 +2,7 @@ import { DataSourceOptions } from 'typeorm';
 import { UserModel } from '../auth/models/User.model';
 import { TypeORMService } from './TypeORM.service';
 import { typeORMConsts } from './consts';
-import { Default1773629122687 } from './migrations/1773629122687-default';
+import fs from 'fs';
 
 export const getDataSource = async () => {
   const NODE_ENV = String(process.env.NODE_ENV);
@@ -10,10 +10,14 @@ export const getDataSource = async () => {
 
   const defaultOptions: DataSourceOptions = {
     logger: NODE_ENV !== 'production' ? 'simple-console' : 'advanced-console',
-    type: 'postgres',
+    type: 'cockroachdb',
+    ssl: {
+      rejectUnauthorized: true,
+      ca: fs.readFileSync(process.env.DB_SSL_CERT_PATH as string).toString(),
+    },
+    timeTravelQueries: false,
     url: DATABASE_URL,
     entities: [UserModel],
-    migrations: [Default1773629122687],
     cache: {
       type: 'database',
       tableName: 'typeorm_cache',

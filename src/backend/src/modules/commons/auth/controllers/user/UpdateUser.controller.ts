@@ -1,28 +1,33 @@
-import { Body, Controller, HttpCode, Param, Patch } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
-import { CreateUserRequestDto } from '../../dtos/user/CreateRequest.dto';
-import { TUserProviderType } from '../../models/User.model';
+import { Body, Controller, HttpCode, Patch } from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiResponse,
+} from '@nestjs/swagger';
+import { UpdateUserRequestDto } from '../../dtos/user/UpdateRequest.dto';
 import { GetUserResponseDto } from '../../dtos/user/GetResponse.dto';
-import { UpdateUserService } from '../../services/UpdateUser.service';
+import { UpdateUserService } from '../../services/user/UpdateUser.service';
+import { AuthTypes, type IUserContainer } from '../../auth.types';
+import { UserContainer } from '../../../utils/getUserContainer';
 
-@Controller()
+@ApiBearerAuth(AuthTypes.ID_TOKEN)
+@Controller('/account')
 export class UpdateUserController {
   constructor(private readonly updateUser: UpdateUserService) {}
 
   @Patch('/:id')
-  @ApiOperation({ summary: 'Atualizar um usuário', tags: ['Auth'] })
+  @ApiOperation({ summary: 'Atualizar usuário', tags: ['Auth'] })
   @ApiResponse({ status: 201, type: GetUserResponseDto })
-  @ApiParam({ name: 'id', required: true })
-  @ApiBody({ type: CreateUserRequestDto })
+  @ApiBody({ type: UpdateUserRequestDto })
   @HttpCode(200)
   async exec(
-    @Body() body: CreateUserRequestDto,
-    @Param('id') id: string,
+    @UserContainer() userContainer: IUserContainer,
+    @Body() body: UpdateUserRequestDto,
   ): Promise<GetUserResponseDto> {
     const user = await this.updateUser.exec({
-      id,
-      email: body.email,
-      provider: body.provider as TUserProviderType,
+      id: userContainer.user.id,
+      name: body.name,
     });
     return user.toJSON();
   }
