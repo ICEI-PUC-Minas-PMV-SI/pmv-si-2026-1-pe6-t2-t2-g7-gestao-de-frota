@@ -3,6 +3,7 @@ import { UserModel } from '../auth/models/User.model';
 import { TypeORMService } from './TypeORM.service';
 import { typeORMConsts } from './consts';
 import fs from 'fs';
+import { VehicleModel } from 'src/modules/vehicle/models/Vehicle.model';
 
 export const getDataSource = async () => {
   const NODE_ENV = String(process.env.NODE_ENV);
@@ -17,7 +18,7 @@ export const getDataSource = async () => {
     },
     timeTravelQueries: false,
     url: DATABASE_URL,
-    entities: [UserModel],
+    entities: [UserModel, VehicleModel],
     cache: {
       type: 'database',
       tableName: 'typeorm_cache',
