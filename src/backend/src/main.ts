@@ -34,12 +34,13 @@ async function bootstrap() {
       .setDescription('API Backend System')
       .addBearerAuth(
         { type: 'http', scheme: 'bearer', bearerFormat: 'JWT', in: 'header' },
-        AuthTypes.ACCESS_TOKEN,
+        AuthTypes.ID_TOKEN,
       )
+      .addSecurityRequirements(AuthTypes.ID_TOKEN)
       .build();
     const documentFactory = () => SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('/docs', app, documentFactory);
   }
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(process.env.PORT ?? 3030);
 }
 void bootstrap();

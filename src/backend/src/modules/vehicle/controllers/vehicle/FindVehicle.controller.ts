@@ -8,7 +8,7 @@ export class FindVehicleController {
   constructor(private readonly findVehicle: FindVehicleService) {}
 
   @Get('/:id')
-  @ApiOperation({ summary: 'Buscar um veículo por ID', tags: ['Vehicle'] })
+  @ApiOperation({ summary: 'Buscar um veículo por ID', tags: ['Veículo'] })
   @ApiResponse({ status: 200, type: GetVehicleResponseDto })
   @ApiParam({ name: 'id', required: true })
   @HttpCode(200)

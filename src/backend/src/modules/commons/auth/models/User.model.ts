@@ -7,15 +7,29 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { TReplace } from '../../utils/replace';
-import { randomUUID } from 'crypto';
 
-export type TUserProviderType = 'google' | 'manual';
+export type TUserProviderType =
+  | 'anonymous'
+  | 'password'
+  | 'facebook.com'
+  | 'github.com'
+  | 'google.com'
+  | 'twitter.com'
+  | 'apple.com'
+  | 'microsoft.com'
+  | 'yahoo.com'
+  | 'phone'
+  | 'playgames.google.com'
+  | 'gc.apple.com'
+  | 'custom';
 
 export interface IUserModelProps {
-  id: string;
+  id: number;
+  uid?: string;
   email: string;
-  name: string;
+  name?: string;
   provider: TUserProviderType;
+  role: TUserRole;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -23,28 +37,37 @@ export interface IUserModelProps {
 export type TUserModelPropsInput = TReplace<
   IUserModelProps,
   {
-    id?: string;
-    name?: string;
+    id?: number;
+    role?: TUserRole;
     createdAt?: Date;
     updatedAt?: Date;
   }
 >;
+
+export type TUserRole = 'owner' | 'admin' | 'user' | 'not_provided';
+export const userRoleList = ['owner', 'admin', 'user'];
 
 export interface IUserJsonProps extends IUserModelProps {}
 
 @Unique('UQ_users_email', ['email'])
 @Entity({ name: 'users' })
 export class UserModel {
-  @PrimaryGeneratedColumn('uuid', {
+  @PrimaryGeneratedColumn('increment', {
     primaryKeyConstraintName: 'PK_users_id',
   })
-  id: string;
+  id: number;
+
+  @Column({ name: 'external_uid', length: 64, type: 'varchar', nullable: true })
+  uid?: string;
 
   @Column({ name: 'email', length: 320, type: 'varchar' })
   email: string;
 
-  @Column({ name: 'name', length: 255, type: 'varchar' })
+  @Column({ name: 'name', length: 320, type: 'varchar', nullable: true })
   name: string;
+
+  @Column({ name: 'role', length: 20, type: 'varchar' })
+  role: TUserRole;
 
   @Column({ name: 'provider', length: 12, type: 'varchar' })
   provider: TUserProviderType;
@@ -58,10 +81,14 @@ export class UserModel {
   constructor(props: TUserModelPropsInput) {
     if (!props) return;
 
-    this.id = props.id ?? randomUUID();
+    if (props.id) this.id = props.id;
+    if (props.name) this.name = props.name;
+    if (props.uid) this.uid = props.uid;
+
     this.email = props.email;
-    this.name = props.name ?? '';
+
     this.provider = props.provider;
+    this.role = props.role ?? 'not_provided';
     this.createdAt = props.createdAt ?? new Date();
     this.updatedAt = props.updatedAt ?? new Date();
   }
@@ -69,9 +96,11 @@ export class UserModel {
   toJSON(): IUserJsonProps {
     return {
       id: this.id,
+      uid: this.uid,
       email: this.email,
       name: this.name,
       provider: this.provider,
+      role: this.role,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
     };
@@ -80,8 +109,10 @@ export class UserModel {
   get props() {
     return {
       id: this.id,
+      uid: this.uid,
       email: this.email,
       name: this.name,
+      role: this.role,
       provider: this.provider,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,

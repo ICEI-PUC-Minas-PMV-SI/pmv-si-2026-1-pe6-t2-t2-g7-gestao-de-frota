@@ -2,23 +2,30 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   IsDateString,
   IsEmail,
+  IsIn,
+  IsNumber,
+  IsOptional,
   IsString,
-  IsUUID,
   MaxLength,
 } from 'class-validator';
-import { IUserJsonProps } from '../../models/User.model';
+import {
+  IUserJsonProps,
+  type TUserRole,
+  userRoleList,
+} from '../../models/User.model';
 
 export interface IGetUserResponseDto extends IUserJsonProps {}
 
 export class GetUserResponseDto {
   @ApiProperty()
-  @IsUUID()
-  id: string;
+  @IsNumber()
+  id: number;
 
-  @ApiProperty({ example: 'John Doe' })
+  @ApiProperty()
   @IsString()
-  @MaxLength(255)
-  name: string;
+  @MaxLength(64)
+  @IsOptional()
+  uid?: string;
 
   @ApiProperty({ example: 'johndoe@email.com' })
   @IsString()
@@ -26,10 +33,21 @@ export class GetUserResponseDto {
   @MaxLength(320)
   email: string;
 
+  @ApiProperty({ example: 'John Doe' })
+  @IsString()
+  @IsOptional()
+  @MaxLength(320)
+  name?: string;
+
   @ApiProperty({ example: 'google' })
   @IsString()
   @MaxLength(12)
   provider: string;
+
+  @ApiProperty({ example: 'admin' })
+  @IsString()
+  @IsIn(userRoleList)
+  role: TUserRole;
 
   @ApiProperty({ example: '2025-10-04T21:08:42.332Z' })
   @IsDateString()

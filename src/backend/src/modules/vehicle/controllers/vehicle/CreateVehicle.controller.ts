@@ -9,7 +9,7 @@ export class CreateVehicleController {
   constructor(private readonly createVehicle: CreateVehicleService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Criar um veículo', tags: ['Vehicle'] })
+  @ApiOperation({ summary: 'Criar um veículo', tags: ['Veículo'] })
   @ApiResponse({ status: 201, type: GetVehicleResponseDto })
   @ApiBody({ type: CreateVehicleRequestDto })
   @HttpCode(201)

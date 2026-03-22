@@ -9,7 +9,7 @@ export class UpdateVehicleController {
   constructor(private readonly updateVehicle: UpdateVehicleService) {}
 
   @Patch('/:id')
-  @ApiOperation({ summary: 'Atualizar um veículo', tags: ['Vehicle'] })
+  @ApiOperation({ summary: 'Atualizar um veículo', tags: ['Veículo'] })
   @ApiResponse({ status: 200, type: GetVehicleResponseDto })
   @ApiParam({ name: 'id', required: true })
   @ApiBody({ type: UpdateVehicleRequestDto })

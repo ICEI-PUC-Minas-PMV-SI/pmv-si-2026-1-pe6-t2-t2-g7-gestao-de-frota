@@ -8,7 +8,7 @@ export class FindAllVehiclesController {
   constructor(private readonly findAllVehicles: FindAllVehiclesService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Listar todos os veículos', tags: ['Vehicle'] })
+  @ApiOperation({ summary: 'Listar todos os veículos', tags: ['Veículo'] })
   @ApiResponse({ status: 200, type: GetVehicleResponseDto, isArray: true })
   @HttpCode(200)
   async exec(): Promise<GetVehicleResponseDto[]> {
