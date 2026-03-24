@@ -6,7 +6,6 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
     "lint": "eslint src --max-warnings=0",
     "lint:fix": "eslint --fix",
     "prettier": "prettier --write",
@@ -27,6 +26,7 @@
     "axios": "^1.13.6",
     "commitizen": "^4.3.1",
     "firebase": "^12.11.0",
+    "leaflet": "^1.9.4",
     "lint-staged": "^16.4.0",
     "next": "16.2.1",
     "prettier": "^3.8.1",
@@ -35,6 +35,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/leaflet": "^1.9.21",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
