@@ -19,10 +19,11 @@
       }
     ],
     "paths": {
-      "@components*": ["./components*"],
-      "@context*": ["./context*"],
-      "@config*": ["./config*"],
-      "@core*": ["./core*"]
+      "@/*": ["./*"],
+      "@components/*": ["./components/*"],
+      "@context/*": ["./context/*"],
+      "@config/*": ["./config/*"],
+      "@core/*": ["./core/*"]
     }
   },
   "include": [
