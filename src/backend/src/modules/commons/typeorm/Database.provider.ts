@@ -4,6 +4,9 @@ import { TypeORMService } from './TypeORM.service';
 import { typeORMConsts } from './consts';
 import fs from 'fs';
 import { VehicleModel } from 'src/modules/vehicle/models/Vehicle.model';
+import { JourneyModel } from 'src/modules/journey/models/Journey.model';
+import { JourneyStopModel } from 'src/modules/journey/models/JourneyStop.model';
+import { JourneyPositionModel } from 'src/modules/journey/models/JourneyPosition.model';
 
 export const getDataSource = async () => {
   const NODE_ENV = String(process.env.NODE_ENV);
@@ -18,7 +21,13 @@ export const getDataSource = async () => {
     },
     timeTravelQueries: false,
     url: DATABASE_URL,
-    entities: [UserModel, VehicleModel],
+    entities: [
+      UserModel,
+      VehicleModel,
+      JourneyModel,
+      JourneyStopModel,
+      JourneyPositionModel,
+    ],
     cache: {
       type: 'database',
       tableName: 'typeorm_cache',

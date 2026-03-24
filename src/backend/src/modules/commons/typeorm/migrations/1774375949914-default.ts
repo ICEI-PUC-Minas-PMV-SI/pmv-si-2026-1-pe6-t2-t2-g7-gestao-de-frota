@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class Default1774211410301 implements MigrationInterface {
-  name = 'Default1774211410301';
+export class Default1774375949914 implements MigrationInterface {
+  name = 'Default1774375949914';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`CREATE SEQUENCE "users_id_seq"`);
@@ -11,9 +11,21 @@ export class Default1774211410301 implements MigrationInterface {
     await queryRunner.query(
       `CREATE TABLE "vehicles" ("id" UUID DEFAULT gen_random_uuid() NOT NULL, "marca" varchar(255) NOT NULL, "modelo" varchar(255) NOT NULL, "ano" int8 NOT NULL, "placa" varchar(10) NOT NULL, "created_at" timestamptz NOT NULL DEFAULT now(), "updated_at" timestamptz NOT NULL DEFAULT now(), CONSTRAINT "UQ_vehicles_placa" UNIQUE ("placa"), CONSTRAINT "PK_vehicles_id" PRIMARY KEY ("id"))`,
     );
+    await queryRunner.query(
+      `CREATE TABLE "journeys" ("id" UUID DEFAULT gen_random_uuid() NOT NULL, "user_id" int8 NOT NULL, "name" varchar(320), "status" varchar(24) NOT NULL, "started_at" timestamptz NOT NULL, "created_at" timestamptz NOT NULL DEFAULT now(), "updated_at" timestamptz NOT NULL DEFAULT now(), CONSTRAINT "PK_journeys_id" PRIMARY KEY ("id"))`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE "journey_stops" ("id" UUID DEFAULT gen_random_uuid() NOT NULL, "journey_id" uuid NOT NULL, "stop_order" int8 NOT NULL, "latitude" float8 NOT NULL, "longitude" float8 NOT NULL, "created_at" timestamptz NOT NULL DEFAULT now(), CONSTRAINT "PK_journey_stops_id" PRIMARY KEY ("id"))`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE "journey_positions" ("id" UUID DEFAULT gen_random_uuid() NOT NULL, "journey_id" uuid NOT NULL, "latitude" float8 NOT NULL, "longitude" float8 NOT NULL, "recorded_at" timestamptz NOT NULL, CONSTRAINT "PK_journey_positions_id" PRIMARY KEY ("id"))`,
+    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`DROP TABLE "journey_positions"`);
+    await queryRunner.query(`DROP TABLE "journey_stops"`);
+    await queryRunner.query(`DROP TABLE "journeys"`);
     await queryRunner.query(`DROP TABLE "vehicles"`);
     await queryRunner.query(`DROP TABLE "users"`);
     await queryRunner.query(`DROP SEQUENCE "users_id_seq"`);
