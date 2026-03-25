@@ -54,7 +54,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if(!idToken) throw new Error("Could not collect idToken!")
 
       await userModule.gateways.sync.exec({idToken})
-      router.push("/dashboard");
+      router.push("/homepage");
     } catch (err) {
       const error = err as AuthError;
       throw new Error(getAuthErrorMessage(error.code));
@@ -70,7 +70,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       await userModule.gateways.sync.exec({idToken, name})
       await updateProfile(user, { displayName: name });
-      router.push("/dashboard");
+      router.push("/homepage");
     } catch (err) {
       const error = err as AuthError;
       throw new Error(getAuthErrorMessage(error.code));
@@ -85,7 +85,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if(!idToken) throw new Error("Could not collect idToken!")
 
       await userModule.gateways.sync.exec({idToken})
-      router.push("/dashboard");
+      router.push("/homepage");
     } catch (err) {
       const error = err as AuthError;
       throw new Error(getAuthErrorMessage(error.code));
