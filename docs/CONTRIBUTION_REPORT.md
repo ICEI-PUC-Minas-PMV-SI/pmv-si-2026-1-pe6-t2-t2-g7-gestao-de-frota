@@ -1,6 +1,6 @@
 # 📊 Relatório de Contribuições do Projeto
 
-**Última atualização:** 25/03/2026 23:38
+**Última atualização:** 30/03/2026 00:24
 
 ---
 
@@ -14,22 +14,24 @@
 | Nícolas                       |         9 |        50 |        74 |          2 |              8 |               2 |
 | Nícolas Cleiton Basilio Viana |         3 |     22946 |       215 |        110 |              0 |               0 |
 | Vitor Sales                   |        12 |        36 |        26 |          7 |             12 |               7 |
-| github-actions[bot]           |         2 |        35 |        34 |          3 |              2 |               1 |
+| github-actions[bot]           |         3 |        41 |        40 |          3 |              3 |               1 |
 | github-classroom[bot]         |         1 |      2152 |         0 |         45 |              1 |              13 |
 | gregorystevao19               |        13 |     18027 |       501 |        153 |              6 |               1 |
 
 
 ## 📅 Contribuições Semanais (Todo o Semestre)
 
-**2026-03-18**: Nícolas: 1, Nícolas Cleiton Basilio Viana: 2, Vitor Sales: 2, github-actions[bot]: 2, gregorystevao19: 5
+**2026-03-23**: Vitor Sales: 2, github-actions[bot]: 3, gregorystevao19: 5
 
-**2026-03-11**: Grégory Stevão: 4, João Borges: 1, João Pedro Reis Martins: 1, Nícolas: 2, Nícolas Cleiton Basilio Viana: 1, Vitor Sales: 3, gregorystevao19: 2
+**2026-03-16**: Grégory Stevão: 2, Nícolas: 1, Nícolas Cleiton Basilio Viana: 3, gregorystevao19: 2
 
-**2026-03-04**: João Pedro Reis Martins: 3, Nícolas: 4, gregorystevao19: 4
+**2026-03-09**: Grégory Stevão: 2, João Borges: 1, João Pedro Reis Martins: 1, Nícolas: 2, Vitor Sales: 3
 
-**2026-02-25**: Grégory Stevão: 1, João Borges: 1, João Pedro Reis Martins: 2, Nícolas: 2, Vitor Sales: 7, gregorystevao19: 2
+**2026-03-02**: Grégory Stevão: 1, João Borges: 1, João Pedro Reis Martins: 5, Nícolas: 6, Vitor Sales: 1, gregorystevao19: 5
 
-**2026-02-18**: github-classroom[bot]: 1
+**2026-02-23**: Vitor Sales: 6, gregorystevao19: 1
+
+**2026-02-16**: github-classroom[bot]: 1
 
 
 
