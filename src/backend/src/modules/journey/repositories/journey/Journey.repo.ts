@@ -31,4 +31,11 @@ export class JourneyRepoImpl implements JourneyRepo {
       userId,
     });
   }
+
+  async findStopsByJourneyId(journeyId: string) {
+    return await this.dataSource.getRepository(JourneyStopModel).find({
+      where: { journeyId },
+      order: { stopOrder: 'ASC' },
+    });
+  }
 }
