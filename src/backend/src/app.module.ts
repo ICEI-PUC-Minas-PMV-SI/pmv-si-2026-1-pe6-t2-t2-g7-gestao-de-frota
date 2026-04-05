@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { AuthModule } from './modules/commons/auth/auth.module';
 import { VehicleModule } from './modules/vehicle/controllers/vehicle.module';
 import { JourneyModule } from './modules/journey/controllers/journey.module';
+import { AnalyticsModule } from './modules/analytics/controllers/analytics.module';
 import { TypeORModule } from './modules/commons/typeorm/TypORM.module';
 import { VerifyTokenService } from './modules/commons/auth/services/user/VerifyToken.service';
 import { APP_GUARD } from '@nestjs/core';
@@ -16,6 +17,7 @@ import { FindUserService } from './modules/commons/auth/services/user/FindUser.s
     AuthModule,
     VehicleModule,
     JourneyModule,
+    AnalyticsModule,
   ],
   providers: [
     VerifyTokenService,
