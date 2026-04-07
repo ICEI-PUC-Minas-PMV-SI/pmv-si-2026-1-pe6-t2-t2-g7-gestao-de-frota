@@ -1,6 +1,6 @@
 # 📊 Relatório de Contribuições do Projeto
 
-**Última atualização:** 06/04/2026 00:25
+**Última atualização:** 07/04/2026 15:24
 
 ---
 
@@ -14,27 +14,27 @@
 | Nícolas                       |         9 |        50 |        74 |          2 |              8 |               2 |
 | Nícolas Cleiton Basilio Viana |         3 |     22946 |       215 |        110 |              0 |               0 |
 | Vitor Sales                   |        12 |        36 |        26 |          7 |             12 |               7 |
-| github-actions[bot]           |         6 |        63 |        60 |          3 |              6 |               1 |
+| github-actions[bot]           |         7 |        75 |        69 |          3 |              7 |               1 |
 | github-classroom[bot]         |         1 |      2152 |         0 |         45 |              1 |              13 |
-| gregorystevao19               |        13 |     18027 |       501 |        153 |              6 |               1 |
+| gregorystevao19               |        15 |     18784 |       626 |        163 |              7 |               2 |
 | monezero                      |         1 |      4452 |       878 |         15 |              0 |               0 |
 
 
 ## 📅 Contribuições Semanais (Todo o Semestre)
 
-**2026-03-30**: Grégory Stevão: 2, João Pedro Reis Martins: 1, github-actions[bot]: 2, monezero: 1
+**2026-03-31**: Grégory Stevão: 2, João Pedro Reis Martins: 1, github-actions[bot]: 3, gregorystevao19: 2, monezero: 1
 
-**2026-03-23**: Vitor Sales: 2, github-actions[bot]: 4, gregorystevao19: 5
+**2026-03-24**: Vitor Sales: 1, github-actions[bot]: 4, gregorystevao19: 5
 
-**2026-03-16**: Grégory Stevão: 2, Nícolas: 1, Nícolas Cleiton Basilio Viana: 3, gregorystevao19: 2
+**2026-03-17**: Nícolas: 1, Nícolas Cleiton Basilio Viana: 2, Vitor Sales: 1
 
-**2026-03-09**: Grégory Stevão: 2, João Borges: 1, João Pedro Reis Martins: 1, Nícolas: 2, Vitor Sales: 3
+**2026-03-10**: Grégory Stevão: 4, João Borges: 1, João Pedro Reis Martins: 1, Nícolas: 2, Nícolas Cleiton Basilio Viana: 1, Vitor Sales: 3, gregorystevao19: 2
 
-**2026-03-02**: Grégory Stevão: 1, João Borges: 1, João Pedro Reis Martins: 5, Nícolas: 6, Vitor Sales: 1, gregorystevao19: 5
+**2026-03-03**: Grégory Stevão: 1, João Borges: 1, João Pedro Reis Martins: 5, Nícolas: 5, gregorystevao19: 4
 
-**2026-02-23**: Vitor Sales: 6, gregorystevao19: 1
+**2026-02-24**: Nícolas: 1, Vitor Sales: 7, gregorystevao19: 2
 
-**2026-02-16**: github-classroom[bot]: 1
+**2026-02-17**: github-classroom[bot]: 1
 
 
 
