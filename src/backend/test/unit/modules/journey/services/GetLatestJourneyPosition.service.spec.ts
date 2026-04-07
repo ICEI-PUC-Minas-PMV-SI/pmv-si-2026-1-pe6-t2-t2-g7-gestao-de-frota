@@ -1,9 +1,9 @@
 import { NotFoundException } from '@nestjs/common';
-import { GetLatestJourneyPositionService } from './GetLatestJourneyPosition.service';
-import { JourneyRepo } from '../repositories/journey/interface';
-import { JourneyPositionRepo } from '../repositories/journeyPosition/interface';
-import { JourneyModel } from '../models/Journey.model';
-import { JourneyPositionModel } from '../models/JourneyPosition.model';
+import { GetLatestJourneyPositionService } from '../../../../../src/modules/journey/services/GetLatestJourneyPosition.service';
+import { JourneyRepo } from '../../../../../src/modules/journey/repositories/journey/interface';
+import { JourneyPositionRepo } from '../../../../../src/modules/journey/repositories/journeyPosition/interface';
+import { JourneyModel } from '../../../../../src/modules/journey/models/Journey.model';
+import { JourneyPositionModel } from '../../../../../src/modules/journey/models/JourneyPosition.model';
 
 describe('GetLatestJourneyPositionService', () => {
   const input = {

@@ -1,7 +1,7 @@
 import { BadRequestException } from '@nestjs/common';
-import { CreateVehicleService } from './CreateVehicle.service';
-import { VehicleRepo } from '../repositories/vehicle/interface';
-import { VehicleModel } from '../models/Vehicle.model';
+import { CreateVehicleService } from '../../../../../src/modules/vehicle/services/CreateVehicle.service';
+import { VehicleRepo } from '../../../../../src/modules/vehicle/repositories/vehicle/interface';
+import { VehicleModel } from '../../../../../src/modules/vehicle/models/Vehicle.model';
 
 describe('CreateVehicleService', () => {
   it('deve criar veículo com dados válidos', async () => {

@@ -219,23 +219,18 @@ Fluxo recomendado:
 
 Estratégia atual:
 
-- Testes unitários de serviços para regras de negócio.
-- Testes e2e para validar comportamento HTTP da aplicação.
+- Testes unitários de serviços para regras de negócio (pasta `src/backend/test/unit/`, espelhando os módulos em `src/`).
+- Testes e2e para validar comportamento HTTP da aplicação (`src/backend/test/*.e2e-spec.ts`).
 
-Testes adicionados para Jornada:
+Testes de jornada (`test/unit/modules/journey/services/`):
 
-- `CreateJourney.service.spec.ts`
-  - Garante ordenação de paradas e mapeamento da resposta.
-- `RecordJourneyPosition.service.spec.ts`
-  - Cobre:
-    - jornada inexistente (`NotFoundException`)
-    - jornada não iniciada (`ForbiddenException`)
-    - registro de posição com sucesso
-- `GetLatestJourneyPosition.service.spec.ts`
-  - Cobre:
-    - jornada inexistente (`NotFoundException`)
-    - retorno sem posição (`temPosicao: false`)
-    - retorno da última posição (`temPosicao: true`)
+- `CreateJourney.service.spec.ts` — ordenação de paradas e mapeamento da resposta.
+- `RecordJourneyPosition.service.spec.ts` — jornada inexistente, fora de andamento e registro de posição.
+- `GetLatestJourneyPosition.service.spec.ts` — jornada inexistente, sem posição e última posição.
+
+Testes de veículo (`test/unit/modules/vehicle/services/`):
+
+- `CreateVehicle.service.spec.ts`, `FindAllVehicles.service.spec.ts`, `FindVehicle.service.spec.ts`, `UpdateVehicle.service.spec.ts`, `DeleteVehicle.service.spec.ts`.
 
 Comandos úteis:
 

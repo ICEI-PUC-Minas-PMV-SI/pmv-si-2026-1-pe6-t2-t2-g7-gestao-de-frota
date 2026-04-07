@@ -1,7 +1,7 @@
-import { CreateJourneyService } from './CreateJourney.service';
-import { JourneyRepo } from '../repositories/journey/interface';
-import { JourneyModel } from '../models/Journey.model';
-import { JourneyStopModel } from '../models/JourneyStop.model';
+import { CreateJourneyService } from '../../../../../src/modules/journey/services/CreateJourney.service';
+import { JourneyRepo } from '../../../../../src/modules/journey/repositories/journey/interface';
+import { JourneyModel } from '../../../../../src/modules/journey/models/Journey.model';
+import { JourneyStopModel } from '../../../../../src/modules/journey/models/JourneyStop.model';
 
 describe('CreateJourneyService', () => {
   it('deve criar jornada com paradas ordenadas por ordem', async () => {

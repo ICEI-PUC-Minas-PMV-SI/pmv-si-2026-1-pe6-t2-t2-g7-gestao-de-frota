@@ -59,6 +59,8 @@ pnpm migrate:revert
 
 ## Testes
 
+Os testes unitarios ficam em `test/unit/` (espelhando `src/modules`). Os testes e2e ficam em `test/*.e2e-spec.ts` e usam configuracao separada.
+
 ```bash
 # todos os testes unitarios
 pnpm test
@@ -76,11 +78,11 @@ pnpm test:e2e
 ### Executar testes por modulo
 
 ```bash
-# jornada (services)
-pnpm test -- --runInBand modules/journey/services
+# jornada
+pnpm test -- --runInBand test/unit/modules/journey/services
 
-# veiculos (services)
-pnpm test -- --runInBand modules/vehicle/services
+# veiculos
+pnpm test -- --runInBand test/unit/modules/vehicle/services
 ```
 
 ## Principais modulos

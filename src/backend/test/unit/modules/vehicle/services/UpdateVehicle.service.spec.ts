@@ -1,7 +1,7 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import { UpdateVehicleService } from './UpdateVehicle.service';
-import { VehicleRepo } from '../repositories/vehicle/interface';
-import { VehicleModel } from '../models/Vehicle.model';
+import { UpdateVehicleService } from '../../../../../src/modules/vehicle/services/UpdateVehicle.service';
+import { VehicleRepo } from '../../../../../src/modules/vehicle/repositories/vehicle/interface';
+import { VehicleModel } from '../../../../../src/modules/vehicle/models/Vehicle.model';
 
 describe('UpdateVehicleService', () => {
   it('deve lançar NotFoundException quando veículo não existe', async () => {

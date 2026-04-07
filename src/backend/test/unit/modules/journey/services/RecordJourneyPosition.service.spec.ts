@@ -1,9 +1,9 @@
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
-import { RecordJourneyPositionService } from './RecordJourneyPosition.service';
-import { JourneyRepo } from '../repositories/journey/interface';
-import { JourneyPositionRepo } from '../repositories/journeyPosition/interface';
-import { JourneyModel } from '../models/Journey.model';
-import { JourneyPositionModel } from '../models/JourneyPosition.model';
+import { RecordJourneyPositionService } from '../../../../../src/modules/journey/services/RecordJourneyPosition.service';
+import { JourneyRepo } from '../../../../../src/modules/journey/repositories/journey/interface';
+import { JourneyPositionRepo } from '../../../../../src/modules/journey/repositories/journeyPosition/interface';
+import { JourneyModel } from '../../../../../src/modules/journey/models/Journey.model';
+import { JourneyPositionModel } from '../../../../../src/modules/journey/models/JourneyPosition.model';
 
 describe('RecordJourneyPositionService', () => {
   const input = {

@@ -1,5 +1,5 @@
-import { DeleteVehicleService } from './DeleteVehicle.service';
-import { VehicleRepo } from '../repositories/vehicle/interface';
+import { DeleteVehicleService } from '../../../../../src/modules/vehicle/services/DeleteVehicle.service';
+import { VehicleRepo } from '../../../../../src/modules/vehicle/repositories/vehicle/interface';
 
 describe('DeleteVehicleService', () => {
   it('deve chamar repositório para remover por id', async () => {

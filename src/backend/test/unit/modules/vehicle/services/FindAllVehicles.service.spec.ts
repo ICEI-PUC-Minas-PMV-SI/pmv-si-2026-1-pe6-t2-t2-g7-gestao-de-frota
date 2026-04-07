@@ -1,6 +1,6 @@
-import { FindAllVehiclesService } from './FindAllVehicles.service';
-import { VehicleRepo } from '../repositories/vehicle/interface';
-import { VehicleModel } from '../models/Vehicle.model';
+import { FindAllVehiclesService } from '../../../../../src/modules/vehicle/services/FindAllVehicles.service';
+import { VehicleRepo } from '../../../../../src/modules/vehicle/repositories/vehicle/interface';
+import { VehicleModel } from '../../../../../src/modules/vehicle/models/Vehicle.model';
 
 describe('FindAllVehiclesService', () => {
   it('deve retornar lista de veículos', async () => {
