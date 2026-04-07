@@ -1,6 +1,6 @@
 # 📊 Relatório de Contribuições do Projeto
 
-**Última atualização:** 07/04/2026 15:38
+**Última atualização:** 07/04/2026 16:59
 
 ---
 
@@ -9,12 +9,12 @@
 | Aluno                         |   Commits |   Linhas+ |   Linhas- |   Arquivos |   Docs Commits |   Docs Arquivos |
 |-------------------------------|-----------|-----------|-----------|------------|----------------|-----------------|
 | Grégory Stevão                |         7 |        11 |         9 |          5 |              5 |               2 |
-| João Borges                   |         2 |        11 |        12 |          2 |              2 |               2 |
+| João Borges                   |         3 |        15 |        16 |          2 |              3 |               2 |
 | João Pedro Reis Martins       |         7 |      1325 |        26 |         30 |              7 |               4 |
 | Nícolas                       |         9 |        50 |        74 |          2 |              8 |               2 |
 | Nícolas Cleiton Basilio Viana |         3 |     22946 |       215 |        110 |              0 |               0 |
 | Vitor Sales                   |        12 |        36 |        26 |          7 |             12 |               7 |
-| github-actions[bot]           |         9 |        89 |        83 |          3 |              9 |               1 |
+| github-actions[bot]           |        10 |        93 |        87 |          3 |             10 |               1 |
 | github-classroom[bot]         |         1 |      2152 |         0 |         45 |              1 |              13 |
 | gregorystevao19               |        18 |     18845 |       683 |        174 |             10 |               3 |
 | monezero                      |         1 |      4452 |       878 |         15 |              0 |               0 |
@@ -22,7 +22,7 @@
 
 ## 📅 Contribuições Semanais (Todo o Semestre)
 
-**2026-03-31**: Grégory Stevão: 2, João Pedro Reis Martins: 1, github-actions[bot]: 5, gregorystevao19: 5, monezero: 1
+**2026-03-31**: Grégory Stevão: 2, João Borges: 1, João Pedro Reis Martins: 1, github-actions[bot]: 6, gregorystevao19: 5, monezero: 1
 
 **2026-03-24**: Vitor Sales: 1, github-actions[bot]: 4, gregorystevao19: 5
 
