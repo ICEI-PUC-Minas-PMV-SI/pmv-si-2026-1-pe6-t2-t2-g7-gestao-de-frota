@@ -59,7 +59,7 @@ pnpm migrate:revert
 
 ## Testes
 
-Os testes unitarios ficam em `test/unit/` (espelhando `src/modules`). Os testes e2e ficam em `test/*.e2e-spec.ts` e usam configuracao separada.
+Os testes unitarios ficam em `test/unit/` (espelhando `src/modules`). Os testes e2e ficam em `test/**/*.e2e-spec.ts` e usam configuracao separada.
 
 ```bash
 # todos os testes unitarios
@@ -73,6 +73,9 @@ pnpm test:cov
 
 # testes e2e
 pnpm test:e2e
+
+# testes e2e de autenticacao
+pnpm test:e2e:auth
 ```
 
 ### Executar testes por modulo

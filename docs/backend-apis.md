@@ -44,6 +44,7 @@ Base URL local (padrão): `http://localhost:3030`
 ### Autenticação e Conta
 
 #### `POST /account/sync`
+
 - Objetivo: sincronizar dados do usuário autenticado.
 - Auth: Bearer token obrigatório.
 - Body:
@@ -55,6 +56,7 @@ Base URL local (padrão): `http://localhost:3030`
 - Sucesso: `201 Created` com dados do usuário.
 
 #### `PATCH /account/:id`
+
 - Objetivo: atualizar dados do usuário atual.
 - Auth: Bearer token obrigatório.
 - Body:
@@ -66,6 +68,7 @@ Base URL local (padrão): `http://localhost:3030`
 - Sucesso: `200 OK`.
 
 #### `DELETE /account/:id`
+
 - Objetivo: remover conta do usuário atual.
 - Auth: Bearer token obrigatório.
 - Sucesso: `204 No Content`.
@@ -73,6 +76,7 @@ Base URL local (padrão): `http://localhost:3030`
 ### Membros
 
 #### `GET /members`
+
 - Objetivo: listar membros.
 - Auth: Bearer token obrigatório.
 - Query params:
@@ -81,17 +85,20 @@ Base URL local (padrão): `http://localhost:3030`
 - Sucesso: `200 OK`.
 
 #### `GET /member/:id`
+
 - Objetivo: buscar um membro por id.
 - Auth: Bearer token obrigatório.
 - Sucesso: `200 OK`.
 
 #### `PATCH /member/:id?role=admin|user`
+
 - Objetivo: alterar papel (`role`) de um membro.
 - Auth: Bearer token obrigatório.
 - Regras: protegido por guardas de membro/perfil.
 - Sucesso: `200 OK`.
 
 #### `DELETE /member/:id`
+
 - Objetivo: remover membro.
 - Auth: Bearer token obrigatório.
 - Regras: protegido por guardas de membro/perfil.
@@ -100,6 +107,7 @@ Base URL local (padrão): `http://localhost:3030`
 ### Veículos
 
 #### `POST /vehicle`
+
 - Objetivo: criar veículo.
 - Auth: Bearer token obrigatório.
 - Body:
@@ -114,16 +122,19 @@ Base URL local (padrão): `http://localhost:3030`
 - Sucesso: `201 Created`.
 
 #### `GET /vehicle`
+
 - Objetivo: listar veículos.
 - Auth: Bearer token obrigatório.
 - Sucesso: `200 OK`.
 
 #### `GET /vehicle/:id`
+
 - Objetivo: buscar veículo por id.
 - Auth: Bearer token obrigatório.
 - Sucesso: `200 OK`.
 
 #### `PATCH /vehicle/:id`
+
 - Objetivo: atualizar veículo.
 - Auth: Bearer token obrigatório.
 - Body (campos opcionais):
@@ -136,6 +147,7 @@ Base URL local (padrão): `http://localhost:3030`
 - Sucesso: `200 OK`.
 
 #### `DELETE /vehicle/:id`
+
 - Objetivo: remover veículo.
 - Auth: Bearer token obrigatório.
 - Sucesso: `204 No Content`.
@@ -143,6 +155,7 @@ Base URL local (padrão): `http://localhost:3030`
 ### Jornada (Journey)
 
 #### `POST /journey`
+
 - Objetivo: iniciar jornada com paradas.
 - Auth: Bearer token obrigatório.
 - Body:
@@ -158,6 +171,7 @@ Base URL local (padrão): `http://localhost:3030`
 - Sucesso: `201 Created`.
 
 #### `POST /journey/:journeyId/positions`
+
 - Objetivo: registrar posição atual de uma jornada em andamento.
 - Auth: Bearer token obrigatório.
 - Body:
@@ -173,6 +187,7 @@ Base URL local (padrão): `http://localhost:3030`
   - `403 Forbidden`: jornada não está em andamento.
 
 #### `GET /journey/:journeyId/positions/latest`
+
 - Objetivo: obter última posição registrada.
 - Auth: Bearer token obrigatório.
 - Sucesso: `200 OK`.
@@ -220,7 +235,7 @@ Fluxo recomendado:
 Estratégia atual:
 
 - Testes unitários de serviços para regras de negócio (pasta `src/backend/test/unit/`, espelhando os módulos em `src/`).
-- Testes e2e para validar comportamento HTTP da aplicação (`src/backend/test/*.e2e-spec.ts`).
+- Testes e2e para validar comportamento HTTP da aplicação (`src/backend/test/**/*.e2e-spec.ts`).
 
 Testes de jornada (`test/unit/modules/journey/services/`):
 
@@ -236,6 +251,43 @@ Comandos úteis:
 
 - `pnpm test`
 - `pnpm test:e2e`
+- `pnpm test:e2e:auth`
+
+### Casos E2E de autenticação
+
+Os cenários E2E de autenticação usam `@nestjs/testing` para subir uma instância global do `AppModule` em `beforeAll`, com todos os controllers carregados. Firebase, TypeORM e `UserRepo` são substituídos por mocks em memória para evitar dependência de serviços externos.
+
+| Caso                             | Requisição                                       | Resultado esperado                                                                            |
+| -------------------------------- | ------------------------------------------------ | --------------------------------------------------------------------------------------------- |
+| Requisição sem Bearer token      | `GET /members`                                   | `403 Forbidden`; Firebase não deve ser chamado.                                               |
+| Bearer token inválido            | `GET /members`                                   | `403 Forbidden`; validação de token deve ser chamada com `checkRevoked=true`.                 |
+| Sincronização de usuário novo    | `POST /account/sync`                             | `201 Created`; cria usuário em memória e retorna `uid`, `email`, `name`, `provider` e `role`. |
+| Atualização da conta autenticada | `PATCH /account/:id`                             | `200 OK`; atualiza o nome do usuário autenticado.                                             |
+| Remoção da conta autenticada     | `DELETE /account/:id`                            | `204 No Content`; remove usuário no Firebase mockado e no repositório mockado.                |
+| Listagem de membros              | `GET /members?limit=2`                           | `200 OK`; retorna lista paginada e total.                                                     |
+| Busca de membro                  | `GET /member/:id`                                | `200 OK`; retorna o membro encontrado.                                                        |
+| Alteração de cargo sem permissão | `PATCH /member/:id?role=admin` com usuário comum | `403 Forbidden`.                                                                              |
+| Alteração de cargo com admin     | `PATCH /member/:id?role=admin` com admin         | `200 OK`; retorna membro com `role=admin`.                                                    |
+| Remoção de owner                 | `DELETE /member/:id` para usuário `owner`        | `401 Unauthorized`; operação bloqueada pelo `PreventOwnerGuard`.                              |
+| Remoção de membro por admin      | `DELETE /member/:id` com admin                   | `204 No Content`; remove usuário no Firebase mockado e no repositório mockado.                |
+
+Resultado registrado em 08/04/2026:
+
+- Comando: `pnpm test:e2e:auth`
+- Resultado local: `FAIL test/e2e/auth.e2e-spec.ts`
+- Testes reportados: 11 falhas na suíte `AuthModule (e2e)`.
+- Motivo: o sandbox bloqueou a abertura de porta dinâmica feita internamente pelo Supertest.
+- Erro observado: `listen EPERM: operation not permitted 0.0.0.0`
+- Observação: a suíte compilou até a fase de execução dos testes HTTP; a falha ocorreu quando o Supertest tentou fazer `listen(0)`.
+
+Resultado complementar informado em ambiente com execução HTTP habilitada:
+
+- Caso falho: `AuthModule (e2e) › membros › deve impedir remocao de usuario owner`
+- Resultado observado antes da correção: esperado `401 Unauthorized`, recebido `204 No Content`.
+- Causa: `PreventOwnerGuard` validava apenas `request.query[id]`, mas `DELETE /member/:id` envia o identificador em `request.params.id`.
+- Correção aplicada: `PreventOwnerGuard` passou a buscar o identificador em `request.params[key]` e, em seguida, em `request.query[key]`.
+- Resultado esperado após correção: `DELETE /member/3` com usuário `owner` deve retornar `401 Unauthorized`.
+- Validação unitária após correção: `pnpm test -- --runInBand test/unit/modules/commons/auth` passou com 8 suítes e 27 testes.
 
 ## Referências
 

@@ -1,0 +1,253 @@
+import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
+import { App } from 'supertest/types';
+import { AppModule } from '../../src/app.module';
+import { UserModel } from '../../src/modules/commons/auth/models/User.model';
+import { UserRepo } from '../../src/modules/commons/auth/repositories/user/interface';
+import { FirebaseService } from '../../src/modules/commons/firebase/firebase.service';
+import { typeORMConsts } from '../../src/modules/commons/typeorm/consts';
+
+type TokenPayload = {
+  uid: string;
+  name?: string;
+  email: string;
+  firebase: {
+    sign_in_provider: string;
+  };
+};
+
+type E2eGlobals = typeof globalThis & {
+  __E2E_APP__?: INestApplication<App>;
+  __E2E_STATE__?: E2eTestState;
+};
+
+const now = new Date('2026-04-08T00:00:00.000Z');
+
+class E2eTestState {
+  private users = new Map<number, UserModel>();
+  private nextId = 10;
+
+  readonly deleteUserRepoMock = jest.fn((id: number) => {
+    this.users.delete(Number(id));
+    return Promise.resolve(undefined);
+  });
+
+  readonly verifyIdToken = jest.fn((token: string) => {
+    const payload = this.tokens[token];
+    if (!payload) throw new Error('invalid token');
+    return Promise.resolve(payload);
+  });
+
+  readonly deleteFirebaseUser = jest.fn(() => Promise.resolve(undefined));
+
+  readonly userRepo: UserRepo = {
+    save: jest.fn((user: UserModel) => {
+      const existing = [...this.users.values()].find(
+        (current) => current.email === user.email,
+      );
+      const saved = new UserModel({
+        ...user.toJSON(),
+        id: existing?.id ?? this.nextId++,
+        role: user.role === 'not_provided' ? 'user' : user.role,
+        createdAt: existing?.createdAt ?? now,
+        updatedAt: now,
+      });
+      this.users.set(saved.id, saved);
+      return Promise.resolve(saved);
+    }),
+    update: jest.fn((changes: UserModel) => {
+      const existing = this.users.get(changes.id);
+      if (!existing) return Promise.resolve(changes);
+
+      const merged = new UserModel({
+        ...existing.toJSON(),
+        ...(changes.uid !== undefined && { uid: changes.uid }),
+        ...(changes.name !== undefined && { name: changes.name }),
+        ...(changes.role !== 'not_provided' && { role: changes.role }),
+        updatedAt: now,
+      });
+      this.users.set(merged.id, merged);
+      return Promise.resolve(merged);
+    }),
+    delete: this.deleteUserRepoMock,
+    findById: jest.fn((id: number) =>
+      Promise.resolve(this.users.get(Number(id)) ?? null),
+    ),
+    findByUid: jest.fn((uid: string) =>
+      Promise.resolve(
+        [...this.users.values()].find((user) => user.uid === uid) ?? null,
+      ),
+    ),
+    findOwners: jest.fn(() =>
+      Promise.resolve(
+        [...this.users.values()].filter((user) => user.role === 'owner'),
+      ),
+    ),
+    findList: jest.fn(({ limit, lastItemId }) => {
+      const filtered = [...this.users.values()]
+        .filter((user) => !lastItemId || user.id > Number(lastItemId))
+        .sort((a, b) => a.id - b.id);
+
+      return Promise.resolve({
+        list: filtered.slice(0, Number(limit)),
+        total: filtered.length,
+      });
+    }),
+    changeRole: jest.fn((id, role) => {
+      const user = this.users.get(Number(id));
+      if (user && user.role !== 'owner') user.role = role;
+      return Promise.resolve(undefined);
+    }),
+  };
+
+  readonly firebaseService = {
+    client: {
+      auth: () => ({
+        verifyIdToken: this.verifyIdToken,
+        deleteUser: this.deleteFirebaseUser,
+      }),
+    },
+  };
+
+  readonly dataSource = {
+    isInitialized: true,
+    destroy: jest.fn(() => Promise.resolve(undefined)),
+    getRepository: jest.fn(() => ({
+      countBy: jest.fn(() => Promise.resolve(0)),
+      delete: jest.fn(() => Promise.resolve(undefined)),
+      find: jest.fn(() => Promise.resolve([])),
+      findBy: jest.fn(() => Promise.resolve([])),
+      findOneBy: jest.fn(() => Promise.resolve(null)),
+      findOneByOrFail: jest.fn(() => Promise.resolve(undefined)),
+      insert: jest.fn(() => Promise.resolve(undefined)),
+      update: jest.fn(() => Promise.resolve(undefined)),
+      upsert: jest.fn(() => Promise.resolve(undefined)),
+    })),
+    transaction: jest.fn((callback: (manager: unknown) => Promise<void>) =>
+      Promise.resolve(
+        callback({
+          getRepository: jest.fn(() => ({
+            insert: jest.fn(() => Promise.resolve(undefined)),
+          })),
+        }),
+      ).then(() => undefined),
+    ),
+  };
+
+  readonly tokens: Record<string, TokenPayload> = {
+    'valid-user-token': {
+      uid: 'uid-user',
+      name: 'Usuario Teste',
+      email: 'user@test.com',
+      firebase: { sign_in_provider: 'password' },
+    },
+    'valid-admin-token': {
+      uid: 'uid-admin',
+      name: 'Admin Teste',
+      email: 'admin@test.com',
+      firebase: { sign_in_provider: 'password' },
+    },
+    'new-user-token': {
+      uid: 'uid-new-user',
+      email: 'new-user@test.com',
+      firebase: { sign_in_provider: 'google.com' },
+    },
+  };
+
+  reset() {
+    jest.clearAllMocks();
+    this.nextId = 10;
+    this.users = new Map(
+      [
+        new UserModel({
+          id: 1,
+          uid: 'uid-user',
+          email: 'user@test.com',
+          name: 'Usuario Teste',
+          provider: 'password',
+          role: 'user',
+          createdAt: now,
+          updatedAt: now,
+        }),
+        new UserModel({
+          id: 2,
+          uid: 'uid-admin',
+          email: 'admin@test.com',
+          name: 'Admin Teste',
+          provider: 'password',
+          role: 'admin',
+          createdAt: now,
+          updatedAt: now,
+        }),
+        new UserModel({
+          id: 3,
+          uid: 'uid-owner',
+          email: 'owner@test.com',
+          name: 'Owner Teste',
+          provider: 'password',
+          role: 'owner',
+          createdAt: now,
+          updatedAt: now,
+        }),
+      ].map((user) => [user.id, user]),
+    );
+  }
+}
+
+const getGlobals = () => globalThis as E2eGlobals;
+
+export const getE2eApp = () => {
+  const app = getGlobals().__E2E_APP__;
+  if (!app) throw new Error('E2E app was not initialized.');
+  return app;
+};
+
+export const getE2eHttpServer = () => {
+  return getE2eApp().getHttpServer();
+};
+
+export const getE2eState = () => {
+  const state = getGlobals().__E2E_STATE__;
+  if (!state) throw new Error('E2E state was not initialized.');
+  return state;
+};
+
+beforeAll(async () => {
+  const state = new E2eTestState();
+  state.reset();
+
+  const moduleFixture: TestingModule = await Test.createTestingModule({
+    imports: [AppModule],
+  })
+    .overrideProvider(FirebaseService)
+    .useValue(state.firebaseService)
+    .overrideProvider(UserRepo)
+    .useValue(state.userRepo)
+    .overrideProvider(typeORMConsts.databaseProviders)
+    .useValue(state.dataSource)
+    .compile();
+
+  const app: INestApplication<App> = moduleFixture.createNestApplication();
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      forbidUnknownValues: true,
+    }),
+  );
+  await app.init();
+
+  getGlobals().__E2E_STATE__ = state;
+  getGlobals().__E2E_APP__ = app;
+});
+
+beforeEach(() => {
+  getE2eState().reset();
+});
+
+afterAll(async () => {
+  await getGlobals().__E2E_APP__?.close();
+  delete getGlobals().__E2E_APP__;
+  delete getGlobals().__E2E_STATE__;
+});

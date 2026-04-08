@@ -19,6 +19,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
+    "test:e2e:auth": "jest --config ./test/jest-e2e.json --runInBand test/e2e/auth.e2e-spec.ts",
     "migrate:generate": "dotenv -e .env -- typeorm-ts-node-commonjs migration:generate -d ./src/modules/commons/typeorm/migrations/handler.ts ./src/modules/commons/typeorm/migrations/default",
     "migrate:run": "dotenv -e .env -- typeorm-ts-node-commonjs migration:run -d ./src/modules/commons/typeorm/migrations/handler.ts",
     "migrate:revert": "dotenv -e .env -- typeorm-ts-node-commonjs migration:revert -d ./src/modules/commons/typeorm/migrations/handler.ts",
@@ -87,7 +88,12 @@
       "ts"
     ],
     "rootDir": ".",
-    "testMatch": ["<rootDir>/test/unit/**/*.spec.ts"],
+    "testMatch": [
+      "<rootDir>/test/unit/**/*.spec.ts"
+    ],
+    "moduleNameMapper": {
+      "^src/(.*)$": "<rootDir>/src/$1"
+    },
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },
