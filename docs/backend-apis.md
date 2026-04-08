@@ -44,6 +44,7 @@ Base URL local (padrão): `http://localhost:3030`
 ### Autenticação e Conta
 
 #### `POST /account/sync`
+
 - Objetivo: sincronizar dados do usuário autenticado.
 - Auth: Bearer token obrigatório.
 - Body:
@@ -55,6 +56,7 @@ Base URL local (padrão): `http://localhost:3030`
 - Sucesso: `201 Created` com dados do usuário.
 
 #### `PATCH /account/:id`
+
 - Objetivo: atualizar dados do usuário atual.
 - Auth: Bearer token obrigatório.
 - Body:
@@ -66,6 +68,7 @@ Base URL local (padrão): `http://localhost:3030`
 - Sucesso: `200 OK`.
 
 #### `DELETE /account/:id`
+
 - Objetivo: remover conta do usuário atual.
 - Auth: Bearer token obrigatório.
 - Sucesso: `204 No Content`.
@@ -73,6 +76,7 @@ Base URL local (padrão): `http://localhost:3030`
 ### Membros
 
 #### `GET /members`
+
 - Objetivo: listar membros.
 - Auth: Bearer token obrigatório.
 - Query params:
@@ -81,17 +85,20 @@ Base URL local (padrão): `http://localhost:3030`
 - Sucesso: `200 OK`.
 
 #### `GET /member/:id`
+
 - Objetivo: buscar um membro por id.
 - Auth: Bearer token obrigatório.
 - Sucesso: `200 OK`.
 
 #### `PATCH /member/:id?role=admin|user`
+
 - Objetivo: alterar papel (`role`) de um membro.
 - Auth: Bearer token obrigatório.
 - Regras: protegido por guardas de membro/perfil.
 - Sucesso: `200 OK`.
 
 #### `DELETE /member/:id`
+
 - Objetivo: remover membro.
 - Auth: Bearer token obrigatório.
 - Regras: protegido por guardas de membro/perfil.
@@ -100,6 +107,7 @@ Base URL local (padrão): `http://localhost:3030`
 ### Veículos
 
 #### `POST /vehicle`
+
 - Objetivo: criar veículo.
 - Auth: Bearer token obrigatório.
 - Body:
@@ -114,16 +122,19 @@ Base URL local (padrão): `http://localhost:3030`
 - Sucesso: `201 Created`.
 
 #### `GET /vehicle`
+
 - Objetivo: listar veículos.
 - Auth: Bearer token obrigatório.
 - Sucesso: `200 OK`.
 
 #### `GET /vehicle/:id`
+
 - Objetivo: buscar veículo por id.
 - Auth: Bearer token obrigatório.
 - Sucesso: `200 OK`.
 
 #### `PATCH /vehicle/:id`
+
 - Objetivo: atualizar veículo.
 - Auth: Bearer token obrigatório.
 - Body (campos opcionais):
@@ -136,6 +147,7 @@ Base URL local (padrão): `http://localhost:3030`
 - Sucesso: `200 OK`.
 
 #### `DELETE /vehicle/:id`
+
 - Objetivo: remover veículo.
 - Auth: Bearer token obrigatório.
 - Sucesso: `204 No Content`.
@@ -143,6 +155,7 @@ Base URL local (padrão): `http://localhost:3030`
 ### Jornada (Journey)
 
 #### `POST /journey`
+
 - Objetivo: iniciar jornada com paradas.
 - Auth: Bearer token obrigatório.
 - Body:
@@ -158,6 +171,7 @@ Base URL local (padrão): `http://localhost:3030`
 - Sucesso: `201 Created`.
 
 #### `POST /journey/:journeyId/positions`
+
 - Objetivo: registrar posição atual de uma jornada em andamento.
 - Auth: Bearer token obrigatório.
 - Body:
@@ -173,6 +187,7 @@ Base URL local (padrão): `http://localhost:3030`
   - `403 Forbidden`: jornada não está em andamento.
 
 #### `GET /journey/:journeyId/positions/latest`
+
 - Objetivo: obter última posição registrada.
 - Auth: Bearer token obrigatório.
 - Sucesso: `200 OK`.
@@ -220,7 +235,7 @@ Fluxo recomendado:
 Estratégia atual:
 
 - Testes unitários de serviços para regras de negócio (pasta `src/backend/test/unit/`, espelhando os módulos em `src/`).
-- Testes e2e para validar comportamento HTTP da aplicação (`src/backend/test/*.e2e-spec.ts`).
+- Testes e2e para validar comportamento HTTP da aplicação (`src/backend/test/**/*.e2e-spec.ts`).
 
 Testes de jornada (`test/unit/modules/journey/services/`):
 

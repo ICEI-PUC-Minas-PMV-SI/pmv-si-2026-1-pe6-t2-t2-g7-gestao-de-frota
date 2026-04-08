@@ -31,7 +31,8 @@ export class PreventOwnerGuard implements CanActivate {
       );
 
     const request = ctx.switchToHttp().getRequest<Request>();
-    const id = request.query[key];
+    const rawId = request.params[key] ?? request.query[key];
+    const id = Array.isArray(rawId) ? rawId[0] : rawId;
 
     const ownersList = await this.findOwners.exec();
     const hasOwner = ownersList.some((owner) => owner.id === Number(id));
