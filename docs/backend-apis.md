@@ -236,10 +236,28 @@ Comandos úteis:
 
 - `pnpm test`
 - `pnpm test:e2e`
+- `pnpm test:e2e:auth`
 
-## Referências
+### Casos E2E de autenticação
 
-- [NestJS Documentation](https://docs.nestjs.com/)
-- [TypeORM Documentation](https://typeorm.io/)
-- [Jest Documentation](https://jestjs.io/docs/getting-started)
-- [Swagger OpenAPI](https://swagger.io/specification/)
+Os cenários E2E de autenticação usam `@nestjs/testing` para subir uma instância global do `AppModule` em `beforeAll`, com todos os controllers carregados. Firebase, TypeORM e `UserRepo` são substituídos por mocks em memória para evitar dependência de serviços externos.
+
+| Caso                             | Requisição                                       | Resultado esperado                                                                            |
+| -------------------------------- | ------------------------------------------------ | --------------------------------------------------------------------------------------------- |
+| Requisição sem Bearer token      | `GET /members`                                   | `403 Forbidden`; Firebase não deve ser chamado.                                               |
+| Bearer token inválido            | `GET /members`                                   | `403 Forbidden`; validação de token deve ser chamada com `checkRevoked=true`.                 |
+| Sincronização de usuário novo    | `POST /account/sync`                             | `201 Created`; cria usuário em memória e retorna `uid`, `email`, `name`, `provider` e `role`. |
+| Atualização da conta autenticada | `PATCH /account/:id`                             | `200 OK`; atualiza o nome do usuário autenticado.                                             |
+| Remoção da conta autenticada     | `DELETE /account/:id`                            | `204 No Content`; remove usuário no Firebase mockado e no repositório mockado.                |
+| Listagem de membros              | `GET /members?limit=2`                           | `200 OK`; retorna lista paginada e total.                                                     |
+| Busca de membro                  | `GET /member/:id`                                | `200 OK`; retorna o membro encontrado.                                                        |
+| Alteração de cargo sem permissão | `PATCH /member/:id?role=admin` com usuário comum | `403 Forbidden`.                                                                              |
+| Alteração de cargo com admin     | `PATCH /member/:id?role=admin` com admin         | `200 OK`; retorna membro com `role=admin`.                                                    |
+| Remoção de owner                 | `DELETE /member/:id` para usuário `owner`        | `401 Unauthorized`; operação bloqueada pelo `PreventOwnerGuard`.                              |
+| Remoção de membro por admin      | `DELETE /member/:id` com admin                   | `204 No Content`; remove usuário no Firebase mockado e no repositório mockado.                |
+
+Status atual do relatório E2E:
+
+- Comando principal: `pnpm test:e2e:auth`
+- Status atual: suíte passando em ambiente com execução HTTP habilitada.
+- Validação unitária complementar: `pnpm test -- --runInBand test/unit/modules/commons/auth` passou com 8 suítes e 27 testes.
