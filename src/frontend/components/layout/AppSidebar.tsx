@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import type { User } from "firebase/auth";
 import {
+  Activity,
   Building2,
   ChevronLeft,
   ChevronRight,
@@ -28,6 +29,7 @@ const nav = [
   { href: "/homepage", label: "Início", icon: Home },
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/map", label: "Mapa", icon: Map },
+  { href: "/telemetry", label: "Telemetria", icon: Activity },
 ] as const;
 
 export function AppSidebar({ user }: { user: User }) {
