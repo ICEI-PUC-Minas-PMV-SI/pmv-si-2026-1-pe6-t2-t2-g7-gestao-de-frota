@@ -7,6 +7,7 @@ import { JourneyModel } from '../../../../modules/journey/models/Journey.model';
 import { JourneyStopModel } from '../../../../modules/journey/models/JourneyStop.model';
 import { JourneyPositionModel } from '../../../../modules/journey/models/JourneyPosition.model';
 import { Default1774375949914 } from './1774375949914-default';
+import { AnalyticsViews1774375949915 } from './1774375949915-analytics-views';
 
 const config: DataSourceOptions = {
   type: 'cockroachdb',
@@ -23,7 +24,7 @@ const config: DataSourceOptions = {
     JourneyStopModel,
     JourneyPositionModel,
   ],
-  migrations: [Default1774375949914],
+  migrations: [Default1774375949914, AnalyticsViews1774375949915],
   synchronize: false,
   migrationsRun: false,
   metadataTableName: 'typeorm_metadata',
