@@ -6,8 +6,11 @@ import { VehicleModel } from '../../../../modules/vehicle/models/Vehicle.model';
 import { JourneyModel } from '../../../../modules/journey/models/Journey.model';
 import { JourneyStopModel } from '../../../../modules/journey/models/JourneyStop.model';
 import { JourneyPositionModel } from '../../../../modules/journey/models/JourneyPosition.model';
+import { TelemetryModel } from '../../../../modules/telemetry/models/Telemetry.model';
 import { Default1774375949914 } from './1774375949914-default';
 import { AnalyticsViews1774375949915 } from './1774375949915-analytics-views';
+import { Telemetry1774375949915 } from './1774375949915-telemetry';
+import { TelemetryRenameRpm1774375949916 } from './1774375949916-telemetry-rename-rpm';
 
 const config: DataSourceOptions = {
   type: 'cockroachdb',
@@ -23,8 +26,14 @@ const config: DataSourceOptions = {
     JourneyModel,
     JourneyStopModel,
     JourneyPositionModel,
+    TelemetryModel,
   ],
-  migrations: [Default1774375949914, AnalyticsViews1774375949915],
+  migrations: [
+    Default1774375949914,
+    Telemetry1774375949915,
+    TelemetryRenameRpm1774375949916,
+    AnalyticsViews1774375949915
+  ],
   synchronize: false,
   migrationsRun: false,
   metadataTableName: 'typeorm_metadata',

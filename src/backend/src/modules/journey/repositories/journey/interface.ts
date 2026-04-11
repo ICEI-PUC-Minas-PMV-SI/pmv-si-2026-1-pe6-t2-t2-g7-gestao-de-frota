@@ -11,4 +11,6 @@ export abstract class JourneyRepo {
     id: string,
     userId: number,
   ): Promise<JourneyModel | null>;
+
+  abstract findStopsByJourneyId(journeyId: string): Promise<JourneyStopModel[]>;
 }

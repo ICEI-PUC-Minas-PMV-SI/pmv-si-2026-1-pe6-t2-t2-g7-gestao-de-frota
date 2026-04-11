@@ -11,7 +11,7 @@
     "start:dev": "dotenv -e .env -- nest start --watch",
     "start:debug": "dotenv -e .env.test -- nest start --debug --watch",
     "start:prod": "dotenv -e .env.prod -- node dist/main",
-    "lint": "eslint src --max-warnings=0",
+    "lint": "eslint src test --max-warnings=0",
     "lint:fix": "eslint --fix",
     "prettier": "prettier --write",
     "test": "jest",
@@ -19,6 +19,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
+    "test:e2e:auth": "jest --config ./test/jest-e2e.json --runInBand test/e2e/auth.e2e-spec.ts",
     "migrate:generate": "dotenv -e .env -- typeorm-ts-node-commonjs migration:generate -d ./src/modules/commons/typeorm/migrations/handler.ts ./src/modules/commons/typeorm/migrations/default",
     "migrate:run": "dotenv -e .env -- typeorm-ts-node-commonjs migration:run -d ./src/modules/commons/typeorm/migrations/handler.ts",
     "migrate:revert": "dotenv -e .env -- typeorm-ts-node-commonjs migration:revert -d ./src/modules/commons/typeorm/migrations/handler.ts",
@@ -31,6 +32,10 @@
   },
   "lint-staged": {
     "src/**/*.+(js|jsx|ts|tsx|md|mdx)": [
+      "pnpm prettier",
+      "pnpm lint:fix"
+    ],
+    "test/**/*.+(js|jsx|ts|tsx|md|mdx)": [
       "pnpm prettier",
       "pnpm lint:fix"
     ]
@@ -82,13 +87,18 @@
       "json",
       "ts"
     ],
-    "rootDir": "src",
-    "testRegex": ".*\\.spec\\.ts$",
+    "rootDir": ".",
+    "testMatch": [
+      "<rootDir>/test/unit/**/*.spec.ts"
+    ],
+    "moduleNameMapper": {
+      "^src/(.*)$": "<rootDir>/src/$1"
+    },
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },
     "collectCoverageFrom": [
-      "**/*.(t|j)s"
+      "<rootDir>/src/**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
