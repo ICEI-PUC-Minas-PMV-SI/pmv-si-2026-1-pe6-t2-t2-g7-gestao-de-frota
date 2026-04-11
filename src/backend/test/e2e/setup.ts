@@ -6,6 +6,11 @@ import { UserModel } from '../../src/modules/commons/auth/models/User.model';
 import { UserRepo } from '../../src/modules/commons/auth/repositories/user/interface';
 import { FirebaseService } from '../../src/modules/commons/firebase/firebase.service';
 import { typeORMConsts } from '../../src/modules/commons/typeorm/consts';
+import {
+  IncidentModel,
+  IncidentType,
+} from '../../src/modules/incident/models/Incident.model';
+import { IncidentRepo } from '../../src/modules/incident/repositories/incident/interface';
 import { VehicleModel } from '../../src/modules/vehicle/models/Vehicle.model';
 import { VehicleRepo } from '../../src/modules/vehicle/repositories/vehicle/interface';
 
@@ -24,11 +29,14 @@ type E2eGlobals = typeof globalThis & {
 };
 
 const now = new Date('2026-04-08T00:00:00.000Z');
+const incidentVehicleOneId = '11111111-1111-4111-8111-111111111111';
+const incidentVehicleTwoId = '22222222-2222-4222-8222-222222222222';
 
 class E2eTestState {
   private users = new Map<number, UserModel>();
   private nextId = 10;
   private vehicles = new Map<string, VehicleModel>();
+  private incidents = new Map<string, IncidentModel>();
   private analyticsDashboardRows = [
     {
       total_users: '3',
@@ -210,6 +218,47 @@ class E2eTestState {
     ),
   };
 
+  readonly incidentRepo: IncidentRepo = {
+    create: jest.fn((incident: IncidentModel) => {
+      this.incidents.set(incident.id, incident);
+      return Promise.resolve(incident);
+    }),
+    update: jest.fn((changes: IncidentModel) => {
+      const existing = this.incidents.get(changes.id);
+      if (!existing) return Promise.resolve(changes);
+
+      const merged = new IncidentModel({
+        ...existing.toJSON(),
+        ...changes.toJSON(),
+        createdAt: existing.createdAt,
+        updatedAt: now,
+      });
+      this.incidents.set(merged.id, merged);
+      return Promise.resolve(merged);
+    }),
+    delete: jest.fn((id: string) => {
+      this.incidents.delete(id);
+      return Promise.resolve(undefined);
+    }),
+    findById: jest.fn((id: string) =>
+      Promise.resolve(this.incidents.get(id) ?? null),
+    ),
+    findAll: jest.fn(() =>
+      Promise.resolve(
+        [...this.incidents.values()].sort(
+          (a, b) => a.createdAt.getTime() - b.createdAt.getTime(),
+        ),
+      ),
+    ),
+    findByVehicleId: jest.fn((vehicleId: string) =>
+      Promise.resolve(
+        [...this.incidents.values()]
+          .filter((incident) => incident.vehicleId === vehicleId)
+          .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime()),
+      ),
+    ),
+  };
+
   readonly dataSource = {
     isInitialized: true,
     destroy: jest.fn(() => Promise.resolve(undefined)),
@@ -315,6 +364,30 @@ class E2eTestState {
         }),
       ].map((vehicle) => [vehicle.id, vehicle]),
     );
+    this.incidents = new Map(
+      [
+        new IncidentModel({
+          id: 'incident-1-id',
+          vehicleId: incidentVehicleOneId,
+          tipo: IncidentType.SINISTRO,
+          descricao: 'Colisao traseira leve',
+          valor: 500,
+          data: new Date('2026-04-05T10:00:00.000Z'),
+          createdAt: now,
+          updatedAt: now,
+        }),
+        new IncidentModel({
+          id: 'incident-2-id',
+          vehicleId: incidentVehicleTwoId,
+          tipo: IncidentType.MULTA,
+          descricao: 'Excesso de velocidade',
+          valor: 250,
+          data: new Date('2026-04-06T11:30:00.000Z'),
+          createdAt: new Date(now.getTime() + 1_000),
+          updatedAt: new Date(now.getTime() + 1_000),
+        }),
+      ].map((incident) => [incident.id, incident]),
+    );
   }
 }
 
@@ -349,6 +422,8 @@ beforeAll(async () => {
     .useValue(state.userRepo)
     .overrideProvider(VehicleRepo)
     .useValue(state.vehicleRepo)
+    .overrideProvider(IncidentRepo)
+    .useValue(state.incidentRepo)
     .overrideProvider(typeORMConsts.databaseProviders)
     .useValue(state.dataSource)
     .compile();
