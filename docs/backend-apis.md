@@ -33,7 +33,9 @@ Principais entidades de domínio:
 
 ## API Endpoints
 
-Base URL local (padrão): `http://localhost:3030`
+- Base URL local (padrão): `http://localhost:3030`
+- Documentação oficial do Swagger: a [documentação do swagger em nuvem](https://icei-puc-minas-pmv-si.github.io/pmv-si-2026-1-pe6-t2-t2-g7-gestao-de-frota/swagger/) serve para fins de referências e validações dos docentes, para interagir com a API diretamente é necessário ativar o servidor localmente e acessar o endpoint ```/docs```
+- OpenAPI (JSON): [https://icei-puc-minas-pmv-si.github.io/pmv-si-2026-1-pe6-t2-t2-g7-gestao-de-frota/swagger/swagger.json](https://icei-puc-minas-pmv-si.github.io/pmv-si-2026-1-pe6-t2-t2-g7-gestao-de-frota/swagger/swagger.json)
 
 ## Considerações de Segurança
 
@@ -62,8 +64,8 @@ Fluxo recomendado:
 
 Comandos úteis:
 
-- `pnpm test`
-- `pnpm test:e2e`
+- `pnpm test`: para testes unitários
+- `pnpm test:e2e`: para testes E2E
 
 ### Casos E2E de autenticação
 
@@ -129,3 +131,11 @@ Os cenários E2E de incidentes usam a mesma infraestrutura de `setup.ts`, com au
 | Atualização de incidente inexistente       | `PATCH /incident/:id` com id inexistente                 | `404 Not Found`; atualização rejeitada por ausência do registro.                                    |
 | Remoção de incidente existente             | `DELETE /incident/:id`                                   | `204 No Content`; aciona a exclusão no repositório mockado.                                         |
 
+## Resultados Obtidos no Testes
+
+Todos os testes de ponta a ponta passaram com sucesso com uma margem de coverage aceitável para o tamanho do projeto atual:
+
+<img width="463" height="167" alt="screenshot_2026-04-11_02-30-54" src="https://github.com/user-attachments/assets/b923240c-059b-441a-858a-7139e8b6a6cb" />
+
+Para visualizar a cobertura de testes unitários e E2E basta conferir o link abaixo:
+- [https://icei-puc-minas-pmv-si.github.io/pmv-si-2026-1-pe6-t2-t2-g7-gestao-de-frota/coverage/](https://icei-puc-minas-pmv-si.github.io/pmv-si-2026-1-pe6-t2-t2-g7-gestao-de-frota/coverage/)
