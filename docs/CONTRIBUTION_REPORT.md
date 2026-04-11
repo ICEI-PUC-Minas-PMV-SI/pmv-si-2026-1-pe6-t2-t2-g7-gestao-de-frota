@@ -1,6 +1,6 @@
 # 📊 Relatório de Contribuições do Projeto
 
-**Última atualização:** 11/04/2026 05:28
+**Última atualização:** 11/04/2026 05:37
 
 ---
 
@@ -11,10 +11,10 @@
 | Grégory Stevão                |         7 |        11 |         9 |          5 |              5 |               2 |
 | João Borges                   |         3 |        15 |        16 |          2 |              3 |               2 |
 | João Pedro Reis Martins       |         7 |      1325 |        26 |         30 |              7 |               4 |
-| Nícolas                       |        16 |        50 |        74 |          2 |             10 |               2 |
+| Nícolas                       |        17 |        63 |        77 |          3 |             11 |               3 |
 | Nícolas Cleiton Basilio Viana |        25 |     29212 |       833 |        155 |             12 |               2 |
 | Vitor Sales                   |        14 |      1474 |        29 |         33 |             14 |               8 |
-| github-actions[bot]           |        20 |       166 |       158 |          3 |             20 |               1 |
+| github-actions[bot]           |        21 |       170 |       162 |          3 |             21 |               1 |
 | github-classroom[bot]         |         1 |      2152 |         0 |         45 |              1 |              13 |
 | gregorystevao19               |        18 |     18845 |       683 |        174 |             10 |               3 |
 | monezero                      |         2 |      4559 |       917 |         19 |              0 |               0 |
@@ -22,7 +22,7 @@
 
 ## 📅 Contribuições Semanais (Todo o Semestre)
 
-**2026-04-04**: João Borges: 1, João Pedro Reis Martins: 1, Nícolas: 7, Nícolas Cleiton Basilio Viana: 22, Vitor Sales: 2, github-actions[bot]: 14, gregorystevao19: 5, monezero: 2
+**2026-04-04**: João Borges: 1, João Pedro Reis Martins: 1, Nícolas: 8, Nícolas Cleiton Basilio Viana: 22, Vitor Sales: 2, github-actions[bot]: 15, gregorystevao19: 5, monezero: 2
 
 **2026-03-28**: Grégory Stevão: 2, github-actions[bot]: 3
 
