@@ -83,6 +83,21 @@ Os cenários E2E de autenticação usam `@nestjs/testing` para subir uma instân
 | Remoção de owner                 | `DELETE /member/:id` para usuário `owner`        | `401 Unauthorized`; operação bloqueada pelo `PreventOwnerGuard`.                              |
 | Remoção de membro por admin      | `DELETE /member/:id` com admin                   | `204 No Content`; remove usuário no Firebase mockado e no repositório mockado.                |
 
+### Casos de teste de analytics
+
+Os testes de analytics foram adicionados em duas camadas: unitária para validar o mapeamento dos serviços sobre as views e E2E para validar autenticação, contrato HTTP e shape final exposto pelos endpoints `/analytics`.
+
+| Tipo     | Arquivo                                                                 | Caso                                                                 | Resultado esperado                                                                                  |
+| -------- | ----------------------------------------------------------------------- | -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| Unitário | `test/unit/modules/analytics/services/GetDashboard.service.spec.ts`     | Conversão dos campos do dashboard                                    | `totalUsers`, `totalVehicles`, `totalJourneys`, `journeysInProgress` e `journeysFinished` como `number`. |
+| Unitário | `test/unit/modules/analytics/services/GetUsersAnalytics.service.spec.ts` | Mapeamento da lista de usuários                                      | `userId` convertido para `number`; `name`, `email` e `role` preservados; totais expostos como `number`. |
+| Unitário | `test/unit/modules/analytics/services/GetJourneysAnalytics.service.spec.ts` | Mapeamento de jornadas com campos preenchidos                        | `userId` convertido para `number`; `journeyId`, `journeyName`, `status`, `startedAt`, `userName` e `userEmail` preservados. |
+| Unitário | `test/unit/modules/analytics/services/GetJourneysAnalytics.service.spec.ts` | Tratamento de campos opcionais nulos                                 | `journey_name` e `user_name` nulos são retornados como campos opcionais ausentes (`undefined`).    |
+| E2E      | `test/e2e/analytics.e2e-spec.ts`                                        | Acesso sem Bearer token ao dashboard                                 | `403 Forbidden`; validação de token não deve ser chamada.                                           |
+| E2E      | `test/e2e/analytics.e2e-spec.ts`                                        | `GET /analytics/dashboard` autenticado                               | `200 OK`; retorna objeto único com campos numéricos no formato do DTO.                              |
+| E2E      | `test/e2e/analytics.e2e-spec.ts`                                        | `GET /analytics/users` autenticado                                   | `200 OK`; retorna array com `userId`, `name`, `email`, `role`, `totalJourneys`, `journeysInProgress` e `journeysFinished`. |
+| E2E      | `test/e2e/analytics.e2e-spec.ts`                                        | `GET /analytics/journeys` autenticado                                | `200 OK`; retorna array com campos do DTO e omite opcionais ausentes em jornadas sem nome/usuário. |
+
 ### Casos E2E de veículos
 
 Os cenários E2E de veículos usam a mesma infraestrutura de `setup.ts`, com autenticação, Firebase e repositórios substituídos por mocks em memória para validar o comportamento HTTP do módulo sem dependências externas.
@@ -97,7 +112,6 @@ Os cenários E2E de veículos usam a mesma infraestrutura de `setup.ts`, com aut
 | Atualização de veículo existente          | `PATCH /vehicle/:id`                        | `200 OK`; atualiza os campos enviados e retorna o veículo atualizado.              |
 | Atualização de veículo inexistente        | `PATCH /vehicle/:id` com id inexistente     | `404 Not Found`; atualização rejeitada por ausência do registro.                   |
 | Remoção de veículo existente              | `DELETE /vehicle/:id`                       | `204 No Content`; aciona a exclusão no repositório mockado.                        |
-
 
 ### Casos E2E de incidentes
 
