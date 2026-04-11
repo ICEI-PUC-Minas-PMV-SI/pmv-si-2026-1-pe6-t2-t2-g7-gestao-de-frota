@@ -6,6 +6,8 @@ import { UserModel } from '../../src/modules/commons/auth/models/User.model';
 import { UserRepo } from '../../src/modules/commons/auth/repositories/user/interface';
 import { FirebaseService } from '../../src/modules/commons/firebase/firebase.service';
 import { typeORMConsts } from '../../src/modules/commons/typeorm/consts';
+import { VehicleModel } from '../../src/modules/vehicle/models/Vehicle.model';
+import { VehicleRepo } from '../../src/modules/vehicle/repositories/vehicle/interface';
 
 type TokenPayload = {
   uid: string;
@@ -26,6 +28,7 @@ const now = new Date('2026-04-08T00:00:00.000Z');
 class E2eTestState {
   private users = new Map<number, UserModel>();
   private nextId = 10;
+  private vehicles = new Map<string, VehicleModel>();
 
   readonly deleteUserRepoMock = jest.fn((id: number) => {
     this.users.delete(Number(id));
@@ -39,6 +42,10 @@ class E2eTestState {
   });
 
   readonly deleteFirebaseUser = jest.fn(() => Promise.resolve(undefined));
+  readonly deleteVehicleRepoMock = jest.fn((id: string) => {
+    this.vehicles.delete(id);
+    return Promise.resolve(undefined);
+  });
 
   readonly userRepo: UserRepo = {
     save: jest.fn((user: UserModel) => {
@@ -107,6 +114,36 @@ class E2eTestState {
         deleteUser: this.deleteFirebaseUser,
       }),
     },
+  };
+
+  readonly vehicleRepo: VehicleRepo = {
+    create: jest.fn((vehicle: VehicleModel) => {
+      this.vehicles.set(vehicle.id, vehicle);
+      return Promise.resolve(vehicle);
+    }),
+    update: jest.fn((changes: VehicleModel) => {
+      const existing = this.vehicles.get(changes.id);
+      if (!existing) return Promise.resolve(changes);
+
+      const merged = new VehicleModel({
+        ...existing.toJSON(),
+        ...changes.toJSON(),
+        updatedAt: now,
+      });
+      this.vehicles.set(merged.id, merged);
+      return Promise.resolve(merged);
+    }),
+    delete: this.deleteVehicleRepoMock,
+    findById: jest.fn((id: string) =>
+      Promise.resolve(this.vehicles.get(id) ?? null),
+    ),
+    findAll: jest.fn(() =>
+      Promise.resolve(
+        [...this.vehicles.values()].sort(
+          (a, b) => a.createdAt.getTime() - b.createdAt.getTime(),
+        ),
+      ),
+    ),
   };
 
   readonly dataSource = {
@@ -191,6 +228,28 @@ class E2eTestState {
         }),
       ].map((user) => [user.id, user]),
     );
+    this.vehicles = new Map(
+      [
+        new VehicleModel({
+          id: 'vehicle-1-id',
+          marca: 'Fiat',
+          modelo: 'Uno',
+          ano: 2020,
+          placa: 'ABC1D23',
+          createdAt: now,
+          updatedAt: now,
+        }),
+        new VehicleModel({
+          id: 'vehicle-2-id',
+          marca: 'Volkswagen',
+          modelo: 'Gol',
+          ano: 2021,
+          placa: 'XYZ9K87',
+          createdAt: new Date(now.getTime() + 1_000),
+          updatedAt: new Date(now.getTime() + 1_000),
+        }),
+      ].map((vehicle) => [vehicle.id, vehicle]),
+    );
   }
 }
 
@@ -223,6 +282,8 @@ beforeAll(async () => {
     .useValue(state.firebaseService)
     .overrideProvider(UserRepo)
     .useValue(state.userRepo)
+    .overrideProvider(VehicleRepo)
+    .useValue(state.vehicleRepo)
     .overrideProvider(typeORMConsts.databaseProviders)
     .useValue(state.dataSource)
     .compile();
