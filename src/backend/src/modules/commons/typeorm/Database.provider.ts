@@ -7,6 +7,7 @@ import { VehicleModel } from 'src/modules/vehicle/models/Vehicle.model';
 import { JourneyModel } from 'src/modules/journey/models/Journey.model';
 import { JourneyStopModel } from 'src/modules/journey/models/JourneyStop.model';
 import { JourneyPositionModel } from 'src/modules/journey/models/JourneyPosition.model';
+import { IncidentModel } from 'src/modules/incident/models/Incident.model';
 import { TelemetryModel } from 'src/modules/telemetry/models/Telemetry.model';
 
 export const getDataSource = async () => {
@@ -28,6 +29,7 @@ export const getDataSource = async () => {
       JourneyModel,
       JourneyStopModel,
       JourneyPositionModel,
+      IncidentModel,
       TelemetryModel,
     ],
     cache: {
