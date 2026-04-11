@@ -29,6 +29,55 @@ class E2eTestState {
   private users = new Map<number, UserModel>();
   private nextId = 10;
   private vehicles = new Map<string, VehicleModel>();
+  private analyticsDashboardRows = [
+    {
+      total_users: '3',
+      total_vehicles: '2',
+      total_journeys: '5',
+      journeys_in_progress: '2',
+      journeys_finished: '3',
+    },
+  ];
+  private analyticsUsersRows = [
+    {
+      user_id: '1',
+      name: 'Usuario Teste',
+      email: 'user@test.com',
+      role: 'user',
+      total_journeys: '2',
+      journeys_in_progress: '1',
+      journeys_finished: '1',
+    },
+    {
+      user_id: '2',
+      name: 'Admin Teste',
+      email: 'admin@test.com',
+      role: 'admin',
+      total_journeys: '3',
+      journeys_in_progress: '1',
+      journeys_finished: '2',
+    },
+  ];
+  private analyticsJourneysRows = [
+    {
+      journey_id: 'journey-1',
+      journey_name: 'Rota Centro',
+      status: 'in_progress',
+      started_at: '2026-04-01T10:00:00.000Z',
+      user_id: '1',
+      user_name: 'Usuario Teste',
+      user_email: 'user@test.com',
+    },
+    {
+      journey_id: 'journey-2',
+      journey_name: null,
+      status: 'finished',
+      started_at: '2026-04-02T15:30:00.000Z',
+      user_id: '2',
+      user_name: null,
+      user_email: 'admin@test.com',
+    },
+  ];
 
   readonly deleteUserRepoMock = jest.fn((id: number) => {
     this.users.delete(Number(id));
@@ -45,6 +94,21 @@ class E2eTestState {
   readonly deleteVehicleRepoMock = jest.fn((id: string) => {
     this.vehicles.delete(id);
     return Promise.resolve(undefined);
+  });
+  readonly queryDataSourceMock = jest.fn((sql: string) => {
+    if (sql.includes('vw_analytics_dashboard')) {
+      return Promise.resolve(this.analyticsDashboardRows);
+    }
+
+    if (sql.includes('vw_analytics_users')) {
+      return Promise.resolve(this.analyticsUsersRows);
+    }
+
+    if (sql.includes('vw_journeys_users')) {
+      return Promise.resolve(this.analyticsJourneysRows);
+    }
+
+    return Promise.resolve([]);
   });
 
   readonly userRepo: UserRepo = {
@@ -149,6 +213,7 @@ class E2eTestState {
   readonly dataSource = {
     isInitialized: true,
     destroy: jest.fn(() => Promise.resolve(undefined)),
+    query: this.queryDataSourceMock,
     getRepository: jest.fn(() => ({
       countBy: jest.fn(() => Promise.resolve(0)),
       delete: jest.fn(() => Promise.resolve(undefined)),
