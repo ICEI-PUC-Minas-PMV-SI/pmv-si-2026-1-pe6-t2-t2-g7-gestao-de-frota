@@ -17,6 +17,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
+    "test:cov:html": "jest --coverage --runInBand",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "migrate:generate": "dotenv -e .env -- typeorm-ts-node-commonjs migration:generate -d ./src/modules/commons/typeorm/migrations/handler.ts ./src/modules/commons/typeorm/migrations/default",
@@ -97,14 +98,15 @@
       "^.+\\.(t|j)s$": "ts-jest"
     },
     "collectCoverageFrom": [
-      "<rootDir>/src/**/*.(t|j)s",
-      "!<rootDir>/src/main.ts",
-      "!<rootDir>/src/app.module.ts",
-      "!<rootDir>/src/**/*.module.ts",
-      "!<rootDir>/src/**/dtos/**/*.(t|j)s",
-      "!<rootDir>/src/modules/commons/typeorm/migrations/**/*.(t|j)s"
+      "<rootDir>/src/**/*.(t|j)s"
     ],
-    "coverageDirectory": "../coverage",
+    "coverageDirectory": "<rootDir>/coverage",
+    "coverageReporters": [
+      "html",
+      "lcov",
+      "text-summary",
+      "json-summary"
+    ],
     "testEnvironment": "node"
   }
 }
