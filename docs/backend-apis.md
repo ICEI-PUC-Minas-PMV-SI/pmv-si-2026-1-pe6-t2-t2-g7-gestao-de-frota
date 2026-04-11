@@ -276,3 +276,23 @@ Status atual do relatório E2E:
 - Comando principal: `pnpm test:e2e:auth`
 - Status atual: suíte passando em ambiente com execução HTTP habilitada.
 - Validação unitária complementar: `pnpm test -- --runInBand test/unit/modules/commons/auth` passou com 8 suítes e 27 testes.
+
+### Casos E2E de veículos
+
+Os cenários E2E de veículos usam a mesma infraestrutura de `setup.ts`, com autenticação, Firebase e repositórios substituídos por mocks em memória para validar o comportamento HTTP do módulo sem dependências externas.
+
+| Caso                                      | Requisição                                  | Resultado esperado                                                                 |
+| ----------------------------------------- | ------------------------------------------- | ---------------------------------------------------------------------------------- |
+| Listagem sem autenticação                 | `GET /vehicle`                              | `403 Forbidden`; Firebase não deve ser chamado.                                    |
+| Listagem autenticada de veículos          | `GET /vehicle` com usuário autenticado      | `200 OK`; retorna os veículos mockados com `id`, `marca`, `modelo`, `ano` e `placa`. |
+| Busca de veículo por id                   | `GET /vehicle/:id`                          | `200 OK`; retorna o veículo correspondente ao identificador informado.             |
+| Criação de veículo com payload válido     | `POST /vehicle`                             | `201 Created`; cria veículo e retorna dados persistidos, incluindo timestamps.     |
+| Criação de veículo com placa inválida     | `POST /vehicle` com `placa` fora do padrão  | `400 Bad Request`; payload rejeitado pela validação.                               |
+| Atualização de veículo existente          | `PATCH /vehicle/:id`                        | `200 OK`; atualiza os campos enviados e retorna o veículo atualizado.              |
+| Atualização de veículo inexistente        | `PATCH /vehicle/:id` com id inexistente     | `404 Not Found`; atualização rejeitada por ausência do registro.                   |
+| Remoção de veículo existente              | `DELETE /vehicle/:id`                       | `204 No Content`; aciona a exclusão no repositório mockado.                        |
+
+Status atual do relatório E2E de veículos:
+
+- Comando principal: `pnpm test:e2e -- --runInBand test/e2e/vehicle.e2e-spec.ts`
+- Status atual: suíte documentada a partir dos cenários presentes em `test/e2e/vehicle.e2e-spec.ts`.
