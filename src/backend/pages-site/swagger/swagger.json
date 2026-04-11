@@ -1,0 +1,1586 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/account/{id}": {
+      "delete": {
+        "operationId": "DeleteUserController_exec",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "ID_TOKEN": []
+          }
+        ],
+        "summary": "Deletar usuário",
+        "tags": [
+          "Auth"
+        ]
+      },
+      "patch": {
+        "operationId": "UpdateUserController_exec",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetUserResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ID_TOKEN": []
+          }
+        ],
+        "summary": "Atualizar usuário",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/account/sync": {
+      "post": {
+        "operationId": "SignupController_exec",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetUserResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ID_TOKEN": []
+          }
+        ],
+        "summary": "Atualizar usuário",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/member/{id}": {
+      "get": {
+        "description": "Retorna um membro usando o número de identificação do usuário",
+        "operationId": "GetMemberController_exec",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetUserResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ID_TOKEN": []
+          }
+        ],
+        "summary": "Retorna um membro usando o id",
+        "tags": [
+          "Membros"
+        ]
+      },
+      "patch": {
+        "operationId": "ChangeMemberRoleController_exec",
+        "parameters": [
+          {
+            "name": "role",
+            "required": true,
+            "in": "query",
+            "description": "Defini os cargos do usuário, sendo eles: 'admin' ou 'user'",
+            "schema": {
+              "example": "admin"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetUserResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ID_TOKEN": []
+          }
+        ],
+        "summary": "Atualizar o cargo de um usuário",
+        "tags": [
+          "Membros"
+        ]
+      },
+      "delete": {
+        "description": "Remove um membro usando o número de identificação do usuário",
+        "operationId": "DeleteMemberController_exec",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "ID_TOKEN": []
+          }
+        ],
+        "summary": "Remove um membro usando o id",
+        "tags": [
+          "Membros"
+        ]
+      }
+    },
+    "/members": {
+      "get": {
+        "operationId": "ListMemberController_exec",
+        "parameters": [
+          {
+            "name": "last-item-id",
+            "required": false,
+            "in": "query",
+            "description": "Referência o último id retornado da lista (usado para paginação)",
+            "schema": {}
+          },
+          {
+            "name": "limit",
+            "required": true,
+            "in": "query",
+            "description": "Indica a largura da lista a ser retornada",
+            "schema": {
+              "example": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListMembersResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ID_TOKEN": []
+          }
+        ],
+        "summary": "Lista todos os membros registrados",
+        "tags": [
+          "Membros"
+        ]
+      }
+    },
+    "/vehicle": {
+      "post": {
+        "operationId": "CreateVehicleController_exec",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateVehicleRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetVehicleResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Criar um veículo",
+        "tags": [
+          "Veículo"
+        ]
+      },
+      "get": {
+        "operationId": "FindAllVehiclesController_exec",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetVehicleResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Listar todos os veículos",
+        "tags": [
+          "Veículo"
+        ]
+      }
+    },
+    "/vehicle/{id}": {
+      "get": {
+        "operationId": "FindVehicleController_exec",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetVehicleResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Buscar um veículo por ID",
+        "tags": [
+          "Veículo"
+        ]
+      },
+      "patch": {
+        "operationId": "UpdateVehicleController_exec",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateVehicleRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetVehicleResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Atualizar um veículo",
+        "tags": [
+          "Veículo"
+        ]
+      },
+      "delete": {
+        "operationId": "DeleteVehicleController_exec",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "summary": "Deletar um veículo",
+        "tags": [
+          "Veículo"
+        ]
+      }
+    },
+    "/journey": {
+      "post": {
+        "operationId": "CreateJourneyController_exec",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateJourneyRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateJourneyResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Iniciar jornada (criar com paradas)",
+        "tags": [
+          "Jornada"
+        ]
+      }
+    },
+    "/journey/{journeyId}/positions": {
+      "post": {
+        "operationId": "RecordJourneyPositionController_exec",
+        "parameters": [
+          {
+            "name": "journeyId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecordPositionRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordPositionResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Registar posição atual na jornada",
+        "tags": [
+          "Jornada"
+        ]
+      }
+    },
+    "/journey/{journeyId}/positions/latest": {
+      "get": {
+        "operationId": "GetLatestJourneyPositionController_exec",
+        "parameters": [
+          {
+            "name": "journeyId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LatestPositionResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Última posição registada da jornada",
+        "tags": [
+          "Jornada"
+        ]
+      }
+    },
+    "/journey/{journeyId}": {
+      "get": {
+        "operationId": "GetJourneyController_exec",
+        "parameters": [
+          {
+            "name": "journeyId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Obter jornada com paradas",
+        "tags": [
+          "Jornada"
+        ]
+      }
+    },
+    "/incident": {
+      "post": {
+        "operationId": "CreateIncidentController_exec",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateIncidentRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetIncidentResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Criar um registro de sinistro ou multa",
+        "tags": [
+          "Incidente"
+        ]
+      },
+      "get": {
+        "operationId": "FindAllIncidentsController_exec",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetIncidentResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Listar todos os incidentes",
+        "tags": [
+          "Incidente"
+        ]
+      }
+    },
+    "/incident/{id}": {
+      "get": {
+        "operationId": "FindIncidentController_exec",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetIncidentResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Buscar um incidente por ID",
+        "tags": [
+          "Incidente"
+        ]
+      },
+      "patch": {
+        "operationId": "UpdateIncidentController_exec",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateIncidentRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetIncidentResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Atualizar um incidente",
+        "tags": [
+          "Incidente"
+        ]
+      },
+      "delete": {
+        "operationId": "DeleteIncidentController_exec",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "summary": "Deletar um incidente",
+        "tags": [
+          "Incidente"
+        ]
+      }
+    },
+    "/incident/vehicle/{vehicleId}": {
+      "get": {
+        "operationId": "FindIncidentsByVehicleController_exec",
+        "parameters": [
+          {
+            "name": "vehicleId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetIncidentResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Listar incidentes de um veículo",
+        "tags": [
+          "Incidente"
+        ]
+      }
+    },
+    "/analytics/dashboard": {
+      "get": {
+        "operationId": "GetDashboardController_exec",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DashboardResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Painel geral de analytics",
+        "tags": [
+          "Analytics"
+        ]
+      }
+    },
+    "/analytics/users": {
+      "get": {
+        "operationId": "GetUsersAnalyticsController_exec",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UsersAnalyticsResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Analytics de usuários",
+        "tags": [
+          "Analytics"
+        ]
+      }
+    },
+    "/analytics/journeys": {
+      "get": {
+        "operationId": "GetJourneysAnalyticsController_exec",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/JourneysAnalyticsResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Analytics de jornadas",
+        "tags": [
+          "Analytics"
+        ]
+      }
+    },
+    "/journey/{journeyId}/telemetry": {
+      "post": {
+        "operationId": "RecordTelemetryController_exec",
+        "parameters": [
+          {
+            "name": "journeyId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecordTelemetryRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TelemetryResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Registrar telemetria da jornada",
+        "tags": [
+          "Telemetria"
+        ]
+      },
+      "get": {
+        "operationId": "GetJourneyTelemetryController_exec",
+        "parameters": [
+          {
+            "name": "journeyId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TelemetryResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Listar telemetria de uma jornada",
+        "tags": [
+          "Telemetria"
+        ]
+      }
+    },
+    "/journey/{journeyId}/telemetry/latest": {
+      "get": {
+        "operationId": "GetLatestTelemetryController_exec",
+        "parameters": [
+          {
+            "name": "journeyId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LatestTelemetryResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Obter última telemetria registrada da jornada",
+        "tags": [
+          "Telemetria"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "API",
+    "description": "API Backend System",
+    "version": "1.0.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "ID_TOKEN": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http",
+        "in": "header"
+      }
+    },
+    "schemas": {
+      "UpdateUserRequestDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "John Doe"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "GetUserResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "uid": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "example": "johndoe@email.com"
+          },
+          "name": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "provider": {
+            "type": "string",
+            "example": "google"
+          },
+          "role": {
+            "type": "string",
+            "example": "admin"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2025-10-04T21:08:42.332Z"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2025-10-04T21:08:42.332Z"
+          }
+        },
+        "required": [
+          "id",
+          "uid",
+          "email",
+          "name",
+          "provider",
+          "role",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "ListMembersResponseDto": {
+        "type": "object",
+        "properties": {
+          "list": {
+            "$ref": "#/components/schemas/GetUserResponseDto"
+          },
+          "total": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "list",
+          "total"
+        ]
+      },
+      "CreateVehicleRequestDto": {
+        "type": "object",
+        "properties": {
+          "marca": {
+            "type": "string",
+            "example": "Fiat"
+          },
+          "modelo": {
+            "type": "string",
+            "example": "Uno"
+          },
+          "ano": {
+            "type": "number",
+            "example": 2020
+          },
+          "placa": {
+            "type": "string",
+            "example": "ABC1D23",
+            "description": "Placa no padrão Mercosul"
+          }
+        },
+        "required": [
+          "marca",
+          "modelo",
+          "ano",
+          "placa"
+        ]
+      },
+      "GetVehicleResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "marca": {
+            "type": "string",
+            "example": "Fiat"
+          },
+          "modelo": {
+            "type": "string",
+            "example": "Uno"
+          },
+          "ano": {
+            "type": "number",
+            "example": 2020
+          },
+          "placa": {
+            "type": "string",
+            "example": "ABC1D23"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2025-10-04T21:08:42.332Z"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2025-10-04T21:08:42.332Z"
+          }
+        },
+        "required": [
+          "id",
+          "marca",
+          "modelo",
+          "ano",
+          "placa",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "UpdateVehicleRequestDto": {
+        "type": "object",
+        "properties": {
+          "marca": {
+            "type": "string",
+            "example": "Fiat"
+          },
+          "modelo": {
+            "type": "string",
+            "example": "Uno"
+          },
+          "ano": {
+            "type": "number",
+            "example": 2020
+          },
+          "placa": {
+            "type": "string",
+            "example": "ABC1D23",
+            "description": "Placa no padrão Mercosul"
+          }
+        },
+        "required": [
+          "marca",
+          "modelo",
+          "ano",
+          "placa"
+        ]
+      },
+      "JourneyParadaRequestDto": {
+        "type": "object",
+        "properties": {
+          "ordem": {
+            "type": "number",
+            "example": 1
+          },
+          "latitude": {
+            "type": "number",
+            "example": -19.8157
+          },
+          "longitude": {
+            "type": "number",
+            "example": -43.9542
+          }
+        },
+        "required": [
+          "ordem",
+          "latitude",
+          "longitude"
+        ]
+      },
+      "CreateJourneyRequestDto": {
+        "type": "object",
+        "properties": {
+          "nome": {
+            "type": "string",
+            "example": "Entrega manhã — zona sul"
+          },
+          "paradas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/JourneyParadaRequestDto"
+            }
+          }
+        },
+        "required": [
+          "paradas"
+        ]
+      },
+      "JourneyParadaResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "ordem": {
+            "type": "number"
+          },
+          "latitude": {
+            "type": "number"
+          },
+          "longitude": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "ordem",
+          "latitude",
+          "longitude"
+        ]
+      },
+      "CreateJourneyResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "number"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "in_progress",
+              "completed",
+              "cancelled"
+            ]
+          },
+          "iniciadaEm": {
+            "type": "string"
+          },
+          "paradas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/JourneyParadaResponseDto"
+            }
+          },
+          "criadaEm": {
+            "type": "string"
+          },
+          "atualizadaEm": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "userId",
+          "status",
+          "iniciadaEm",
+          "paradas",
+          "criadaEm",
+          "atualizadaEm"
+        ]
+      },
+      "RecordPositionRequestDto": {
+        "type": "object",
+        "properties": {
+          "latitude": {
+            "type": "number",
+            "example": -19.8157
+          },
+          "longitude": {
+            "type": "number",
+            "example": -43.9542
+          }
+        },
+        "required": [
+          "latitude",
+          "longitude"
+        ]
+      },
+      "RecordPositionResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "latitude": {
+            "type": "number"
+          },
+          "longitude": {
+            "type": "number"
+          },
+          "registradaEm": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "latitude",
+          "longitude",
+          "registradaEm"
+        ]
+      },
+      "LatestPositionResponseDto": {
+        "type": "object",
+        "properties": {
+          "temPosicao": {
+            "type": "boolean"
+          },
+          "latitude": {
+            "type": "number"
+          },
+          "longitude": {
+            "type": "number"
+          },
+          "registradaEm": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "temPosicao"
+        ]
+      },
+      "CreateIncidentRequestDto": {
+        "type": "object",
+        "properties": {
+          "vehicleId": {
+            "type": "string",
+            "example": "a0f5a1d3-34a2-4f78-9b1e-7cf426d5fa77"
+          },
+          "tipo": {
+            "type": "string",
+            "example": "sinistro",
+            "enum": [
+              "sinistro",
+              "multa"
+            ]
+          },
+          "descricao": {
+            "type": "string",
+            "example": "Colisão traseira em estacionamento"
+          },
+          "valor": {
+            "type": "number",
+            "example": 500
+          },
+          "data": {
+            "type": "string",
+            "example": "2026-04-10T00:00:00.000Z"
+          }
+        },
+        "required": [
+          "vehicleId",
+          "tipo",
+          "descricao"
+        ]
+      },
+      "GetIncidentResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "vehicleId": {
+            "type": "string",
+            "example": "a0f5a1d3-34a2-4f78-9b1e-7cf426d5fa77"
+          },
+          "tipo": {
+            "type": "string",
+            "example": "sinistro",
+            "enum": [
+              "sinistro",
+              "multa"
+            ]
+          },
+          "descricao": {
+            "type": "string",
+            "example": "Colisão traseira em estacionamento"
+          },
+          "valor": {
+            "type": "number",
+            "example": 500
+          },
+          "data": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-04-10T00:00:00.000Z"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-04-10T00:00:00.000Z"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-04-10T00:00:00.000Z"
+          }
+        },
+        "required": [
+          "id",
+          "vehicleId",
+          "tipo",
+          "descricao",
+          "data",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "UpdateIncidentRequestDto": {
+        "type": "object",
+        "properties": {
+          "vehicleId": {
+            "type": "string",
+            "example": "a0f5a1d3-34a2-4f78-9b1e-7cf426d5fa77"
+          },
+          "tipo": {
+            "type": "string",
+            "example": "multa",
+            "enum": [
+              "sinistro",
+              "multa"
+            ]
+          },
+          "descricao": {
+            "type": "string",
+            "example": "Multa por excesso de velocidade"
+          },
+          "valor": {
+            "type": "number",
+            "example": 250
+          },
+          "data": {
+            "type": "string",
+            "example": "2026-04-10T00:00:00.000Z"
+          }
+        }
+      },
+      "DashboardResponseDto": {
+        "type": "object",
+        "properties": {
+          "totalUsers": {
+            "type": "number"
+          },
+          "totalVehicles": {
+            "type": "number"
+          },
+          "totalJourneys": {
+            "type": "number"
+          },
+          "journeysInProgress": {
+            "type": "number"
+          },
+          "journeysFinished": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "totalUsers",
+          "totalVehicles",
+          "totalJourneys",
+          "journeysInProgress",
+          "journeysFinished"
+        ]
+      },
+      "UsersAnalyticsResponseDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "totalJourneys": {
+            "type": "number"
+          },
+          "journeysInProgress": {
+            "type": "number"
+          },
+          "journeysFinished": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "userId",
+          "name",
+          "email",
+          "role",
+          "totalJourneys",
+          "journeysInProgress",
+          "journeysFinished"
+        ]
+      },
+      "JourneysAnalyticsResponseDto": {
+        "type": "object",
+        "properties": {
+          "journeyId": {
+            "type": "string"
+          },
+          "journeyName": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "in_progress",
+              "finished"
+            ]
+          },
+          "startedAt": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "number"
+          },
+          "userName": {
+            "type": "string"
+          },
+          "userEmail": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "journeyId",
+          "status",
+          "startedAt",
+          "userId",
+          "userEmail"
+        ]
+      },
+      "RecordTelemetryRequestDto": {
+        "type": "object",
+        "properties": {
+          "vehicleId": {
+            "type": "string",
+            "example": "uuid-do-veiculo"
+          },
+          "kmRodados": {
+            "type": "number",
+            "example": 120.5
+          },
+          "combustivelGasto": {
+            "type": "number",
+            "example": 8.3
+          },
+          "nivelCombustivel": {
+            "type": "number",
+            "example": 45
+          },
+          "latitude": {
+            "type": "number",
+            "example": -19.8157
+          },
+          "longitude": {
+            "type": "number",
+            "example": -43.9542
+          },
+          "velocidadeMedia": {
+            "type": "number",
+            "example": 60
+          }
+        },
+        "required": [
+          "vehicleId",
+          "kmRodados",
+          "combustivelGasto",
+          "nivelCombustivel",
+          "latitude",
+          "longitude",
+          "velocidadeMedia"
+        ]
+      },
+      "TelemetryResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "journeyId": {
+            "type": "string"
+          },
+          "vehicleId": {
+            "type": "string"
+          },
+          "kmRodados": {
+            "type": "number"
+          },
+          "combustivelGasto": {
+            "type": "number"
+          },
+          "nivelCombustivel": {
+            "type": "number"
+          },
+          "latitude": {
+            "type": "number"
+          },
+          "longitude": {
+            "type": "number"
+          },
+          "velocidadeMedia": {
+            "type": "number"
+          },
+          "registradaEm": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "journeyId",
+          "vehicleId",
+          "kmRodados",
+          "combustivelGasto",
+          "nivelCombustivel",
+          "latitude",
+          "longitude",
+          "velocidadeMedia",
+          "registradaEm"
+        ]
+      },
+      "LatestTelemetryResponseDto": {
+        "type": "object",
+        "properties": {
+          "temTelemetria": {
+            "type": "boolean"
+          },
+          "id": {
+            "type": "string"
+          },
+          "journeyId": {
+            "type": "string"
+          },
+          "vehicleId": {
+            "type": "string"
+          },
+          "kmRodados": {
+            "type": "number"
+          },
+          "combustivelGasto": {
+            "type": "number"
+          },
+          "nivelCombustivel": {
+            "type": "number"
+          },
+          "latitude": {
+            "type": "number"
+          },
+          "longitude": {
+            "type": "number"
+          },
+          "velocidadeMedia": {
+            "type": "number"
+          },
+          "registradaEm": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "temTelemetria"
+        ]
+      }
+    }
+  },
+  "security": [
+    {
+      "ID_TOKEN": []
+    }
+  ]
+}

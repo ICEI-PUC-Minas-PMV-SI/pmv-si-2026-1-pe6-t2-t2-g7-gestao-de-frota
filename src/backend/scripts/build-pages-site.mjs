@@ -1,0 +1,134 @@
+import { cp, mkdir, rm, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
+
+const rootDir = process.cwd();
+const outputDir = join(rootDir, 'pages-site');
+const coverageDir = join(rootDir, 'coverage', 'lcov-report');
+const swaggerDir = join(rootDir, 'swagger-static');
+
+const indexHtml = `<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Backend Reports</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f3f6ef;
+        --surface: #ffffff;
+        --text: #183024;
+        --muted: #56705f;
+        --border: #c9d8cc;
+        --accent: #1e7a4f;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: Georgia, 'Times New Roman', serif;
+        background:
+          radial-gradient(circle at top left, #dcebd9 0, transparent 30%),
+          linear-gradient(135deg, #f7faf4 0%, var(--bg) 100%);
+        color: var(--text);
+      }
+
+      main {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 64px 24px;
+      }
+
+      h1 {
+        margin: 0 0 12px;
+        font-size: clamp(2.4rem, 5vw, 4rem);
+        line-height: 0.95;
+      }
+
+      p {
+        margin: 0 0 28px;
+        font-size: 1.1rem;
+        color: var(--muted);
+      }
+
+      .grid {
+        display: grid;
+        gap: 16px;
+      }
+
+      .card {
+        display: block;
+        padding: 22px 24px;
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.88);
+        color: inherit;
+        text-decoration: none;
+        transition:
+          transform 160ms ease,
+          border-color 160ms ease,
+          box-shadow 160ms ease;
+      }
+
+      .card:hover {
+        transform: translateY(-2px);
+        border-color: var(--accent);
+        box-shadow: 0 14px 34px rgba(24, 48, 36, 0.08);
+      }
+
+      .label {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 0.82rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+
+      .title {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 1.5rem;
+      }
+
+      .meta {
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Backend Reports</h1>
+      <p>Portal estático publicado no GitHub Pages com cobertura de testes e documentação Swagger do backend.</p>
+      <div class="grid">
+        <a class="card" href="./coverage/">
+          <span class="label">Coverage</span>
+          <span class="title">Relatório HTML do Jest</span>
+          <span class="meta">Abrir o lcov-report publicado.</span>
+        </a>
+        <a class="card" href="./swagger/">
+          <span class="label">Swagger</span>
+          <span class="title">Documentação estática da API</span>
+          <span class="meta">Abrir o Swagger UI gerado a partir do backend.</span>
+        </a>
+        <a class="card" href="./swagger/swagger.json">
+          <span class="label">OpenAPI</span>
+          <span class="title">Arquivo swagger.json</span>
+          <span class="meta">Consumir a especificação estática diretamente.</span>
+        </a>
+      </div>
+    </main>
+  </body>
+</html>
+`;
+
+await rm(outputDir, { recursive: true, force: true });
+await mkdir(outputDir, { recursive: true });
+
+await cp(coverageDir, join(outputDir, 'coverage'), { recursive: true });
+await cp(swaggerDir, join(outputDir, 'swagger'), { recursive: true });
+await writeFile(join(outputDir, 'index.html'), indexHtml, 'utf8');

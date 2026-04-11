@@ -46,10 +46,18 @@ jobs:
         working-directory: src/backend
         run: pnpm test:cov:html
 
+      - name: Generate static Swagger
+        working-directory: src/backend
+        run: pnpm swagger:static
+
+      - name: Build Pages site
+        working-directory: src/backend
+        run: pnpm pages:build
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: src/backend/coverage/lcov-report
+          path: src/backend/pages-site
 
   deploy:
     needs: build
