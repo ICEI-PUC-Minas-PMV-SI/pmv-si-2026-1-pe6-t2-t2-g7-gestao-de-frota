@@ -11,8 +11,8 @@
 | 09/03 - 15/03 | APIs e Web Services - Unidade 1 | ✅ | Definição dos módulos e distribuição das atividades entre os integrantes | O grupo se reunião para revisar os componentes do projetos e distribuir as atividades |
 | 16/03 - 22/03 | APIs e Web Services - Unidade 2 | ✅ | Reunião para alinhamento técnico e demonstração das APIs iniciais | Foi feito alinhamento técnico do framework utilizado e padrões a serem utilizados |
 | 23/03 - 29/03 | APIs e Web Services - Unidade 2 | ✅ | Construção da API de multas e manutenções  |  |
-| 30/03 - 05/04 | Recuperação de Informação na Web e Redes Sociais - Unidade 1 | ⬜ |  |  |
-| 06/04 - 12/04 | Recuperação de Informação na Web e Redes Sociais - Unidade 2 | ⬜ |  |  |
+| 30/03 - 05/04 | Recuperação de Informação na Web e Redes Sociais - Unidade 1 | ✅ | Desenvolvimento do módulo de multas e sinistros  | Foram desenvolvidas as APIs para o CRUD de multas e sinistros |
+| 06/04 - 12/04 | Recuperação de Informação na Web e Redes Sociais - Unidade 2 | ✅ | Documentação e testes das API de multas e sinistros |  |
 | 13/04 - 19/04 | Computação Ubíqua e Pervasiva e IoT - Unidade 1 | ⬜ |  |  |
 | 20/04 - 26/04 | Computação Ubíqua e Pervasiva e IoT - Unidade 2 | ⬜ |  |  |
 | 27/04 - 03/05 | Desenvolvimento de Aplicações Móveis - Unidade 1 | ⬜ |  |  |

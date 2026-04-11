@@ -1,10 +1,13 @@
 import { IncidentModel } from '../../models/Incident.model';
 
 export abstract class IncidentRepo {
-  abstract create(incident: IncidentModel): Promise<IncidentModel>;
-  abstract update(incident: IncidentModel): Promise<IncidentModel>;
-  abstract delete(id: string): Promise<void>;
-  abstract findById(id: string): Promise<IncidentModel | null>;
-  abstract findAll(): Promise<IncidentModel[]>;
-  abstract findByVehicleId(vehicleId: string): Promise<IncidentModel[]>;
+  abstract create(this: void, incident: IncidentModel): Promise<IncidentModel>;
+  abstract update(this: void, incident: IncidentModel): Promise<IncidentModel>;
+  abstract delete(this: void, id: string): Promise<void>;
+  abstract findById(this: void, id: string): Promise<IncidentModel | null>;
+  abstract findAll(this: void): Promise<IncidentModel[]>;
+  abstract findByVehicleId(
+    this: void,
+    vehicleId: string,
+  ): Promise<IncidentModel[]>;
 }

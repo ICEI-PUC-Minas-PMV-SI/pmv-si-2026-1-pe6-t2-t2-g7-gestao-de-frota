@@ -1,81 +1,283 @@
-# APIs e Web Services
+# APIs e Web Services - Gestão de Frota
 
-O planejamento de uma aplicação de APIS Web é uma etapa fundamental para o sucesso do projeto. Ao planejar adequadamente, você pode evitar muitos problemas e garantir que a sua API seja segura, escalável e eficiente.
-
-Aqui estão algumas etapas importantes que devem ser consideradas no planejamento de uma aplicação de APIS Web.
-
-[Inclua uma breve descrição do projeto.]
+Este backend expõe serviços para autenticação/autorização, gestão de membros, CRUD de veículos e acompanhamento de jornadas com geolocalização.
 
 ## Objetivos da API
 
-O primeiro passo é definir os objetivos da sua API. O que você espera alcançar com ela? Você quer que ela seja usada por clientes externos ou apenas por aplicações internas? Quais são os recursos que a API deve fornecer?
-
-[Inclua os objetivos da sua api.]
-
+- Centralizar operações da aplicação de gestão de frota em uma API REST.
+- Garantir controle de acesso por identidade autenticada e perfil de usuário.
+- Registrar jornada e posição de deslocamento em tempo real.
+- Disponibilizar documentação navegável via Swagger (`/docs` em ambiente não produção).
 
 ## Modelagem da Aplicação
-[Descreva a modelagem da aplicação, incluindo a estrutura de dados, diagramas de classes ou entidades, e outras representações visuais relevantes.]
 
+Principais entidades de domínio:
+
+- `User`: conta do sistema (email, provider, role, etc.).
+- `Vehicle`: cadastro de veículos da frota.
+- `Journey`: jornada de deslocamento (status, início, usuário).
+- `JourneyStop`: paradas planejadas de uma jornada.
+- `JourneyPosition`: posições geográficas registradas durante uma jornada.
+
+![Arquitetura da Solução](../docs/img/Gestao-frotas-imagens/modulos-api.jpg)
 
 ## Tecnologias Utilizadas
 
-Existem muitas tecnologias diferentes que podem ser usadas para desenvolver APIs Web. A tecnologia certa para o seu projeto dependerá dos seus objetivos, dos seus clientes e dos recursos que a API deve fornecer.
-
-[Lista das tecnologias principais que serão utilizadas no projeto.]
+- `NestJS` (framework principal da API)
+- `TypeORM` (persistência e mapeamento objeto-relacional)
+- `PostgreSQL` (banco de dados)
+- `Firebase Admin` (validação de token de autenticação)
+- `Swagger` (OpenAPI para documentação)
+- `class-validator` e `class-transformer` (validação e transformação de DTOs)
+- `Jest` e `Supertest` (testes)
 
 ## API Endpoints
 
-[Liste os principais endpoints da API, incluindo as operações disponíveis, os parâmetros esperados e as respostas retornadas.]
+Base URL local (padrão): `http://localhost:3030`
 
-### Endpoint 1
-- Método: GET
-- URL: /endpoint1
-- Parâmetros:
-  - param1: [descrição]
-- Resposta:
-  - Sucesso (200 OK)
-    ```
-    {
-      "message": "Success",
-      "data": {
-        ...
-      }
-    }
-    ```
-  - Erro (4XX, 5XX)
-    ```
-    {
-      "message": "Error",
-      "error": {
-        ...
-      }
-    }
-    ```
+### Autenticação e Conta
+
+#### `POST /account/sync`
+
+- Objetivo: sincronizar dados do usuário autenticado.
+- Auth: Bearer token obrigatório.
+- Body:
+  ```json
+  {
+    "name": "John Doe"
+  }
+  ```
+- Sucesso: `201 Created` com dados do usuário.
+
+#### `PATCH /account/:id`
+
+- Objetivo: atualizar dados do usuário atual.
+- Auth: Bearer token obrigatório.
+- Body:
+  ```json
+  {
+    "name": "John Doe"
+  }
+  ```
+- Sucesso: `200 OK`.
+
+#### `DELETE /account/:id`
+
+- Objetivo: remover conta do usuário atual.
+- Auth: Bearer token obrigatório.
+- Sucesso: `204 No Content`.
+
+### Membros
+
+#### `GET /members`
+
+- Objetivo: listar membros.
+- Auth: Bearer token obrigatório.
+- Query params:
+  - `limit` (obrigatório)
+  - `last-item-id` (opcional, paginação)
+- Sucesso: `200 OK`.
+
+#### `GET /member/:id`
+
+- Objetivo: buscar um membro por id.
+- Auth: Bearer token obrigatório.
+- Sucesso: `200 OK`.
+
+#### `PATCH /member/:id?role=admin|user`
+
+- Objetivo: alterar papel (`role`) de um membro.
+- Auth: Bearer token obrigatório.
+- Regras: protegido por guardas de membro/perfil.
+- Sucesso: `200 OK`.
+
+#### `DELETE /member/:id`
+
+- Objetivo: remover membro.
+- Auth: Bearer token obrigatório.
+- Regras: protegido por guardas de membro/perfil.
+- Sucesso: `204 No Content` (ou `404` se não encontrado).
+
+### Veículos
+
+#### `POST /vehicle`
+
+- Objetivo: criar veículo.
+- Auth: Bearer token obrigatório.
+- Body:
+  ```json
+  {
+    "marca": "Fiat",
+    "modelo": "Uno",
+    "ano": 2020,
+    "placa": "ABC1D23"
+  }
+  ```
+- Sucesso: `201 Created`.
+
+#### `GET /vehicle`
+
+- Objetivo: listar veículos.
+- Auth: Bearer token obrigatório.
+- Sucesso: `200 OK`.
+
+#### `GET /vehicle/:id`
+
+- Objetivo: buscar veículo por id.
+- Auth: Bearer token obrigatório.
+- Sucesso: `200 OK`.
+
+#### `PATCH /vehicle/:id`
+
+- Objetivo: atualizar veículo.
+- Auth: Bearer token obrigatório.
+- Body (campos opcionais):
+  ```json
+  {
+    "marca": "Fiat",
+    "modelo": "Uno Way"
+  }
+  ```
+- Sucesso: `200 OK`.
+
+#### `DELETE /vehicle/:id`
+
+- Objetivo: remover veículo.
+- Auth: Bearer token obrigatório.
+- Sucesso: `204 No Content`.
+
+### Jornada (Journey)
+
+#### `POST /journey`
+
+- Objetivo: iniciar jornada com paradas.
+- Auth: Bearer token obrigatório.
+- Body:
+  ```json
+  {
+    "nome": "Entrega manhã - zona sul",
+    "paradas": [
+      { "ordem": 1, "latitude": -19.8157, "longitude": -43.9542 },
+      { "ordem": 2, "latitude": -19.9123, "longitude": -43.8765 }
+    ]
+  }
+  ```
+- Sucesso: `201 Created`.
+
+#### `POST /journey/:journeyId/positions`
+
+- Objetivo: registrar posição atual de uma jornada em andamento.
+- Auth: Bearer token obrigatório.
+- Body:
+  ```json
+  {
+    "latitude": -19.8157,
+    "longitude": -43.9542
+  }
+  ```
+- Sucesso: `201 Created`.
+- Erros comuns:
+  - `404 Not Found`: jornada inexistente.
+  - `403 Forbidden`: jornada não está em andamento.
+
+#### `GET /journey/:journeyId/positions/latest`
+
+- Objetivo: obter última posição registrada.
+- Auth: Bearer token obrigatório.
+- Sucesso: `200 OK`.
+- Resposta sem posição:
+  ```json
+  {
+    "temPosicao": false
+  }
+  ```
+- Resposta com posição:
+  ```json
+  {
+    "temPosicao": true,
+    "latitude": -19.8157,
+    "longitude": -43.9542,
+    "registradaEm": "2026-04-07T10:05:00.000Z"
+  }
+  ```
 
 ## Considerações de Segurança
 
-[Discuta as considerações de segurança relevantes para a aplicação distribuída, como autenticação, autorização, proteção contra ataques, etc.]
+- A API usa `AuthGuard` global para validar Bearer token.
+- O token é validado via Firebase e o usuário é resolvido/sincronizado internamente.
+- Há controle de permissão por papéis (`owner`, `admin`, `user`) em endpoints sensíveis.
+- `ValidationPipe` global está ativo com:
+  - `whitelist: true`
+  - `forbidNonWhitelisted: true`
+  - `forbidUnknownValues: true`
 
 ## Implantação
 
-[Instruções para implantar a aplicação distribuída em um ambiente de produção.]
+Fluxo recomendado:
 
-1. Defina os requisitos de hardware e software necessários para implantar a aplicação em um ambiente de produção.
-2. Escolha uma plataforma de hospedagem adequada, como um provedor de nuvem ou um servidor dedicado.
-3. Configure o ambiente de implantação, incluindo a instalação de dependências e configuração de variáveis de ambiente.
-4. Faça o deploy da aplicação no ambiente escolhido, seguindo as instruções específicas da plataforma de hospedagem.
-5. Realize testes para garantir que a aplicação esteja funcionando corretamente no ambiente de produção.
+1. Configurar variáveis de ambiente (`.env`, `.env.prod`), especialmente banco e Firebase.
+2. Instalar dependências no backend.
+3. Executar migrations:
+   - `pnpm migrate:run`
+4. Build e execução:
+   - `pnpm build`
+   - `pnpm start:prod`
+5. Validar saúde dos endpoints e autenticação após deploy.
 
 ## Testes
 
-[Descreva a estratégia de teste, incluindo os tipos de teste a serem realizados (unitários, integração, carga, etc.) e as ferramentas a serem utilizadas.]
+Comandos úteis:
 
-1. Crie casos de teste para cobrir todos os requisitos funcionais e não funcionais da aplicação.
-2. Implemente testes unitários para testar unidades individuais de código, como funções e classes.
-3. Realize testes de integração para verificar a interação correta entre os componentes da aplicação.
-4. Execute testes de carga para avaliar o desempenho da aplicação sob carga significativa.
-5. Utilize ferramentas de teste adequadas, como frameworks de teste e ferramentas de automação de teste, para agilizar o processo de teste.
+- `pnpm test`
+- `pnpm test:e2e`
 
-# Referências
+### Casos E2E de autenticação
 
-Inclua todas as referências (livros, artigos, sites, etc) utilizados no desenvolvimento do trabalho.
+Os cenários E2E de autenticação usam `@nestjs/testing` para subir uma instância global do `AppModule` em `beforeAll`, com todos os controllers carregados. Firebase, TypeORM e `UserRepo` são substituídos por mocks em memória para evitar dependência de serviços externos.
+
+| Caso                             | Requisição                                       | Resultado esperado                                                                            |
+| -------------------------------- | ------------------------------------------------ | --------------------------------------------------------------------------------------------- |
+| Requisição sem Bearer token      | `GET /members`                                   | `403 Forbidden`; Firebase não deve ser chamado.                                               |
+| Bearer token inválido            | `GET /members`                                   | `403 Forbidden`; validação de token deve ser chamada com `checkRevoked=true`.                 |
+| Sincronização de usuário novo    | `POST /account/sync`                             | `201 Created`; cria usuário em memória e retorna `uid`, `email`, `name`, `provider` e `role`. |
+| Atualização da conta autenticada | `PATCH /account/:id`                             | `200 OK`; atualiza o nome do usuário autenticado.                                             |
+| Remoção da conta autenticada     | `DELETE /account/:id`                            | `204 No Content`; remove usuário no Firebase mockado e no repositório mockado.                |
+| Listagem de membros              | `GET /members?limit=2`                           | `200 OK`; retorna lista paginada e total.                                                     |
+| Busca de membro                  | `GET /member/:id`                                | `200 OK`; retorna o membro encontrado.                                                        |
+| Alteração de cargo sem permissão | `PATCH /member/:id?role=admin` com usuário comum | `403 Forbidden`.                                                                              |
+| Alteração de cargo com admin     | `PATCH /member/:id?role=admin` com admin         | `200 OK`; retorna membro com `role=admin`.                                                    |
+| Remoção de owner                 | `DELETE /member/:id` para usuário `owner`        | `401 Unauthorized`; operação bloqueada pelo `PreventOwnerGuard`.                              |
+| Remoção de membro por admin      | `DELETE /member/:id` com admin                   | `204 No Content`; remove usuário no Firebase mockado e no repositório mockado.                |
+
+### Casos E2E de veículos
+
+Os cenários E2E de veículos usam a mesma infraestrutura de `setup.ts`, com autenticação, Firebase e repositórios substituídos por mocks em memória para validar o comportamento HTTP do módulo sem dependências externas.
+
+| Caso                                      | Requisição                                  | Resultado esperado                                                                 |
+| ----------------------------------------- | ------------------------------------------- | ---------------------------------------------------------------------------------- |
+| Listagem sem autenticação                 | `GET /vehicle`                              | `403 Forbidden`; Firebase não deve ser chamado.                                    |
+| Listagem autenticada de veículos          | `GET /vehicle` com usuário autenticado      | `200 OK`; retorna os veículos mockados com `id`, `marca`, `modelo`, `ano` e `placa`. |
+| Busca de veículo por id                   | `GET /vehicle/:id`                          | `200 OK`; retorna o veículo correspondente ao identificador informado.             |
+| Criação de veículo com payload válido     | `POST /vehicle`                             | `201 Created`; cria veículo e retorna dados persistidos, incluindo timestamps.     |
+| Criação de veículo com placa inválida     | `POST /vehicle` com `placa` fora do padrão  | `400 Bad Request`; payload rejeitado pela validação.                               |
+| Atualização de veículo existente          | `PATCH /vehicle/:id`                        | `200 OK`; atualiza os campos enviados e retorna o veículo atualizado.              |
+| Atualização de veículo inexistente        | `PATCH /vehicle/:id` com id inexistente     | `404 Not Found`; atualização rejeitada por ausência do registro.                   |
+| Remoção de veículo existente              | `DELETE /vehicle/:id`                       | `204 No Content`; aciona a exclusão no repositório mockado.                        |
+
+
+### Casos E2E de incidentes
+
+Os cenários E2E de incidentes usam a mesma infraestrutura de `setup.ts`, com autenticação, Firebase e repositório de incidentes substituídos por mocks em memória para validar o comportamento HTTP do módulo sem dependências externas.
+
+| Caso                                       | Requisição                                               | Resultado esperado                                                                                  |
+| ------------------------------------------ | -------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| Listagem sem autenticação                  | `GET /incident`                                          | `403 Forbidden`; Firebase não deve ser chamado.                                                     |
+| Listagem autenticada de incidentes         | `GET /incident` com usuário autenticado                  | `200 OK`; retorna os incidentes mockados com `id`, `vehicleId`, `tipo`, `descricao`, `valor` e datas. |
+| Busca de incidente por id                  | `GET /incident/:id`                                      | `200 OK`; retorna o incidente correspondente ao identificador informado.                             |
+| Listagem de incidentes por veículo         | `GET /incident/vehicle/:vehicleId`                       | `200 OK`; retorna apenas os incidentes vinculados ao `vehicleId` informado.                         |
+| Criação de incidente com payload válido    | `POST /incident`                                         | `201 Created`; cria incidente e retorna dados persistidos, incluindo timestamps.                    |
+| Criação de incidente com descrição inválida | `POST /incident` com `descricao` acima de 1024 caracteres | `400 Bad Request`; payload rejeitado pela validação.                                                |
+| Atualização de incidente existente         | `PATCH /incident/:id`                                    | `200 OK`; atualiza os campos enviados e retorna o incidente atualizado.                             |
+| Atualização de incidente inexistente       | `PATCH /incident/:id` com id inexistente                 | `404 Not Found`; atualização rejeitada por ausência do registro.                                    |
+| Remoção de incidente existente             | `DELETE /incident/:id`                                   | `204 No Content`; aciona a exclusão no repositório mockado.                                         |
+
