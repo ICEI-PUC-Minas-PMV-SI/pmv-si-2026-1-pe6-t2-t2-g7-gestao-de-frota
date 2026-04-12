@@ -16,6 +16,8 @@ import { JourneyPositionModel } from '../../src/modules/journey/models/JourneyPo
 import { JourneyStopModel } from '../../src/modules/journey/models/JourneyStop.model';
 import { JourneyRepo } from '../../src/modules/journey/repositories/journey/interface';
 import { JourneyPositionRepo } from '../../src/modules/journey/repositories/journeyPosition/interface';
+import { TelemetryModel } from '../../src/modules/telemetry/models/Telemetry.model';
+import { TelemetryRepo } from '../../src/modules/telemetry/repositories/telemetry/interface';
 import { VehicleModel } from '../../src/modules/vehicle/models/Vehicle.model';
 import { VehicleRepo } from '../../src/modules/vehicle/repositories/vehicle/interface';
 
@@ -39,6 +41,7 @@ const incidentVehicleTwoId = '22222222-2222-4222-8222-222222222222';
 const journeyInProgressId = '33333333-3333-4333-8333-333333333333';
 const journeyCompletedId = '44444444-4444-4444-8444-444444444444';
 const journeyWithoutPositionsId = '55555555-5555-4555-8555-555555555555';
+const journeyAdminId = '66666666-6666-4666-8666-666666666666';
 
 class E2eTestState {
   private users = new Map<number, UserModel>();
@@ -48,6 +51,7 @@ class E2eTestState {
   private journeys = new Map<string, JourneyModel>();
   private journeyStops = new Map<string, JourneyStopModel[]>();
   private journeyPositions = new Map<string, JourneyPositionModel[]>();
+  private telemetries = new Map<string, TelemetryModel[]>();
   private analyticsDashboardRows = [
     {
       total_users: '3',
@@ -331,6 +335,32 @@ class E2eTestState {
     }),
   };
 
+  readonly telemetryRepo: TelemetryRepo = {
+    create: jest.fn((row: TelemetryModel) => {
+      const saved = new TelemetryModel(row.toJSON());
+      const current = this.telemetries.get(row.journeyId) ?? [];
+      current.push(saved);
+      this.telemetries.set(row.journeyId, current);
+      return Promise.resolve(saved);
+    }),
+    findByJourneyId: jest.fn((journeyId: string) =>
+      Promise.resolve(
+        [...(this.telemetries.get(journeyId) ?? [])].sort(
+          (a, b) => a.recordedAt.getTime() - b.recordedAt.getTime(),
+        ),
+      ),
+    ),
+    findLatestByJourneyId: jest.fn((journeyId: string) => {
+      const records = this.telemetries.get(journeyId) ?? [];
+      if (records.length === 0) return Promise.resolve(null);
+      return Promise.resolve(
+        [...records].sort(
+          (a, b) => b.recordedAt.getTime() - a.recordedAt.getTime(),
+        )[0] ?? null,
+      );
+    }),
+  };
+
   readonly dataSource = {
     isInitialized: true,
     destroy: jest.fn(() => Promise.resolve(undefined)),
@@ -489,6 +519,15 @@ class E2eTestState {
           createdAt: new Date('2026-04-08T09:00:00.000Z'),
           updatedAt: new Date('2026-04-08T09:00:00.000Z'),
         }),
+        new JourneyModel({
+          id: journeyAdminId,
+          userId: 2,
+          name: 'Rota admin',
+          status: 'in_progress',
+          startedAt: new Date('2026-04-08T10:00:00.000Z'),
+          createdAt: new Date('2026-04-08T10:00:00.000Z'),
+          updatedAt: new Date('2026-04-08T10:00:00.000Z'),
+        }),
       ].map((journey) => [journey.id, journey]),
     );
     this.journeyStops = new Map<string, JourneyStopModel[]>([
@@ -579,6 +618,29 @@ class E2eTestState {
       [journeyCompletedId, []],
       [journeyWithoutPositionsId, []],
     ]);
+    this.telemetries = new Map<string, TelemetryModel[]>([
+      [
+        journeyInProgressId,
+        [
+          new TelemetryModel({
+            id: 'telemetry-1',
+            journeyId: journeyInProgressId,
+            vehicleId: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
+            kmRodados: 50,
+            combustivelGasto: 5,
+            nivelCombustivel: 70,
+            latitude: -23.5505,
+            longitude: -46.6333,
+            velocidadeMedia: 50,
+            recordedAt: new Date('2026-04-08T08:10:00.000Z'),
+            createdAt: new Date('2026-04-08T08:10:00.000Z'),
+            updatedAt: new Date('2026-04-08T08:10:00.000Z'),
+          }),
+        ],
+      ],
+      [journeyCompletedId, []],
+      [journeyWithoutPositionsId, []],
+    ]);
   }
 }
 
@@ -619,6 +681,8 @@ beforeAll(async () => {
     .useValue(state.journeyRepo)
     .overrideProvider(JourneyPositionRepo)
     .useValue(state.journeyPositionRepo)
+    .overrideProvider(TelemetryRepo)
+    .useValue(state.telemetryRepo)
     .overrideProvider(typeORMConsts.databaseProviders)
     .useValue(state.dataSource)
     .compile();
