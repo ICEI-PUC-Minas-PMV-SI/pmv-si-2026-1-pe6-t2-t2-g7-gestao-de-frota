@@ -147,6 +147,20 @@ Os cenários E2E de jornadas usam a mesma infraestrutura de `setup.ts`, agora co
 | Consulta da última posição registrada        | `GET /journey/:journeyId/positions/latest`               | `200 OK`; retorna `temPosicao=true` com latitude, longitude e data da última posição.                   |
 | Consulta da última posição sem registros     | `GET /journey/:journeyId/positions/latest` sem posições  | `200 OK`; retorna somente `temPosicao=false`.                                                           |
 
+### Casos de teste de telemetria
+
+Os cenários E2E de telemetria usam a mesma infraestrutura de `setup.ts`, com `JourneyRepo` e `TelemetryRepo` mockados em memória. Os testes cobrem autenticação, validação de dados, regras de negócio (jornada em curso obrigatória, pertencimento ao usuário) e consulta do último registro.
+
+| Caso | Requisição | Resultado esperado |
+| ---- | ---------- | ------------------ |
+| Acesso sem Bearer token | `GET /journey/:id/telemetry` sem token | `403 Forbidden`; validação de token não deve ser chamada. |
+| Registrar telemetria com dados válidos | `POST /journey/:id/telemetry` com payload completo e jornada `in_progress` do usuário | `201 Created`; retorna `id`, `journeyId`, `vehicleId`, `kmRodados`, `combustivelGasto`, `nivelCombustivel`, `latitude`, `longitude`, `velocidadeMedia` e `registradaEm`. |
+| Registrar telemetria em jornada de outro usuário | `POST /journey/:id/telemetry` com id de jornada pertencente a outro usuário | `404 Not Found`; jornada não localizada para o usuário autenticado. |
+| Registrar telemetria em jornada finalizada | `POST /journey/:id/telemetry` com jornada `completed` | `403 Forbidden`; apenas jornadas em curso aceitam telemetria. |
+| Registrar telemetria com latitude fora do range | `POST /journey/:id/telemetry` com `latitude: 200` | `400 Bad Request`; payload rejeitado pela validação do DTO (`@Max(90)`). |
+| Buscar última telemetria com registros | `GET /journey/:id/telemetry/latest` em jornada com registros | `200 OK`; retorna `temTelemetria: true` com todos os campos do registro mais recente. |
+| Buscar última telemetria sem registros | `GET /journey/:id/telemetry/latest` em jornada sem registros | `200 OK`; retorna somente `temTelemetria: false`. |
+
 ## Resultados Obtidos no Testes
 
 Todos os testes de ponta a ponta passaram com sucesso com uma margem de coverage aceitável para o tamanho do projeto atual:
