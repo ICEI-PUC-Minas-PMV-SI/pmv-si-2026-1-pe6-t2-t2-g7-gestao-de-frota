@@ -13,11 +13,13 @@ Este backend expõe serviços para autenticação/autorização, gestão de memb
 
 Principais entidades de domínio:
 
-- `User`: conta do sistema (email, provider, role, etc.).
-- `Vehicle`: cadastro de veículos da frota.
-- `Journey`: jornada de deslocamento (status, início, usuário).
-- `JourneyStop`: paradas planejadas de uma jornada.
-- `JourneyPosition`: posições geográficas registradas durante uma jornada.
+- `User`: conta do sistema autenticada via Firebase, com identificação interna, `email`, `name`, `provider` e papel de acesso (`owner`, `admin` ou `user`).
+- `Vehicle`: cadastro de veículos da frota, com `marca`, `modelo`, `ano` e `placa`.
+- `Journey`: jornada vinculada a um usuário, com `name` opcional, status (`in_progress`, `completed` ou `cancelled`) e instante de início.
+- `JourneyStop`: parada planejada de uma jornada, com ordem de execução e coordenadas geográficas (`latitude` e `longitude`).
+- `JourneyPosition`: posição geográfica efetivamente registrada durante a execução de uma jornada, com latitude, longitude e horário do registro.
+- `Incident`: ocorrência associada a um veículo, como `sinistro` ou `multa`, com descrição, valor opcional e data do evento.
+- `Telemetry`: telemetria operacional de uma jornada e de um veículo, incluindo quilometragem rodada, consumo de combustível, nível de combustível, localização e velocidade média.
 
 ![Arquitetura da Solução](../docs/img/Gestao-frotas-imagens/modulos-api.jpg)
 
