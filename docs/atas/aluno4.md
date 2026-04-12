@@ -8,11 +8,11 @@
 | 16/02 - 22/02 | Gestão de Serviços de TI - Unidade 2 | ✅ | Organização do grupo e definição do tema | Organização do grupo de definição do tema do projeto |
 | 23/02 - 01/03 | Arquitetura de Software Distribuído - Unidade 3 | ✅ | Especificação do projeto | Estruturação da lista de requisitos funcionais e não funcionais do sistema |
 | 02/03 - 08/03 | Arquitetura de Software Distribuído - Unidade 3 | ✅ | Definição da arquitetura do projeto | Criar e diagramar infraestrutura do sistema em nuvem e definir principais stacks de tecnologia a serem utilizadas |
-| 09/03 - 15/03 | APIs e Web Services - Unidade 1 | ⬜ |  |  |
-| 16/03 - 22/03 | APIs e Web Services - Unidade 2 | ⬜ |  |  |
-| 23/03 - 29/03 | APIs e Web Services - Unidade 2 | ⬜ |  |  |
-| 30/03 - 05/04 | Recuperação de Informação na Web e Redes Sociais - Unidade 1 | ⬜ |  |  |
-| 06/04 - 12/04 | Recuperação de Informação na Web e Redes Sociais - Unidade 2 | ⬜ |  |  |
+| 09/03 - 15/03 | APIs e Web Services - Unidade 1 | ✅ | Planejamento da arquitetura do servidor | Planejamento e criação dos diagramas de módulos e suas respectivas dependências com o ecossistema do servidor |
+| 16/03 - 22/03 | APIs e Web Services - Unidade 2 | ✅ | Configuração de infraestrutura e início de produção do servidor | Definição e configuração da infraestrutura compartilhada do CockroachDB e Firebase para os demais membros do grupo, assim como o desenvolvimento do módulo de autenticação do servidor |
+| 23/03 - 29/03 | APIs e Web Services - Unidade 2 | ✅ | Suporte a produção | Suporte no desenvolvimento dos demais módulos juntamente com os demais membros do grupo |
+| 30/03 - 05/04 | Recuperação de Informação na Web e Redes Sociais - Unidade 1 | ✅ | Testes | Criação dos testes unitários e de ponta a ponta usando Jest |
+| 06/04 - 12/04 | Recuperação de Informação na Web e Redes Sociais - Unidade 2 | ✅ | Suporte nos testes | Suporte na produção dos testes com os demais membros do grupo, auxiliando na produção de testes unitários e de ponta a ponta e melhorando a cobertura dos testes dentro do sistema, adicionando mais casos de uso |
 | 13/04 - 19/04 | Computação Ubíqua e Pervasiva e IoT - Unidade 1 | ⬜ |  |  |
 | 20/04 - 26/04 | Computação Ubíqua e Pervasiva e IoT - Unidade 2 | ⬜ |  |  |
 | 27/04 - 03/05 | Desenvolvimento de Aplicações Móveis - Unidade 1 | ⬜ |  |  |

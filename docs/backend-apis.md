@@ -87,7 +87,7 @@ Os cenários E2E de autenticação usam `@nestjs/testing` para subir uma instân
 
 ### Casos de teste de analytics
 
-Os testes de analytics foram adicionados em duas camadas: unitária para validar o mapeamento dos serviços sobre as views e E2E para validar autenticação, contrato HTTP e shape final exposto pelos endpoints `/analytics`.
+Os testes de analytics foram adicionados em duas camadas: unitária para validar o mapeamento dos serviços sobre as views e E2E para validar autenticação, contrato HTTP e formato final exposto pelos endpoints `/analytics`.
 
 | Tipo     | Arquivo                                                                 | Caso                                                                 | Resultado esperado                                                                                  |
 | -------- | ----------------------------------------------------------------------- | -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
@@ -130,6 +130,22 @@ Os cenários E2E de incidentes usam a mesma infraestrutura de `setup.ts`, com au
 | Atualização de incidente existente         | `PATCH /incident/:id`                                    | `200 OK`; atualiza os campos enviados e retorna o incidente atualizado.                             |
 | Atualização de incidente inexistente       | `PATCH /incident/:id` com id inexistente                 | `404 Not Found`; atualização rejeitada por ausência do registro.                                    |
 | Remoção de incidente existente             | `DELETE /incident/:id`                                   | `204 No Content`; aciona a exclusão no repositório mockado.                                         |
+
+### Casos E2E de jornadas
+
+Os cenários E2E de jornadas usam a mesma infraestrutura de `setup.ts`, agora com `JourneyRepo` e `JourneyPositionRepo` mockados em memória para validar criação de jornada, consulta de paradas e registro de geolocalização sem depender de banco real.
+
+| Caso                                         | Requisição                                               | Resultado esperado                                                                                      |
+| -------------------------------------------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| Busca de jornada sem autenticação            | `GET /journey/:journeyId`                                | `403 Forbidden`; acesso bloqueado pelo `AuthGuard`.                                                     |
+| Criação de jornada com payload válido        | `POST /journey`                                          | `201 Created`; cria jornada para o usuário autenticado, ordena as paradas por `ordem` e retorna carimbos de data/hora. |
+| Criação de jornada com menos de 2 paradas    | `POST /journey` com array `paradas` inválido             | `400 Bad Request`; payload rejeitado pela validação do DTO.                                             |
+| Busca de jornada existente                   | `GET /journey/:journeyId`                                | `200 OK`; retorna jornada com `nome`, `status`, `iniciadaEm` e lista de paradas.                       |
+| Busca de jornada inexistente                 | `GET /journey/:journeyId` com id inexistente             | `404 Not Found`; jornada não localizada para o usuário autenticado.                                     |
+| Registro de posição em jornada em andamento  | `POST /journey/:journeyId/positions`                     | `201 Created`; persiste latitude/longitude e retorna `registradaEm`.                                    |
+| Registro de posição em jornada concluída     | `POST /journey/:journeyId/positions` em jornada concluída | `403 Forbidden`; operação bloqueada porque apenas jornadas em curso aceitam posições.                   |
+| Consulta da última posição registrada        | `GET /journey/:journeyId/positions/latest`               | `200 OK`; retorna `temPosicao=true` com latitude, longitude e data da última posição.                   |
+| Consulta da última posição sem registros     | `GET /journey/:journeyId/positions/latest` sem posições  | `200 OK`; retorna somente `temPosicao=false`.                                                           |
 
 ## Resultados Obtidos no Testes
 
