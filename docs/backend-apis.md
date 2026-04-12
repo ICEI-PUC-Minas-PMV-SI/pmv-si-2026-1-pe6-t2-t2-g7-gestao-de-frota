@@ -167,6 +167,10 @@ Todos os testes de ponta a ponta passaram com sucesso com uma margem de coverage
 
 <img width="384" height="234" alt="image" src="https://github.com/user-attachments/assets/052010d1-2620-4483-8017-e97c69bf53a2" />
 
+![Tecnologias Utilizadas](../docs/img/Gestao-frotas-imagens/testes-unitários.png)
+
 
 Para visualizar a cobertura de testes unitários e E2E basta conferir o link abaixo:
 - [https://icei-puc-minas-pmv-si.github.io/pmv-si-2026-1-pe6-t2-t2-g7-gestao-de-frota/coverage/](https://icei-puc-minas-pmv-si.github.io/pmv-si-2026-1-pe6-t2-t2-g7-gestao-de-frota/coverage/)
+
+
