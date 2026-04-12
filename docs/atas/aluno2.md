@@ -12,7 +12,7 @@
 | 16/03 - 22/03 | APIs e Web Services - Unidade 2 | ✅ | Criação da base no cockroachdb | Criação da base no cockroachdb |
 | 23/03 - 29/03 | APIs e Web Services - Unidade 2 | ✅ | Criação do modulo de analytics | Criação do modulo de analytics |
 | 30/03 - 05/04 | Recuperação de Informação na Web e Redes Sociais - Unidade 1 | ✅ | Testes gerais | Testes gerais |
-| 06/04 - 12/04 | Recuperação de Informação na Web e Redes Sociais - Unidade 2 | ⬜ |  |  |
+| 06/04 - 12/04 | Recuperação de Informação na Web e Redes Sociais - Unidade 2 | ✅ | Continuação de testes no módulo de Analytics  | Continuação de testes no módulo de analytics  |
 | 13/04 - 19/04 | Computação Ubíqua e Pervasiva e IoT - Unidade 1 | ⬜ |  |  |
 | 20/04 - 26/04 | Computação Ubíqua e Pervasiva e IoT - Unidade 2 | ⬜ |  |  |
 | 27/04 - 03/05 | Desenvolvimento de Aplicações Móveis - Unidade 1 | ⬜ |  |  |
