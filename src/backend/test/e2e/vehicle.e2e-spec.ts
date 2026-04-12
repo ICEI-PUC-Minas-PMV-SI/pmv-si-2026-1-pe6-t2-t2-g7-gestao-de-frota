@@ -4,16 +4,16 @@ import { getE2eHttpServer, getE2eState } from './setup';
 const auth = (token: string) => `Bearer ${token}`;
 
 describe('VehicleModule (e2e)', () => {
-  describe('autenticacao', () => {
-    it('deve exigir autenticacao para listar veiculos', async () => {
+  describe('autenticação', () => {
+    it('deve exigir autenticação para listar veículos', async () => {
       await request(getE2eHttpServer()).get('/vehicle').expect(403);
 
       expect(getE2eState().verifyIdToken).not.toHaveBeenCalled();
     });
   });
 
-  describe('veiculos', () => {
-    it('deve listar todos os veiculos para usuario autenticado', async () => {
+  describe('veículos', () => {
+    it('deve listar todos os veículos para usuário autenticado', async () => {
       const response = await request(getE2eHttpServer())
         .get('/vehicle')
         .set('Authorization', auth('valid-user-token'))
@@ -37,7 +37,7 @@ describe('VehicleModule (e2e)', () => {
       ]);
     });
 
-    it('deve buscar um veiculo por id', async () => {
+    it('deve buscar um veículo por id', async () => {
       const response = await request(getE2eHttpServer())
         .get('/vehicle/vehicle-1-id')
         .set('Authorization', auth('valid-user-token'))
@@ -52,7 +52,7 @@ describe('VehicleModule (e2e)', () => {
       });
     });
 
-    it('deve criar um veiculo com payload valido', async () => {
+    it('deve criar um veículo com payload válido', async () => {
       const response = await request(getE2eHttpServer())
         .post('/vehicle')
         .set('Authorization', auth('valid-user-token'))
@@ -75,7 +75,7 @@ describe('VehicleModule (e2e)', () => {
       });
     });
 
-    it('deve rejeitar criacao com placa invalida', async () => {
+    it('deve rejeitar criação com placa inválida', async () => {
       await request(getE2eHttpServer())
         .post('/vehicle')
         .set('Authorization', auth('valid-user-token'))
@@ -88,7 +88,7 @@ describe('VehicleModule (e2e)', () => {
         .expect(400);
     });
 
-    it('deve atualizar um veiculo existente', async () => {
+    it('deve atualizar um veículo existente', async () => {
       const response = await request(getE2eHttpServer())
         .patch('/vehicle/vehicle-1-id')
         .set('Authorization', auth('valid-user-token'))
@@ -108,7 +108,7 @@ describe('VehicleModule (e2e)', () => {
       });
     });
 
-    it('deve retornar 404 ao atualizar veiculo inexistente', async () => {
+    it('deve retornar 404 ao atualizar veículo inexistente', async () => {
       await request(getE2eHttpServer())
         .patch('/vehicle/vehicle-inexistente')
         .set('Authorization', auth('valid-user-token'))
@@ -116,7 +116,7 @@ describe('VehicleModule (e2e)', () => {
         .expect(404);
     });
 
-    it('deve remover um veiculo existente', async () => {
+    it('deve remover um veículo existente', async () => {
       await request(getE2eHttpServer())
         .delete('/vehicle/vehicle-1-id')
         .set('Authorization', auth('valid-user-token'))

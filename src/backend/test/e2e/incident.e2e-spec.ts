@@ -6,8 +6,8 @@ const vehicleOneId = '11111111-1111-4111-8111-111111111111';
 const vehicleTwoId = '22222222-2222-4222-8222-222222222222';
 
 describe('IncidentModule (e2e)', () => {
-  describe('autenticacao', () => {
-    it('deve exigir autenticacao para listar incidentes', async () => {
+  describe('autenticação', () => {
+    it('deve exigir autenticação para listar incidentes', async () => {
       await request(getE2eHttpServer()).get('/incident').expect(403);
 
       expect(getE2eState().verifyIdToken).not.toHaveBeenCalled();
@@ -15,7 +15,7 @@ describe('IncidentModule (e2e)', () => {
   });
 
   describe('incidentes', () => {
-    it('deve listar todos os incidentes para usuario autenticado', async () => {
+    it('deve listar todos os incidentes para usuário autenticado', async () => {
       const response = await request(getE2eHttpServer())
         .get('/incident')
         .set('Authorization', auth('valid-user-token'))
@@ -54,7 +54,7 @@ describe('IncidentModule (e2e)', () => {
       });
     });
 
-    it('deve listar incidentes filtrando por veiculo', async () => {
+    it('deve listar incidentes filtrando por veículo', async () => {
       const response = await request(getE2eHttpServer())
         .get(`/incident/vehicle/${vehicleOneId}`)
         .set('Authorization', auth('valid-user-token'))
@@ -68,7 +68,7 @@ describe('IncidentModule (e2e)', () => {
       ]);
     });
 
-    it('deve criar um incidente com payload valido', async () => {
+    it('deve criar um incidente com payload válido', async () => {
       const response = await request(getE2eHttpServer())
         .post('/incident')
         .set('Authorization', auth('valid-user-token'))
@@ -93,7 +93,7 @@ describe('IncidentModule (e2e)', () => {
       });
     });
 
-    it('deve rejeitar criacao com descricao acima do limite', async () => {
+    it('deve rejeitar criação com descrição acima do limite', async () => {
       await request(getE2eHttpServer())
         .post('/incident')
         .set('Authorization', auth('valid-user-token'))

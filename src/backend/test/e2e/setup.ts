@@ -11,6 +11,11 @@ import {
   IncidentType,
 } from '../../src/modules/incident/models/Incident.model';
 import { IncidentRepo } from '../../src/modules/incident/repositories/incident/interface';
+import { JourneyModel } from '../../src/modules/journey/models/Journey.model';
+import { JourneyPositionModel } from '../../src/modules/journey/models/JourneyPosition.model';
+import { JourneyStopModel } from '../../src/modules/journey/models/JourneyStop.model';
+import { JourneyRepo } from '../../src/modules/journey/repositories/journey/interface';
+import { JourneyPositionRepo } from '../../src/modules/journey/repositories/journeyPosition/interface';
 import { VehicleModel } from '../../src/modules/vehicle/models/Vehicle.model';
 import { VehicleRepo } from '../../src/modules/vehicle/repositories/vehicle/interface';
 
@@ -31,12 +36,18 @@ type E2eGlobals = typeof globalThis & {
 const now = new Date('2026-04-08T00:00:00.000Z');
 const incidentVehicleOneId = '11111111-1111-4111-8111-111111111111';
 const incidentVehicleTwoId = '22222222-2222-4222-8222-222222222222';
+const journeyInProgressId = '33333333-3333-4333-8333-333333333333';
+const journeyCompletedId = '44444444-4444-4444-8444-444444444444';
+const journeyWithoutPositionsId = '55555555-5555-4555-8555-555555555555';
 
 class E2eTestState {
   private users = new Map<number, UserModel>();
   private nextId = 10;
   private vehicles = new Map<string, VehicleModel>();
   private incidents = new Map<string, IncidentModel>();
+  private journeys = new Map<string, JourneyModel>();
+  private journeyStops = new Map<string, JourneyStopModel[]>();
+  private journeyPositions = new Map<string, JourneyPositionModel[]>();
   private analyticsDashboardRows = [
     {
       total_users: '3',
@@ -259,6 +270,67 @@ class E2eTestState {
     ),
   };
 
+  readonly journeyRepo: JourneyRepo = {
+    createWithStops: jest.fn(
+      (journey: JourneyModel, stops: JourneyStopModel[]) => {
+        const savedJourney = new JourneyModel({
+          ...journey.toJSON(),
+          createdAt: journey.createdAt ?? now,
+          updatedAt: journey.updatedAt ?? now,
+        });
+        const savedStops = stops.map(
+          (stop, index) =>
+            new JourneyStopModel({
+              ...stop.toJSON(),
+              journeyId: savedJourney.id,
+              createdAt: new Date(now.getTime() + index),
+            }),
+        );
+
+        this.journeys.set(savedJourney.id, savedJourney);
+        this.journeyStops.set(savedJourney.id, savedStops);
+        this.journeyPositions.set(savedJourney.id, []);
+
+        return Promise.resolve({
+          journey: savedJourney,
+          stops: savedStops,
+        });
+      },
+    ),
+    findByIdForUser: jest.fn((id: string, userId: number) => {
+      const journey = this.journeys.get(id) ?? null;
+      if (!journey || journey.userId !== userId) return Promise.resolve(null);
+      return Promise.resolve(journey);
+    }),
+    findStopsByJourneyId: jest.fn((journeyId: string) =>
+      Promise.resolve(
+        [...(this.journeyStops.get(journeyId) ?? [])].sort(
+          (a, b) => a.stopOrder - b.stopOrder,
+        ),
+      ),
+    ),
+  };
+
+  readonly journeyPositionRepo: JourneyPositionRepo = {
+    create: jest.fn((row: JourneyPositionModel) => {
+      const saved = new JourneyPositionModel(row.toJSON());
+      const current = this.journeyPositions.get(row.journeyId) ?? [];
+      current.push(saved);
+      this.journeyPositions.set(row.journeyId, current);
+      return Promise.resolve(saved);
+    }),
+    findLatestByJourneyId: jest.fn((journeyId: string) => {
+      const positions = this.journeyPositions.get(journeyId) ?? [];
+      if (positions.length === 0) return Promise.resolve(null);
+
+      return Promise.resolve(
+        [...positions].sort(
+          (a, b) => b.recordedAt.getTime() - a.recordedAt.getTime(),
+        )[0] ?? null,
+      );
+    }),
+  };
+
   readonly dataSource = {
     isInitialized: true,
     destroy: jest.fn(() => Promise.resolve(undefined)),
@@ -388,6 +460,125 @@ class E2eTestState {
         }),
       ].map((incident) => [incident.id, incident]),
     );
+    this.journeys = new Map(
+      [
+        new JourneyModel({
+          id: journeyInProgressId,
+          userId: 1,
+          name: 'Rota Centro',
+          status: 'in_progress',
+          startedAt: new Date('2026-04-08T08:00:00.000Z'),
+          createdAt: new Date('2026-04-08T08:00:00.000Z'),
+          updatedAt: new Date('2026-04-08T08:00:00.000Z'),
+        }),
+        new JourneyModel({
+          id: journeyCompletedId,
+          userId: 1,
+          name: 'Entrega concluida',
+          status: 'completed',
+          startedAt: new Date('2026-04-07T08:00:00.000Z'),
+          createdAt: new Date('2026-04-07T08:00:00.000Z'),
+          updatedAt: new Date('2026-04-07T12:00:00.000Z'),
+        }),
+        new JourneyModel({
+          id: journeyWithoutPositionsId,
+          userId: 1,
+          name: 'Rota sem posicao',
+          status: 'in_progress',
+          startedAt: new Date('2026-04-08T09:00:00.000Z'),
+          createdAt: new Date('2026-04-08T09:00:00.000Z'),
+          updatedAt: new Date('2026-04-08T09:00:00.000Z'),
+        }),
+      ].map((journey) => [journey.id, journey]),
+    );
+    this.journeyStops = new Map<string, JourneyStopModel[]>([
+      [
+        journeyInProgressId,
+        [
+          new JourneyStopModel({
+            id: 'journey-stop-1',
+            journeyId: journeyInProgressId,
+            stopOrder: 1,
+            latitude: -23.5505,
+            longitude: -46.6333,
+            createdAt: new Date('2026-04-08T08:00:00.000Z'),
+          }),
+          new JourneyStopModel({
+            id: 'journey-stop-2',
+            journeyId: journeyInProgressId,
+            stopOrder: 2,
+            latitude: -23.5614,
+            longitude: -46.6559,
+            createdAt: new Date('2026-04-08T08:05:00.000Z'),
+          }),
+        ],
+      ],
+      [
+        journeyCompletedId,
+        [
+          new JourneyStopModel({
+            id: 'journey-stop-3',
+            journeyId: journeyCompletedId,
+            stopOrder: 1,
+            latitude: -23.5338,
+            longitude: -46.6253,
+            createdAt: new Date('2026-04-07T08:00:00.000Z'),
+          }),
+          new JourneyStopModel({
+            id: 'journey-stop-4',
+            journeyId: journeyCompletedId,
+            stopOrder: 2,
+            latitude: -23.5489,
+            longitude: -46.6388,
+            createdAt: new Date('2026-04-07T08:10:00.000Z'),
+          }),
+        ],
+      ],
+      [
+        journeyWithoutPositionsId,
+        [
+          new JourneyStopModel({
+            id: 'journey-stop-5',
+            journeyId: journeyWithoutPositionsId,
+            stopOrder: 1,
+            latitude: -23.567,
+            longitude: -46.648,
+            createdAt: new Date('2026-04-08T09:00:00.000Z'),
+          }),
+          new JourneyStopModel({
+            id: 'journey-stop-6',
+            journeyId: journeyWithoutPositionsId,
+            stopOrder: 2,
+            latitude: -23.58,
+            longitude: -46.66,
+            createdAt: new Date('2026-04-08T09:10:00.000Z'),
+          }),
+        ],
+      ],
+    ]);
+    this.journeyPositions = new Map<string, JourneyPositionModel[]>([
+      [
+        journeyInProgressId,
+        [
+          new JourneyPositionModel({
+            id: 'journey-position-1',
+            journeyId: journeyInProgressId,
+            latitude: -23.5505,
+            longitude: -46.6333,
+            recordedAt: new Date('2026-04-08T08:10:00.000Z'),
+          }),
+          new JourneyPositionModel({
+            id: 'journey-position-2',
+            journeyId: journeyInProgressId,
+            latitude: -23.551,
+            longitude: -46.634,
+            recordedAt: new Date('2026-04-08T08:15:00.000Z'),
+          }),
+        ],
+      ],
+      [journeyCompletedId, []],
+      [journeyWithoutPositionsId, []],
+    ]);
   }
 }
 
@@ -424,6 +615,10 @@ beforeAll(async () => {
     .useValue(state.vehicleRepo)
     .overrideProvider(IncidentRepo)
     .useValue(state.incidentRepo)
+    .overrideProvider(JourneyRepo)
+    .useValue(state.journeyRepo)
+    .overrideProvider(JourneyPositionRepo)
+    .useValue(state.journeyPositionRepo)
     .overrideProvider(typeORMConsts.databaseProviders)
     .useValue(state.dataSource)
     .compile();

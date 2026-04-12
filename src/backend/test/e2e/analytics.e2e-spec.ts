@@ -4,8 +4,8 @@ import { getE2eHttpServer, getE2eState } from './setup';
 const auth = (token: string) => `Bearer ${token}`;
 
 describe('AnalyticsModule (e2e)', () => {
-  describe('autenticacao', () => {
-    it('deve exigir autenticacao para consultar o dashboard', async () => {
+  describe('autenticação', () => {
+    it('deve exigir autenticação para consultar o dashboard', async () => {
       await request(getE2eHttpServer()).get('/analytics/dashboard').expect(403);
 
       expect(getE2eState().verifyIdToken).not.toHaveBeenCalled();
@@ -13,7 +13,7 @@ describe('AnalyticsModule (e2e)', () => {
   });
 
   describe('analytics', () => {
-    it('deve retornar o dashboard com contrato numerico para usuario autenticado', async () => {
+    it('deve retornar o dashboard com contrato numérico para usuário autenticado', async () => {
       const response = await request(getE2eHttpServer())
         .get('/analytics/dashboard')
         .set('Authorization', auth('valid-user-token'))
@@ -31,7 +31,7 @@ describe('AnalyticsModule (e2e)', () => {
       );
     });
 
-    it('deve retornar a lista de analytics de usuarios com os nomes de campos expostos pelo DTO', async () => {
+    it('deve retornar a lista de analytics de usuários com os nomes de campos expostos pelo DTO', async () => {
       const response = await request(getE2eHttpServer())
         .get('/analytics/users')
         .set('Authorization', auth('valid-user-token'))

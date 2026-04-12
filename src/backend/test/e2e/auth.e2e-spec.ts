@@ -4,14 +4,14 @@ import { getE2eHttpServer, getE2eState } from './setup';
 const auth = (token: string) => `Bearer ${token}`;
 
 describe('AuthModule (e2e)', () => {
-  describe('autenticacao global', () => {
-    it('deve negar requisicoes sem token bearer', async () => {
+  describe('autenticação global', () => {
+    it('deve negar requisições sem token bearer', async () => {
       await request(getE2eHttpServer()).get('/members').expect(403);
 
       expect(getE2eState().verifyIdToken).not.toHaveBeenCalled();
     });
 
-    it('deve negar requisicoes com token invalido', async () => {
+    it('deve negar requisições com token inválido', async () => {
       await request(getE2eHttpServer())
         .get('/members')
         .set('Authorization', auth('invalid-token'))
@@ -25,7 +25,7 @@ describe('AuthModule (e2e)', () => {
   });
 
   describe('conta', () => {
-    it('deve sincronizar usuario novo usando nome do body quando o token nao possui nome', async () => {
+    it('deve sincronizar usuário novo usando nome do body quando o token não possui nome', async () => {
       const response = await request(getE2eHttpServer())
         .post('/account/sync')
         .set('Authorization', auth('new-user-token'))
@@ -42,7 +42,7 @@ describe('AuthModule (e2e)', () => {
       });
     });
 
-    it('deve atualizar o nome do usuario autenticado', async () => {
+    it('deve atualizar o nome do usuário autenticado', async () => {
       const response = await request(getE2eHttpServer())
         .patch('/account/1')
         .set('Authorization', auth('valid-user-token'))
@@ -58,7 +58,7 @@ describe('AuthModule (e2e)', () => {
       });
     });
 
-    it('deve remover a conta autenticada no Firebase e no repositorio', async () => {
+    it('deve remover a conta autenticada no Firebase e no repositório', async () => {
       await request(getE2eHttpServer())
         .delete('/account/1')
         .set('Authorization', auth('valid-user-token'))
@@ -70,7 +70,7 @@ describe('AuthModule (e2e)', () => {
   });
 
   describe('membros', () => {
-    it('deve listar membros autenticados com paginacao', async () => {
+    it('deve listar membros autenticados com paginação', async () => {
       const response = await request(getE2eHttpServer())
         .get('/members?limit=2')
         .set('Authorization', auth('valid-user-token'))
@@ -99,14 +99,14 @@ describe('AuthModule (e2e)', () => {
       });
     });
 
-    it('deve bloquear alteracao de cargo para usuario sem perfil admin ou owner', async () => {
+    it('deve bloquear alteração de cargo para usuário sem perfil admin ou owner', async () => {
       await request(getE2eHttpServer())
         .patch('/member/2?role=admin')
         .set('Authorization', auth('valid-user-token'))
         .expect(403);
     });
 
-    it('deve permitir que admin altere cargo de membro que nao e owner', async () => {
+    it('deve permitir que admin altere cargo de membro que não é owner', async () => {
       const response = await request(getE2eHttpServer())
         .patch('/member/1?role=admin')
         .set('Authorization', auth('valid-admin-token'))
@@ -119,14 +119,14 @@ describe('AuthModule (e2e)', () => {
       });
     });
 
-    it('deve impedir remocao de usuario owner', async () => {
+    it('deve impedir remoção de usuário owner', async () => {
       await request(getE2eHttpServer())
         .delete('/member/3')
         .set('Authorization', auth('valid-admin-token'))
         .expect(401);
     });
 
-    it('deve permitir que admin remova membro que nao e owner', async () => {
+    it('deve permitir que admin remova membro que não é owner', async () => {
       await request(getE2eHttpServer())
         .delete('/member/1')
         .set('Authorization', auth('valid-admin-token'))
