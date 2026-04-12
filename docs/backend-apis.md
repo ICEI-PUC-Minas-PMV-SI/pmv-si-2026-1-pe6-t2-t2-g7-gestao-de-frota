@@ -165,7 +165,7 @@ Os cenários E2E de telemetria usam a mesma infraestrutura de `setup.ts`, com `J
 
 Todos os testes de ponta a ponta passaram com sucesso com uma margem de coverage aceitável para o tamanho do projeto atual:
 
-<img width="463" height="167" alt="screenshot_2026-04-11_02-30-54" src="https://github.com/user-attachments/assets/b923240c-059b-441a-858a-7139e8b6a6cb" />
+<img width="1889" height="456" alt="image" src="https://github.com/user-attachments/assets/4a59969a-e813-428e-9d14-395c76cbb10d" />
 
 Para visualizar a cobertura de testes unitários e E2E basta conferir o link abaixo:
 - [https://icei-puc-minas-pmv-si.github.io/pmv-si-2026-1-pe6-t2-t2-g7-gestao-de-frota/coverage/](https://icei-puc-minas-pmv-si.github.io/pmv-si-2026-1-pe6-t2-t2-g7-gestao-de-frota/coverage/)
