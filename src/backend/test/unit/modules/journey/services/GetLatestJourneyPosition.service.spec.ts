@@ -35,6 +35,7 @@ describe('GetLatestJourneyPositionService', () => {
           new JourneyModel({
             id: 'journey-1',
             userId: 10,
+            vehicleId: 'vehicle-1-id',
             status: 'in_progress',
           }),
         ),
@@ -60,6 +61,7 @@ describe('GetLatestJourneyPositionService', () => {
           new JourneyModel({
             id: 'journey-1',
             userId: 10,
+            vehicleId: 'vehicle-1-id',
             status: 'in_progress',
           }),
         ),

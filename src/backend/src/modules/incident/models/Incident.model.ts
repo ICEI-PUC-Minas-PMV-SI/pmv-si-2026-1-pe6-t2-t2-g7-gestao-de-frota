@@ -13,13 +13,33 @@ export enum IncidentType {
   MULTA = 'multa',
 }
 
+export enum IncidentStatus {
+  ABERTO = 'aberto',
+  EM_ANALISE = 'em_analise',
+  RESOLVIDO = 'resolvido',
+  CANCELADO = 'cancelado',
+}
+
+export enum IncidentSeverity {
+  BAIXA = 'baixa',
+  MEDIA = 'media',
+  ALTA = 'alta',
+  CRITICA = 'critica',
+}
+
 export type IncidentModelProps = {
   id: string;
   vehicleId: string;
   tipo: IncidentType;
+  status: IncidentStatus;
+  severidade: IncidentSeverity;
   descricao: string;
-  valor?: number;
   data: Date;
+  codigoInfracao?: string;
+  valor?: number;
+  localInfracao?: string;
+  natureza?: string;
+  local?: string;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -30,8 +50,14 @@ export type IncidentModelPropsInput = TReplace<
     id?: string;
     vehicleId: string;
     tipo: IncidentType;
+    status?: IncidentStatus;
+    severidade: IncidentSeverity;
     descricao: string;
+    codigoInfracao?: string;
     valor?: number;
+    localInfracao?: string;
+    natureza?: string;
+    local?: string;
     data?: Date;
     createdAt?: Date;
     updatedAt?: Date;
@@ -42,8 +68,14 @@ export type IncidentModelUpdateInput = {
   id: string;
   vehicleId?: string;
   tipo?: IncidentType;
+  status?: IncidentStatus;
+  severidade?: IncidentSeverity;
   descricao?: string;
+  codigoInfracao?: string;
   valor?: number;
+  localInfracao?: string;
+  natureza?: string;
+  local?: string;
   data?: Date;
 };
 
@@ -62,11 +94,39 @@ export class IncidentModel {
   @Column({ name: 'tipo', length: 24, type: 'varchar' })
   tipo!: IncidentType;
 
+  @Column({ name: 'status', length: 24, type: 'varchar' })
+  status!: IncidentStatus;
+
+  @Column({ name: 'severidade', length: 24, type: 'varchar' })
+  severidade!: IncidentSeverity;
+
   @Column({ name: 'descricao', length: 1024, type: 'varchar' })
   descricao!: string;
 
+  @Column({
+    name: 'codigo_infracao',
+    length: 128,
+    type: 'varchar',
+    nullable: true,
+  })
+  codigoInfracao?: string;
+
   @Column({ name: 'valor', type: 'numeric', nullable: true })
   valor?: number;
+
+  @Column({
+    name: 'local_infracao',
+    length: 512,
+    type: 'varchar',
+    nullable: true,
+  })
+  localInfracao?: string;
+
+  @Column({ name: 'natureza', length: 255, type: 'varchar', nullable: true })
+  natureza?: string;
+
+  @Column({ name: 'local', length: 512, type: 'varchar', nullable: true })
+  local?: string;
 
   @Column({ name: 'data', type: 'timestamptz' })
   data!: Date;
@@ -83,8 +143,14 @@ export class IncidentModel {
     this.id = props.id ?? randomUUID();
     this.vehicleId = props.vehicleId;
     this.tipo = props.tipo;
+    this.status = props.status ?? IncidentStatus.ABERTO;
+    this.severidade = props.severidade;
     this.descricao = props.descricao;
+    this.codigoInfracao = props.codigoInfracao;
     this.valor = props.valor;
+    this.localInfracao = props.localInfracao;
+    this.natureza = props.natureza;
+    this.local = props.local;
     this.data = props.data ?? new Date();
     this.createdAt = props.createdAt ?? new Date();
     this.updatedAt = props.updatedAt ?? new Date();
@@ -95,8 +161,14 @@ export class IncidentModel {
       id: this.id,
       vehicleId: this.vehicleId,
       tipo: this.tipo,
+      status: this.status,
+      severidade: this.severidade,
       descricao: this.descricao,
+      codigoInfracao: this.codigoInfracao,
       valor: this.valor,
+      localInfracao: this.localInfracao,
+      natureza: this.natureza,
+      local: this.local,
       data: this.data,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
@@ -108,8 +180,14 @@ export class IncidentModel {
       id: this.id,
       vehicleId: this.vehicleId,
       tipo: this.tipo,
+      status: this.status,
+      severidade: this.severidade,
       descricao: this.descricao,
+      codigoInfracao: this.codigoInfracao,
       valor: this.valor,
+      localInfracao: this.localInfracao,
+      natureza: this.natureza,
+      local: this.local,
       data: this.data,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,

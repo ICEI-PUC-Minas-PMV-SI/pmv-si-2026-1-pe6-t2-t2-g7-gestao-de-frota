@@ -24,6 +24,7 @@ export class CreateJourneyController {
   ): Promise<CreateJourneyResponseDto> {
     return await this.createJourney.exec({
       userId: container.user.id,
+      vehicleId: body.vehicleId,
       nome: body.nome,
       paradas: body.paradas.map((p) => ({
         ordem: p.ordem,

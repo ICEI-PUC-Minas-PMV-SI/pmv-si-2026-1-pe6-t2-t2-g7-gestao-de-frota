@@ -23,6 +23,9 @@ describe('VehicleRepoImpl', () => {
       modelo: 'Uno',
       ano: 2020,
       placa: 'ABC1D23',
+      fotoUrl: 'https://example.com/uno.jpg',
+      tamanhoTanque: 50,
+      consumoMedio: 10,
     });
 
     await expect(repo.create(vehicle)).resolves.toBe(vehicle);

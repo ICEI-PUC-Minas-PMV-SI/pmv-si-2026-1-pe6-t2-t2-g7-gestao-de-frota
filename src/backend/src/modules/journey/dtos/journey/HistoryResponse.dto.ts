@@ -1,22 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsUUID } from 'class-validator';
 import { TJourneyStatus } from '../../models/Journey.model';
 
-export class JourneyParadaResponseDto {
-  @ApiProperty()
-  id: string;
-
-  @ApiProperty()
-  ordem: number;
-
-  @ApiProperty()
-  latitude: number;
-
-  @ApiProperty()
-  longitude: number;
-}
-
-export class CreateJourneyResponseDto {
+export class JourneyHistoryResponseDto {
   @ApiProperty()
   id: string;
 
@@ -24,7 +9,6 @@ export class CreateJourneyResponseDto {
   userId: number;
 
   @ApiProperty()
-  @IsUUID()
   vehicleId: string;
 
   @ApiPropertyOptional()
@@ -44,9 +28,6 @@ export class CreateJourneyResponseDto {
 
   @ApiProperty()
   iniciadaEm: string;
-
-  @ApiProperty({ type: [JourneyParadaResponseDto] })
-  paradas: JourneyParadaResponseDto[];
 
   @ApiProperty()
   criadaEm: string;

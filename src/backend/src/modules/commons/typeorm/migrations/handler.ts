@@ -7,12 +7,11 @@ import { JourneyModel } from '../../../../modules/journey/models/Journey.model';
 import { JourneyStopModel } from '../../../../modules/journey/models/JourneyStop.model';
 import { JourneyPositionModel } from '../../../../modules/journey/models/JourneyPosition.model';
 import { IncidentModel } from '../../../../modules/incident/models/Incident.model';
-import { Default1774375949914 } from './1774375949914-default';
-import { AddIncidents1774375949915 } from './1774375949915-add-incidents';
 import { TelemetryModel } from '../../../../modules/telemetry/models/Telemetry.model';
-import { AnalyticsViews1774375949915 } from './1774375949915-analytics-views';
-import { Telemetry1774375949915 } from './1774375949915-telemetry';
-import { TelemetryRenameRpm1774375949916 } from './1774375949916-telemetry-rename-rpm';
+import { Default1777378570930 } from './1777378570930-default';
+import { Default1777379041197 } from './1777379041197-default';
+import { Default1777381505441 } from './1777381505441-default';
+import { Default1777384691511 } from './1777384691511-default';
 
 const config: DataSourceOptions = {
   type: 'cockroachdb',
@@ -32,11 +31,10 @@ const config: DataSourceOptions = {
     IncidentModel,
   ],
   migrations: [
-    Default1774375949914,
-    Telemetry1774375949915,
-    TelemetryRenameRpm1774375949916,
-    AddIncidents1774375949915,
-    AnalyticsViews1774375949915,
+    Default1777378570930,
+    Default1777379041197,
+    Default1777381505441,
+    Default1777384691511,
   ],
   synchronize: false,
   migrationsRun: false,

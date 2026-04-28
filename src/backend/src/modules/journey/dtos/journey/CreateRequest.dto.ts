@@ -7,6 +7,7 @@ import {
   IsNumber,
   IsOptional,
   IsString,
+  IsUUID,
   Max,
   MaxLength,
   Min,
@@ -45,4 +46,8 @@ export class CreateJourneyRequestDto {
   @ValidateNested({ each: true })
   @Type(() => JourneyParadaRequestDto)
   paradas: JourneyParadaRequestDto[];
+
+  @ApiProperty({ example: 'd7e15cc6-c0d9-455d-bb27-2ec9fd68a1c7' })
+  @IsUUID()
+  vehicleId: string;
 }

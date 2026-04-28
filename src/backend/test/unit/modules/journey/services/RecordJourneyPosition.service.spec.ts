@@ -37,6 +37,7 @@ describe('RecordJourneyPositionService', () => {
           new JourneyModel({
             id: 'journey-1',
             userId: 10,
+            vehicleId: 'vehicle-1-id',
             status: 'completed',
           }),
         ),
@@ -65,6 +66,7 @@ describe('RecordJourneyPositionService', () => {
           new JourneyModel({
             id: 'journey-1',
             userId: 10,
+            vehicleId: 'vehicle-1-id',
             status: 'in_progress',
           }),
         ),

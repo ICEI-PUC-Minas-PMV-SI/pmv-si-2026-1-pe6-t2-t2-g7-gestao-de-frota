@@ -38,6 +38,7 @@ describe('JourneyRepoImpl', () => {
     const journey = new JourneyModel({
       id: 'j1',
       userId: 1,
+      vehicleId: 'vehicle-1-id',
       name: 'Entrega',
       status: 'in_progress',
     });

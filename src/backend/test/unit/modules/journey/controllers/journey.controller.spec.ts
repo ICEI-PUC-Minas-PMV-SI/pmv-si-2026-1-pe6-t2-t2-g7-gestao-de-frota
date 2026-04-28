@@ -16,6 +16,7 @@ describe('Journey controllers', () => {
       controller.exec(
         {
           nome: 'Entrega',
+          vehicleId: '00000000-0000-4000-8000-000000000001',
           paradas: [{ ordem: 1, latitude: -10, longitude: -20 }],
         },
         container,
@@ -24,6 +25,7 @@ describe('Journey controllers', () => {
     expect(execMock).toHaveBeenCalledWith({
       userId: 1,
       nome: 'Entrega',
+      vehicleId: '00000000-0000-4000-8000-000000000001',
       paradas: [{ ordem: 1, latitude: -10, longitude: -20 }],
     });
   });

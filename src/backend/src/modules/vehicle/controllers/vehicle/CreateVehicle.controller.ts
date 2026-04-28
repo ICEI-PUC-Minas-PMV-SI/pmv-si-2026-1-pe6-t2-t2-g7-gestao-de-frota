@@ -21,6 +21,9 @@ export class CreateVehicleController {
       modelo: body.modelo,
       ano: body.ano,
       placa: body.placa,
+      fotoUrl: body.fotoUrl,
+      tamanhoTanque: body.tamanhoTanque,
+      consumoMedio: body.consumoMedio,
     });
     return vehicle.toJSON();
   }

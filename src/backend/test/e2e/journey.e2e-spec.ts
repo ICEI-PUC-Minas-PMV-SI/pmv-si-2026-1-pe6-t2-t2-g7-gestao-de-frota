@@ -5,6 +5,7 @@ const auth = (token: string) => `Bearer ${token}`;
 const inProgressJourneyId = '33333333-3333-4333-8333-333333333333';
 const completedJourneyId = '44444444-4444-4444-8444-444444444444';
 const journeyWithoutPositionsId = '55555555-5555-4555-8555-555555555555';
+const validVehicleId = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
 
 describe('JourneyModule (e2e)', () => {
   describe('autenticação', () => {
@@ -22,6 +23,7 @@ describe('JourneyModule (e2e)', () => {
         .set('Authorization', auth('valid-user-token'))
         .send({
           nome: 'Coleta Zona Norte',
+          vehicleId: validVehicleId,
           paradas: [
             {
               ordem: 2,
@@ -40,8 +42,12 @@ describe('JourneyModule (e2e)', () => {
       expect(response.body).toEqual({
         id: expect.any(String),
         userId: 1,
+        vehicleId: validVehicleId,
         nome: 'Coleta Zona Norte',
         status: 'in_progress',
+        kmRodados: 0,
+        combustivelGasto: 0,
+        nivelCombustivel: 100,
         iniciadaEm: expect.any(String),
         paradas: [
           {
@@ -68,6 +74,7 @@ describe('JourneyModule (e2e)', () => {
         .set('Authorization', auth('valid-user-token'))
         .send({
           nome: 'Jornada invalida',
+          vehicleId: validVehicleId,
           paradas: [
             {
               ordem: 1,
@@ -88,8 +95,12 @@ describe('JourneyModule (e2e)', () => {
       expect(response.body).toEqual({
         id: inProgressJourneyId,
         userId: 1,
+        vehicleId: 'vehicle-1-id',
         nome: 'Rota Centro',
         status: 'in_progress',
+        kmRodados: 0,
+        combustivelGasto: 0,
+        nivelCombustivel: 100,
         iniciadaEm: '2026-04-08T08:00:00.000Z',
         paradas: [
           {

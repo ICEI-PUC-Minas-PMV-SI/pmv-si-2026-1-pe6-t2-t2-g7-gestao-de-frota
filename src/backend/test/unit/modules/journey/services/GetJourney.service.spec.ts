@@ -9,6 +9,7 @@ describe('GetJourneyService', () => {
     const journey = new JourneyModel({
       id: 'j1',
       userId: 1,
+      vehicleId: 'vehicle-1-id',
       name: 'Entrega',
       status: 'in_progress',
       startedAt: new Date('2026-04-10T00:00:00.000Z'),

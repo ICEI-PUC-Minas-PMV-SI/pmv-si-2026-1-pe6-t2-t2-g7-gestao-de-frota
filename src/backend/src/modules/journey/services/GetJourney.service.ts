@@ -24,8 +24,12 @@ export class GetJourneyService {
     return {
       id: journey.id,
       userId: journey.userId,
+      vehicleId: journey.vehicleId,
       nome: journey.name,
       status: journey.status,
+      kmRodados: journey.kmRodados,
+      combustivelGasto: journey.combustivelGasto,
+      nivelCombustivel: journey.nivelCombustivel,
       iniciadaEm: journey.startedAt.toISOString(),
       paradas: stops.map((s) => ({
         id: s.id,

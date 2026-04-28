@@ -3,8 +3,6 @@ import { GetLatestTelemetryController } from '../../../../../src/modules/telemet
 import { RecordTelemetryController } from '../../../../../src/modules/telemetry/controllers/telemetry/RecordTelemetry.controller';
 
 describe('Telemetry controllers', () => {
-  const container = { user: { id: 1 } } as never;
-
   it('deve registrar telemetria', async () => {
     const execMock = jest.fn(() => Promise.resolve({ id: 't1' }));
     const controller = new RecordTelemetryController({
@@ -12,19 +10,12 @@ describe('Telemetry controllers', () => {
     } as never);
 
     await expect(
-      controller.exec(
-        'j1',
-        {
-          vehicleId: 'v1',
-          kmRodados: 10,
-          combustivelGasto: 2,
-          nivelCombustivel: 40,
-          latitude: -10,
-          longitude: -20,
-          velocidadeMedia: 70,
-        },
-        container,
-      ),
+      controller.exec('00000000-0000-4000-8000-000000000001', {
+        kmRodados: 10,
+        combustivelGasto: 2,
+        nivelCombustivel: 40,
+        velocidadeMedia: 70,
+      }),
     ).resolves.toEqual({ id: 't1' });
   });
 
@@ -34,7 +25,9 @@ describe('Telemetry controllers', () => {
       exec: execMock,
     } as never);
 
-    await expect(controller.exec('j1', container)).resolves.toEqual({
+    await expect(
+      controller.exec('00000000-0000-4000-8000-000000000001'),
+    ).resolves.toEqual({
       temTelemetria: false,
     });
   });
@@ -45,8 +38,8 @@ describe('Telemetry controllers', () => {
       exec: execMock,
     } as never);
 
-    await expect(controller.exec('j1', container)).resolves.toEqual([
-      { id: 't1' },
-    ]);
+    await expect(
+      controller.exec('00000000-0000-4000-8000-000000000001'),
+    ).resolves.toEqual([{ id: 't1' }]);
   });
 });

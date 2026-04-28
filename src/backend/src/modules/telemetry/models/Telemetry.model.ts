@@ -10,13 +10,10 @@ import { randomUUID } from 'crypto';
 
 export type TelemetryModelProps = {
   id: string;
-  journeyId: string;
   vehicleId: string;
   kmRodados: number;
   combustivelGasto: number;
   nivelCombustivel: number;
-  latitude: number;
-  longitude: number;
   velocidadeMedia: number;
   recordedAt: Date;
   createdAt: Date;
@@ -42,9 +39,6 @@ export class TelemetryModel {
   })
   id: string;
 
-  @Column({ name: 'journey_id', type: 'uuid' })
-  journeyId: string;
-
   @Column({ name: 'vehicle_id', type: 'uuid' })
   vehicleId: string;
 
@@ -56,12 +50,6 @@ export class TelemetryModel {
 
   @Column({ name: 'nivel_combustivel', type: 'double precision' })
   nivelCombustivel: number;
-
-  @Column({ name: 'latitude', type: 'double precision' })
-  latitude: number;
-
-  @Column({ name: 'longitude', type: 'double precision' })
-  longitude: number;
 
   @Column({ name: 'velocidade_media', type: 'double precision' })
   velocidadeMedia: number;
@@ -79,13 +67,10 @@ export class TelemetryModel {
     if (!props) return;
 
     this.id = props.id ?? randomUUID();
-    this.journeyId = props.journeyId;
     this.vehicleId = props.vehicleId;
     this.kmRodados = props.kmRodados;
     this.combustivelGasto = props.combustivelGasto;
     this.nivelCombustivel = props.nivelCombustivel;
-    this.latitude = props.latitude;
-    this.longitude = props.longitude;
     this.velocidadeMedia = props.velocidadeMedia;
     this.recordedAt = props.recordedAt ?? new Date();
     this.createdAt = props.createdAt ?? new Date();
@@ -95,13 +80,10 @@ export class TelemetryModel {
   toJSON(): TelemetryJsonProps {
     return {
       id: this.id,
-      journeyId: this.journeyId,
       vehicleId: this.vehicleId,
       kmRodados: this.kmRodados,
       combustivelGasto: this.combustivelGasto,
       nivelCombustivel: this.nivelCombustivel,
-      latitude: this.latitude,
-      longitude: this.longitude,
       velocidadeMedia: this.velocidadeMedia,
       recordedAt: this.recordedAt,
       createdAt: this.createdAt,
@@ -112,13 +94,10 @@ export class TelemetryModel {
   get props() {
     return {
       id: this.id,
-      journeyId: this.journeyId,
       vehicleId: this.vehicleId,
       kmRodados: this.kmRodados,
       combustivelGasto: this.combustivelGasto,
       nivelCombustivel: this.nivelCombustivel,
-      latitude: this.latitude,
-      longitude: this.longitude,
       velocidadeMedia: this.velocidadeMedia,
       recordedAt: this.recordedAt,
       createdAt: this.createdAt,

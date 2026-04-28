@@ -32,6 +32,11 @@ export function TripRoutePlanner({ className }: TripRoutePlannerProps) {
     user,
     tripName,
     setTripName,
+    selectedVehicleId,
+    setSelectedVehicleId,
+    vehicles,
+    vehiclesLoading,
+    vehiclesError,
     routeStartedAt,
     savedJourneyId,
     journeySaving,
@@ -77,6 +82,35 @@ export function TripRoutePlanner({ className }: TripRoutePlannerProps) {
             className="rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-white placeholder:text-zinc-600 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
           />
         </label>
+
+        <label className="flex flex-col gap-1.5">
+          <span className="text-xs font-medium text-zinc-400">
+            Veículo da jornada (obrigatório)
+          </span>
+          <select
+            value={selectedVehicleId}
+            onChange={(e) => setSelectedVehicleId(e.target.value)}
+            disabled={vehiclesLoading || vehicles.length === 0}
+            className="rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-white focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 disabled:opacity-50"
+          >
+            {vehicles.length === 0 ? (
+              <option value="">
+                {vehiclesLoading ? "Carregando veículos..." : "Nenhum veículo disponível"}
+              </option>
+            ) : (
+              vehicles.map((vehicle) => (
+                <option key={vehicle.id} value={vehicle.id}>
+                  {vehicle.marca} {vehicle.modelo} · {vehicle.placa}
+                </option>
+              ))
+            )}
+          </select>
+        </label>
+        {vehiclesError && (
+          <p className="text-xs text-red-400" role="alert">
+            {vehiclesError}
+          </p>
+        )}
 
         <label className="flex cursor-pointer items-center gap-2 text-sm text-zinc-300">
           <input
@@ -168,7 +202,8 @@ export function TripRoutePlanner({ className }: TripRoutePlannerProps) {
               waypoints.length < 2 ||
               routeStartedAt !== null ||
               journeySaving ||
-              !user
+              !user ||
+              !selectedVehicleId
             }
             title={!user ? "É necessário estar logado" : undefined}
             className="rounded-lg border border-emerald-600/70 bg-emerald-950/50 px-4 py-2.5 text-sm font-medium text-emerald-100 transition hover:bg-emerald-900/45 disabled:cursor-not-allowed disabled:opacity-40"

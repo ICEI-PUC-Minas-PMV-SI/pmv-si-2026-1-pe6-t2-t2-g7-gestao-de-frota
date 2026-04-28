@@ -8,6 +8,7 @@ import { FirebaseService } from '../../src/modules/commons/firebase/firebase.ser
 import { typeORMConsts } from '../../src/modules/commons/typeorm/consts';
 import {
   IncidentModel,
+  IncidentSeverity,
   IncidentType,
 } from '../../src/modules/incident/models/Incident.model';
 import { IncidentRepo } from '../../src/modules/incident/repositories/incident/interface';
@@ -306,6 +307,26 @@ class E2eTestState {
       if (!journey || journey.userId !== userId) return Promise.resolve(null);
       return Promise.resolve(journey);
     }),
+    update: jest.fn((changes: JourneyModel) => {
+      const existing = this.journeys.get(changes.id);
+      if (!existing) return Promise.resolve(changes);
+
+      const merged = new JourneyModel({
+        ...existing.toJSON(),
+        ...changes.toJSON(),
+        createdAt: existing.createdAt,
+        updatedAt: now,
+      });
+      this.journeys.set(merged.id, merged);
+      return Promise.resolve(merged);
+    }),
+    findByVehicleId: jest.fn((vehicleId: string) =>
+      Promise.resolve(
+        [...this.journeys.values()]
+          .filter((journey) => journey.vehicleId === vehicleId)
+          .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime()),
+      ),
+    ),
     findStopsByJourneyId: jest.fn((journeyId: string) =>
       Promise.resolve(
         [...(this.journeyStops.get(journeyId) ?? [])].sort(
@@ -338,20 +359,31 @@ class E2eTestState {
   readonly telemetryRepo: TelemetryRepo = {
     create: jest.fn((row: TelemetryModel) => {
       const saved = new TelemetryModel(row.toJSON());
-      const current = this.telemetries.get(row.journeyId) ?? [];
+      const current = this.telemetries.get(row.vehicleId) ?? [];
       current.push(saved);
-      this.telemetries.set(row.journeyId, current);
+      this.telemetries.set(row.vehicleId, current);
       return Promise.resolve(saved);
     }),
-    findByJourneyId: jest.fn((journeyId: string) =>
+    update: jest.fn((row: TelemetryModel) => {
+      const current = this.telemetries.get(row.vehicleId) ?? [];
+      const index = current.findIndex((item) => item.id === row.id);
+      if (index >= 0) {
+        current[index] = row;
+      } else {
+        current.push(row);
+      }
+      this.telemetries.set(row.vehicleId, current);
+      return Promise.resolve(row);
+    }),
+    findByVehicleId: jest.fn((vehicleId: string) =>
       Promise.resolve(
-        [...(this.telemetries.get(journeyId) ?? [])].sort(
+        [...(this.telemetries.get(vehicleId) ?? [])].sort(
           (a, b) => a.recordedAt.getTime() - b.recordedAt.getTime(),
         ),
       ),
     ),
-    findLatestByJourneyId: jest.fn((journeyId: string) => {
-      const records = this.telemetries.get(journeyId) ?? [];
+    findLatestByVehicleId: jest.fn((vehicleId: string) => {
+      const records = this.telemetries.get(vehicleId) ?? [];
       if (records.length === 0) return Promise.resolve(null);
       return Promise.resolve(
         [...records].sort(
@@ -452,8 +484,23 @@ class E2eTestState {
           modelo: 'Uno',
           ano: 2020,
           placa: 'ABC1D23',
+          fotoUrl: 'https://example.com/uno.jpg',
+          tamanhoTanque: 50,
+          consumoMedio: 10,
           createdAt: now,
           updatedAt: now,
+        }),
+        new VehicleModel({
+          id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
+          marca: 'Renault',
+          modelo: 'Kwid',
+          ano: 2022,
+          placa: 'QWE1R23',
+          fotoUrl: 'https://example.com/kwid.jpg',
+          tamanhoTanque: 38,
+          consumoMedio: 14,
+          createdAt: new Date(now.getTime() + 2_000),
+          updatedAt: new Date(now.getTime() + 2_000),
         }),
         new VehicleModel({
           id: 'vehicle-2-id',
@@ -461,6 +508,9 @@ class E2eTestState {
           modelo: 'Gol',
           ano: 2021,
           placa: 'XYZ9K87',
+          fotoUrl: 'https://example.com/gol.jpg',
+          tamanhoTanque: 55,
+          consumoMedio: 12,
           createdAt: new Date(now.getTime() + 1_000),
           updatedAt: new Date(now.getTime() + 1_000),
         }),
@@ -472,8 +522,11 @@ class E2eTestState {
           id: 'incident-1-id',
           vehicleId: incidentVehicleOneId,
           tipo: IncidentType.SINISTRO,
+          severidade: IncidentSeverity.MEDIA,
           descricao: 'Colisao traseira leve',
           valor: 500,
+          natureza: 'colisao',
+          local: 'Av. Afonso Pena, 1000',
           data: new Date('2026-04-05T10:00:00.000Z'),
           createdAt: now,
           updatedAt: now,
@@ -482,8 +535,11 @@ class E2eTestState {
           id: 'incident-2-id',
           vehicleId: incidentVehicleTwoId,
           tipo: IncidentType.MULTA,
+          severidade: IncidentSeverity.BAIXA,
           descricao: 'Excesso de velocidade',
           valor: 250,
+          codigoInfracao: 'M123',
+          localInfracao: 'Rodovia BR-381 km 50',
           data: new Date('2026-04-06T11:30:00.000Z'),
           createdAt: new Date(now.getTime() + 1_000),
           updatedAt: new Date(now.getTime() + 1_000),
@@ -495,6 +551,7 @@ class E2eTestState {
         new JourneyModel({
           id: journeyInProgressId,
           userId: 1,
+          vehicleId: 'vehicle-1-id',
           name: 'Rota Centro',
           status: 'in_progress',
           startedAt: new Date('2026-04-08T08:00:00.000Z'),
@@ -504,6 +561,7 @@ class E2eTestState {
         new JourneyModel({
           id: journeyCompletedId,
           userId: 1,
+          vehicleId: 'vehicle-1-id',
           name: 'Entrega concluida',
           status: 'completed',
           startedAt: new Date('2026-04-07T08:00:00.000Z'),
@@ -513,6 +571,7 @@ class E2eTestState {
         new JourneyModel({
           id: journeyWithoutPositionsId,
           userId: 1,
+          vehicleId: 'vehicle-2-id',
           name: 'Rota sem posicao',
           status: 'in_progress',
           startedAt: new Date('2026-04-08T09:00:00.000Z'),
@@ -522,6 +581,7 @@ class E2eTestState {
         new JourneyModel({
           id: journeyAdminId,
           userId: 2,
+          vehicleId: 'vehicle-2-id',
           name: 'Rota admin',
           status: 'in_progress',
           startedAt: new Date('2026-04-08T10:00:00.000Z'),
@@ -620,17 +680,14 @@ class E2eTestState {
     ]);
     this.telemetries = new Map<string, TelemetryModel[]>([
       [
-        journeyInProgressId,
+        'vehicle-1-id',
         [
           new TelemetryModel({
             id: 'telemetry-1',
-            journeyId: journeyInProgressId,
-            vehicleId: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
+            vehicleId: 'vehicle-1-id',
             kmRodados: 50,
             combustivelGasto: 5,
             nivelCombustivel: 70,
-            latitude: -23.5505,
-            longitude: -46.6333,
             velocidadeMedia: 50,
             recordedAt: new Date('2026-04-08T08:10:00.000Z'),
             createdAt: new Date('2026-04-08T08:10:00.000Z'),
@@ -638,8 +695,7 @@ class E2eTestState {
           }),
         ],
       ],
-      [journeyCompletedId, []],
-      [journeyWithoutPositionsId, []],
+      ['vehicle-2-id', []],
     ]);
   }
 }

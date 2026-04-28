@@ -13,6 +13,9 @@ describe('Vehicle controllers', () => {
       modelo: 'Uno',
       ano: 2020,
       placa: 'ABC1D23',
+      fotoUrl: 'https://example.com/uno.jpg',
+      tamanhoTanque: 50,
+      consumoMedio: 10,
     });
     const execMock = jest.fn(() => Promise.resolve(vehicle));
     const controller = new CreateVehicleController({ exec: execMock } as never);
@@ -23,6 +26,9 @@ describe('Vehicle controllers', () => {
         modelo: 'Uno',
         ano: 2020,
         placa: 'ABC1D23',
+        fotoUrl: 'https://example.com/uno.jpg',
+        tamanhoTanque: 50,
+        consumoMedio: 10,
       }),
     ).resolves.toMatchObject({ id: 'v1', placa: 'ABC1D23' });
   });
@@ -36,6 +42,9 @@ describe('Vehicle controllers', () => {
           modelo: 'Uno',
           ano: 2020,
           placa: 'ABC1D23',
+          fotoUrl: 'https://example.com/uno.jpg',
+          tamanhoTanque: 50,
+          consumoMedio: 10,
         }),
       ]),
     );
@@ -57,6 +66,9 @@ describe('Vehicle controllers', () => {
           modelo: 'Uno',
           ano: 2020,
           placa: 'ABC1D23',
+          fotoUrl: 'https://example.com/uno.jpg',
+          tamanhoTanque: 50,
+          consumoMedio: 10,
         }),
       ),
     );
@@ -75,6 +87,9 @@ describe('Vehicle controllers', () => {
           modelo: 'Uno Way',
           ano: 2022,
           placa: 'DEF2G45',
+          fotoUrl: 'https://example.com/uno-way.jpg',
+          tamanhoTanque: 52,
+          consumoMedio: 11,
         }),
       ),
     );

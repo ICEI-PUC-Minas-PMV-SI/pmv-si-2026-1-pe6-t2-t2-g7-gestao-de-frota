@@ -6,9 +6,10 @@ import { GetLatestTelemetryService } from '../services/GetLatestTelemetry.servic
 import { RecordTelemetryController } from './telemetry/RecordTelemetry.controller';
 import { GetJourneyTelemetryController } from './telemetry/GetJourneyTelemetry.controller';
 import { GetLatestTelemetryController } from './telemetry/GetLatestTelemetry.controller';
+import { VehicleRepoModule } from '../../vehicle/repositories/vehicleRepo.module';
 
 @Module({
-  imports: [TelemetryRepoModule],
+  imports: [TelemetryRepoModule, VehicleRepoModule],
   controllers: [
     RecordTelemetryController,
     GetJourneyTelemetryController,

@@ -1,6 +1,8 @@
 import { FindIncidentsByVehicleService } from '../../../../../src/modules/incident/services/FindIncidentsByVehicle.service';
 import {
   IncidentModel,
+  IncidentSeverity,
+  IncidentStatus,
   IncidentType,
 } from '../../../../../src/modules/incident/models/Incident.model';
 import { IncidentRepo } from '../../../../../src/modules/incident/repositories/incident/interface';
@@ -14,6 +16,8 @@ describe('FindIncidentsByVehicleService', () => {
             id: 'incident-1-id',
             vehicleId: 'vehicle-1-id',
             tipo: IncidentType.MULTA,
+            status: IncidentStatus.ABERTO,
+            severidade: IncidentSeverity.BAIXA,
             descricao: 'Radar',
             data: new Date('2026-04-10T00:00:00.000Z'),
           }),

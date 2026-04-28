@@ -26,6 +26,9 @@ describe('CreateVehicleService', () => {
       modelo: 'Uno',
       ano: 2020,
       placa: 'ABC1D23',
+      fotoUrl: 'https://example.com/uno.jpg',
+      tamanhoTanque: 50,
+      consumoMedio: 10,
     });
 
     expect(repo.create).toHaveBeenCalledTimes(1);
@@ -45,6 +48,9 @@ describe('CreateVehicleService', () => {
         modelo: 'Uno',
         ano: 2020,
         placa: 'PLACAINVALIDA',
+        fotoUrl: 'https://example.com/uno.jpg',
+        tamanhoTanque: 50,
+        consumoMedio: 10,
       }),
     ).rejects.toBeInstanceOf(BadRequestException);
     expect(repo.create).not.toHaveBeenCalled();

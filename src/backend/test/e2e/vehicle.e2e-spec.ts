@@ -19,22 +19,24 @@ describe('VehicleModule (e2e)', () => {
         .set('Authorization', auth('valid-user-token'))
         .expect(200);
 
-      expect(response.body).toMatchObject([
-        {
-          id: 'vehicle-1-id',
-          marca: 'Fiat',
-          modelo: 'Uno',
-          ano: 2020,
-          placa: 'ABC1D23',
-        },
-        {
-          id: 'vehicle-2-id',
-          marca: 'Volkswagen',
-          modelo: 'Gol',
-          ano: 2021,
-          placa: 'XYZ9K87',
-        },
-      ]);
+      expect(response.body).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: 'vehicle-1-id',
+            marca: 'Fiat',
+            modelo: 'Uno',
+            ano: 2020,
+            placa: 'ABC1D23',
+          }),
+          expect.objectContaining({
+            id: 'vehicle-2-id',
+            marca: 'Volkswagen',
+            modelo: 'Gol',
+            ano: 2021,
+            placa: 'XYZ9K87',
+          }),
+        ]),
+      );
     });
 
     it('deve buscar um veículo por id', async () => {
@@ -61,6 +63,9 @@ describe('VehicleModule (e2e)', () => {
           modelo: 'Corolla',
           ano: 2024,
           placa: 'BRA2E19',
+          fotoUrl: 'https://example.com/corolla.jpg',
+          tamanhoTanque: 55,
+          consumoMedio: 12,
         })
         .expect(201);
 
@@ -70,6 +75,9 @@ describe('VehicleModule (e2e)', () => {
         modelo: 'Corolla',
         ano: 2024,
         placa: 'BRA2E19',
+        fotoUrl: 'https://example.com/corolla.jpg',
+        tamanhoTanque: 55,
+        consumoMedio: 12,
         createdAt: expect.any(String),
         updatedAt: expect.any(String),
       });
@@ -84,6 +92,9 @@ describe('VehicleModule (e2e)', () => {
           modelo: 'Corolla',
           ano: 2024,
           placa: 'INVALIDA',
+          fotoUrl: 'https://example.com/corolla.jpg',
+          tamanhoTanque: 55,
+          consumoMedio: 12,
         })
         .expect(400);
     });

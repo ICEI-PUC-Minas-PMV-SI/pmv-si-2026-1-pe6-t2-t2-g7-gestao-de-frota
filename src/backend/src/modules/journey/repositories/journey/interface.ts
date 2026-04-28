@@ -12,5 +12,9 @@ export abstract class JourneyRepo {
     userId: number,
   ): Promise<JourneyModel | null>;
 
+  abstract update(journey: JourneyModel): Promise<JourneyModel>;
+
+  abstract findByVehicleId(vehicleId: string): Promise<JourneyModel[]>;
+
   abstract findStopsByJourneyId(journeyId: string): Promise<JourneyStopModel[]>;
 }

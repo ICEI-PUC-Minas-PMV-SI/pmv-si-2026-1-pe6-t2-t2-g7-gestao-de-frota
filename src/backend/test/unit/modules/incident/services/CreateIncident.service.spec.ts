@@ -1,6 +1,8 @@
 import { CreateIncidentService } from '../../../../../src/modules/incident/services/CreateIncident.service';
 import {
   IncidentModel,
+  IncidentSeverity,
+  IncidentStatus,
   IncidentType,
 } from '../../../../../src/modules/incident/models/Incident.model';
 import { IncidentRepo } from '../../../../../src/modules/incident/repositories/incident/interface';
@@ -15,8 +17,12 @@ describe('CreateIncidentService', () => {
     const result = await service.exec({
       vehicleId: 'vehicle-1-id',
       tipo: IncidentType.SINISTRO,
+      status: IncidentStatus.ABERTO,
+      severidade: IncidentSeverity.MEDIA,
       descricao: 'Colisao traseira',
       valor: 500,
+      natureza: 'colisao',
+      local: 'Av. Brasil, 500',
       data: new Date('2026-04-10T00:00:00.000Z'),
     });
 
@@ -24,8 +30,12 @@ describe('CreateIncidentService', () => {
     expect(result.toJSON()).toMatchObject({
       vehicleId: 'vehicle-1-id',
       tipo: IncidentType.SINISTRO,
+      status: IncidentStatus.ABERTO,
+      severidade: IncidentSeverity.MEDIA,
       descricao: 'Colisao traseira',
       valor: 500,
+      natureza: 'colisao',
+      local: 'Av. Brasil, 500',
       data: new Date('2026-04-10T00:00:00.000Z'),
     });
   });
@@ -40,7 +50,11 @@ describe('CreateIncidentService', () => {
     const result = await service.exec({
       vehicleId: 'vehicle-2-id',
       tipo: IncidentType.MULTA,
+      status: IncidentStatus.ABERTO,
+      severidade: IncidentSeverity.BAIXA,
       descricao: 'Excesso de velocidade',
+      codigoInfracao: 'M123',
+      localInfracao: 'Av. Amazonas, 20',
     });
     const after = Date.now();
 

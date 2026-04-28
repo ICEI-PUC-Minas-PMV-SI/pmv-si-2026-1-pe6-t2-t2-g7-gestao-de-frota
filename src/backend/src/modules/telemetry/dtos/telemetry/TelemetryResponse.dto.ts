@@ -5,9 +5,6 @@ export class TelemetryResponseDto {
   id: string;
 
   @ApiProperty()
-  journeyId: string;
-
-  @ApiProperty()
   vehicleId: string;
 
   @ApiProperty()
@@ -18,12 +15,6 @@ export class TelemetryResponseDto {
 
   @ApiProperty()
   nivelCombustivel: number;
-
-  @ApiProperty()
-  latitude: number;
-
-  @ApiProperty()
-  longitude: number;
 
   @ApiProperty()
   velocidadeMedia: number;
@@ -40,9 +31,6 @@ export class LatestTelemetryResponseDto {
   id?: string;
 
   @ApiProperty({ required: false })
-  journeyId?: string;
-
-  @ApiProperty({ required: false })
   vehicleId?: string;
 
   @ApiProperty({ required: false })
@@ -53,12 +41,6 @@ export class LatestTelemetryResponseDto {
 
   @ApiProperty({ required: false })
   nivelCombustivel?: number;
-
-  @ApiProperty({ required: false })
-  latitude?: number;
-
-  @ApiProperty({ required: false })
-  longitude?: number;
 
   @ApiProperty({ required: false })
   velocidadeMedia?: number;

@@ -22,8 +22,18 @@ export class UpdateIncidentController {
       id,
       ...(body.vehicleId !== undefined && { vehicleId: body.vehicleId }),
       ...(body.tipo !== undefined && { tipo: body.tipo }),
+      ...(body.status !== undefined && { status: body.status }),
+      ...(body.severidade !== undefined && { severidade: body.severidade }),
       ...(body.descricao !== undefined && { descricao: body.descricao }),
+      ...(body.codigoInfracao !== undefined && {
+        codigoInfracao: body.codigoInfracao,
+      }),
       ...(body.valor !== undefined && { valor: body.valor }),
+      ...(body.localInfracao !== undefined && {
+        localInfracao: body.localInfracao,
+      }),
+      ...(body.natureza !== undefined && { natureza: body.natureza }),
+      ...(body.local !== undefined && { local: body.local }),
       ...(body.data !== undefined && { data: new Date(body.data) }),
     });
     return incident.toJSON();

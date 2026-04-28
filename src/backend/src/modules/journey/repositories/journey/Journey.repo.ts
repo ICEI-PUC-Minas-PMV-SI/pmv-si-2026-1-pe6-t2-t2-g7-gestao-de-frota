@@ -32,6 +32,26 @@ export class JourneyRepoImpl implements JourneyRepo {
     });
   }
 
+  async update(journey: JourneyModel) {
+    const changes = journey.toJSON();
+    Reflect.deleteProperty(changes, 'id');
+    Reflect.deleteProperty(changes, 'createdAt');
+    Reflect.deleteProperty(changes, 'updatedAt');
+
+    await this.dataSource
+      .getRepository(JourneyModel)
+      .update({ id: journey.id }, changes);
+
+    return journey;
+  }
+
+  async findByVehicleId(vehicleId: string) {
+    return await this.dataSource.getRepository(JourneyModel).find({
+      where: { vehicleId },
+      order: { startedAt: 'DESC' },
+    });
+  }
+
   async findStopsByJourneyId(journeyId: string) {
     return await this.dataSource.getRepository(JourneyStopModel).find({
       where: { journeyId },

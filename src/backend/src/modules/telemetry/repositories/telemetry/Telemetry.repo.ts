@@ -16,16 +16,28 @@ export class TelemetryRepoImpl implements TelemetryRepo {
     return row;
   }
 
-  async findByJourneyId(journeyId: string) {
+  async update(row: TelemetryModel) {
+    const changes = row.toJSON();
+    Reflect.deleteProperty(changes, 'id');
+    Reflect.deleteProperty(changes, 'createdAt');
+
+    await this.dataSource
+      .getRepository(TelemetryModel)
+      .update({ id: row.id }, changes);
+
+    return row;
+  }
+
+  async findByVehicleId(vehicleId: string) {
     return await this.dataSource.getRepository(TelemetryModel).find({
-      where: { journeyId },
+      where: { vehicleId },
       order: { recordedAt: 'ASC' },
     });
   }
 
-  async findLatestByJourneyId(journeyId: string) {
+  async findLatestByVehicleId(vehicleId: string) {
     const rows = await this.dataSource.getRepository(TelemetryModel).find({
-      where: { journeyId },
+      where: { vehicleId },
       order: { recordedAt: 'DESC' },
       take: 1,
     });

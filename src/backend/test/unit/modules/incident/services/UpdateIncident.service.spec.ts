@@ -2,6 +2,8 @@ import { NotFoundException } from '@nestjs/common';
 import { UpdateIncidentService } from '../../../../../src/modules/incident/services/UpdateIncident.service';
 import {
   IncidentModel,
+  IncidentSeverity,
+  IncidentStatus,
   IncidentType,
 } from '../../../../../src/modules/incident/models/Incident.model';
 import { IncidentRepo } from '../../../../../src/modules/incident/repositories/incident/interface';
@@ -12,6 +14,8 @@ describe('UpdateIncidentService', () => {
       id: 'incident-1-id',
       vehicleId: 'vehicle-1-id',
       tipo: IncidentType.SINISTRO,
+      status: IncidentStatus.ABERTO,
+      severidade: IncidentSeverity.MEDIA,
       descricao: 'Descricao original',
       valor: 500,
       data: new Date('2026-04-10T00:00:00.000Z'),

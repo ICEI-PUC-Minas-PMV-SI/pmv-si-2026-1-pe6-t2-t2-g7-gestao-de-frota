@@ -10,6 +10,7 @@ import {
   useState,
 } from "react";
 import { useAuth } from "@context/auth.context";
+import { constants } from "@core/contants";
 import { journeyModule } from "@core/modules/journeys/journeys";
 import {
   densifyStops,
@@ -58,6 +59,12 @@ export function useTripJourney(
   const simIndexRef = useRef(0);
 
   const [tripName, setTripName] = useState("");
+  const [selectedVehicleId, setSelectedVehicleId] = useState("");
+  const [vehicles, setVehicles] = useState<
+    { id: string; marca: string; modelo: string; placa: string }[]
+  >([]);
+  const [vehiclesLoading, setVehiclesLoading] = useState(false);
+  const [vehiclesError, setVehiclesError] = useState<string | null>(null);
   const [routeStartedAt, setRouteStartedAt] = useState<string | null>(null);
   const [journeySaving, setJourneySaving] = useState(false);
   const [journeyError, setJourneyError] = useState<string | null>(null);
@@ -78,6 +85,52 @@ export function useTripJourney(
       setSimulationPath([]);
     }
   }, [waypoints]);
+
+  useEffect(
+    function loadVehiclesForJourneySelection() {
+      if (!user) {
+        setVehicles([]);
+        setSelectedVehicleId("");
+        return;
+      }
+
+      let active = true;
+      async function run() {
+        setVehiclesLoading(true);
+        setVehiclesError(null);
+        try {
+          const idToken = await user.getIdToken();
+          const response = await fetch(`${constants.API_BASE}/vehicle`, {
+            headers: {
+              Authorization: `Bearer ${idToken}`,
+            },
+          });
+          const data = await response.json();
+          if (!response.ok) {
+            throw new Error(data?.message ?? "Erro ao carregar veículos.");
+          }
+          if (!active) return;
+          setVehicles(data);
+          setSelectedVehicleId((prev) => {
+            if (prev && data.some((v: { id: string }) => v.id === prev)) return prev;
+            return data[0]?.id ?? "";
+          });
+        } catch (err: unknown) {
+          if (!active) return;
+          setVehiclesError(
+            err instanceof Error ? err.message : "Erro ao carregar veículos.",
+          );
+        } finally {
+          if (active) setVehiclesLoading(false);
+        }
+      }
+      void run();
+      return () => {
+        active = false;
+      };
+    },
+    [user],
+  );
 
   useEffect(function simulateVehiclePathAndRecordPositions() {
     if (
@@ -122,24 +175,35 @@ export function useTripJourney(
       }
     }
 
-    let intervalId: ReturnType<typeof setInterval> | undefined;
-
     function onSimulationTimer() {
       if (simIndexRef.current >= path.length) {
-        if (intervalId !== undefined) clearInterval(intervalId);
-        setGeoHint(
-          "Simulação concluída — veículo na última parada. Limpe a rota para planear outra jornada.",
-        );
+        clearInterval(intervalId);
+        void (async () => {
+          try {
+            const idToken = await firebaseUser.getIdToken();
+            await journeyModule.gateways.complete.exec({
+              idToken,
+              journeyId: activeJourneyId,
+            });
+            setGeoHint(
+              "Simulação concluída e jornada finalizada com métricas consolidadas.",
+            );
+          } catch {
+            setGeoHint(
+              "Simulação concluída, mas não foi possível finalizar a jornada automaticamente.",
+            );
+          }
+        })();
         return;
       }
       void advanceSimulationAndSendPosition();
     }
 
     void advanceSimulationAndSendPosition();
-    intervalId = setInterval(onSimulationTimer, tickMs);
+    const intervalId = setInterval(onSimulationTimer, tickMs);
 
     return function clearSimulationInterval() {
-      if (intervalId !== undefined) clearInterval(intervalId);
+      clearInterval(intervalId);
     };
   }, [savedJourneyId, routeStartedAt, user, simulationPath]);
 
@@ -191,6 +255,10 @@ export function useTripJourney(
       return;
     }
     if (waypoints.length < 2) return;
+    if (!selectedVehicleId) {
+      setJourneyError("Selecione um veículo para iniciar a jornada.");
+      return;
+    }
 
     setJourneyError(null);
     setJourneySaving(true);
@@ -205,6 +273,7 @@ export function useTripJourney(
 
       const res = await journeyModule.gateways.create.exec({
         idToken,
+        vehicleId: selectedVehicleId,
         nome,
         paradas,
       });
@@ -233,10 +302,11 @@ export function useTripJourney(
     } finally {
       setJourneySaving(false);
     }
-  }, [user, waypoints, tripName]);
+  }, [user, waypoints, tripName, selectedVehicleId]);
 
   const copyRouteJson = useCallback(() => {
     const payload = {
+      vehicleId: selectedVehicleId,
       nome: tripName.trim() || undefined,
       paradas: waypoints.map((w, i) => ({
         ordem: i + 1,
@@ -246,12 +316,17 @@ export function useTripJourney(
       criadoEm: new Date().toISOString(),
     };
     void navigator.clipboard.writeText(JSON.stringify(payload, null, 2));
-  }, [tripName, waypoints]);
+  }, [selectedVehicleId, tripName, waypoints]);
 
   return {
     user,
     tripName,
     setTripName,
+    selectedVehicleId,
+    setSelectedVehicleId,
+    vehicles,
+    vehiclesLoading,
+    vehiclesError,
     routeStartedAt,
     savedJourneyId,
     journeySaving,

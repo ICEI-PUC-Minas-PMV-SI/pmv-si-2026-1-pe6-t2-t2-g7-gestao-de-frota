@@ -1,6 +1,8 @@
 import { FindAllIncidentsService } from '../../../../../src/modules/incident/services/FindAllIncidents.service';
 import {
   IncidentModel,
+  IncidentSeverity,
+  IncidentStatus,
   IncidentType,
 } from '../../../../../src/modules/incident/models/Incident.model';
 import { IncidentRepo } from '../../../../../src/modules/incident/repositories/incident/interface';
@@ -14,6 +16,8 @@ describe('FindAllIncidentsService', () => {
             id: 'incident-1-id',
             vehicleId: 'vehicle-1-id',
             tipo: IncidentType.SINISTRO,
+            status: IncidentStatus.ABERTO,
+            severidade: IncidentSeverity.MEDIA,
             descricao: 'Colisao traseira',
             data: new Date('2026-04-10T00:00:00.000Z'),
           }),

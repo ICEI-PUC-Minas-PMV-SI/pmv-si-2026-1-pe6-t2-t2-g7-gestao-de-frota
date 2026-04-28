@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useAuth } from "@context/auth.context";
-import { Activity, LayoutDashboard, Map, Truck } from "lucide-react";
+import { AlertTriangle, Car, LayoutDashboard, Map, Truck } from "lucide-react";
 
 export default function HomepagePage() {
   const { user } = useAuth();
@@ -60,17 +60,32 @@ export default function HomepagePage() {
             </Link>
 
             <Link
-              href="/telemetry"
-              className="group rounded-xl border border-zinc-800 bg-zinc-900/50 p-6 transition hover:border-violet-500/40 hover:bg-zinc-900"
+              href="/vehicles"
+              className="group rounded-xl border border-zinc-800 bg-zinc-900/50 p-6 transition hover:border-amber-500/40 hover:bg-zinc-900"
             >
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-violet-600/15 text-violet-400 ring-1 ring-violet-500/20">
-                <Activity className="h-5 w-5" aria-hidden />
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-600/15 text-amber-400 ring-1 ring-amber-500/20">
+                <Car className="h-5 w-5" aria-hidden />
               </div>
-              <h3 className="mt-4 text-lg font-semibold text-white group-hover:text-violet-300">
-                Telemetria
+              <h3 className="mt-4 text-lg font-semibold text-white group-hover:text-amber-300">
+                Veículos
               </h3>
               <p className="mt-1 text-sm text-zinc-500">
-                Registre e consulte dados de telemetria da frota.
+                Gerencie cadastro, edição e exclusão da frota.
+              </p>
+            </Link>
+
+            <Link
+              href="/incidents"
+              className="group rounded-xl border border-zinc-800 bg-zinc-900/50 p-6 transition hover:border-rose-500/40 hover:bg-zinc-900"
+            >
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-rose-600/15 text-rose-400 ring-1 ring-rose-500/20">
+                <AlertTriangle className="h-5 w-5" aria-hidden />
+              </div>
+              <h3 className="mt-4 text-lg font-semibold text-white group-hover:text-rose-300">
+                Incidentes
+              </h3>
+              <p className="mt-1 text-sm text-zinc-500">
+                Controle multas e sinistros dos veículos.
               </p>
             </Link>
 

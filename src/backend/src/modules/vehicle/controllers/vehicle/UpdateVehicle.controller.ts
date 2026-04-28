@@ -24,6 +24,13 @@ export class UpdateVehicleController {
       ...(body.modelo !== undefined && { modelo: body.modelo }),
       ...(body.ano !== undefined && { ano: body.ano }),
       ...(body.placa !== undefined && { placa: body.placa }),
+      ...(body.fotoUrl !== undefined && { fotoUrl: body.fotoUrl }),
+      ...(body.tamanhoTanque !== undefined && {
+        tamanhoTanque: body.tamanhoTanque,
+      }),
+      ...(body.consumoMedio !== undefined && {
+        consumoMedio: body.consumoMedio,
+      }),
     });
     return vehicle.toJSON();
   }

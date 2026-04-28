@@ -22,8 +22,14 @@ export class CreateIncidentController {
     const incident = await this.createIncident.exec({
       vehicleId: body.vehicleId,
       tipo: body.tipo,
+      status: body.status,
+      severidade: body.severidade,
       descricao: body.descricao,
+      codigoInfracao: body.codigoInfracao,
       valor: body.valor,
+      localInfracao: body.localInfracao,
+      natureza: body.natureza,
+      local: body.local,
       data: body.data ? new Date(body.data) : undefined,
     });
 

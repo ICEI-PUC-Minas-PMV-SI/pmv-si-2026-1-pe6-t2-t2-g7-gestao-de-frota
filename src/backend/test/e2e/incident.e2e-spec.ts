@@ -75,8 +75,12 @@ describe('IncidentModule (e2e)', () => {
         .send({
           vehicleId: vehicleOneId,
           tipo: 'sinistro',
+          status: 'aberto',
+          severidade: 'media',
           descricao: 'Dano na lateral',
           valor: 900,
+          natureza: 'colisao',
+          local: 'Av. Brasil, 500',
           data: '2026-04-10T00:00:00.000Z',
         })
         .expect(201);
@@ -85,8 +89,12 @@ describe('IncidentModule (e2e)', () => {
         id: expect.any(String),
         vehicleId: vehicleOneId,
         tipo: 'sinistro',
+        status: 'aberto',
+        severidade: 'media',
         descricao: 'Dano na lateral',
         valor: 900,
+        natureza: 'colisao',
+        local: 'Av. Brasil, 500',
         data: '2026-04-10T00:00:00.000Z',
         createdAt: expect.any(String),
         updatedAt: expect.any(String),
@@ -100,6 +108,8 @@ describe('IncidentModule (e2e)', () => {
         .send({
           vehicleId: vehicleOneId,
           tipo: 'sinistro',
+          status: 'aberto',
+          severidade: 'media',
           descricao: 'a'.repeat(1025),
           data: '2026-04-10T00:00:00.000Z',
         })

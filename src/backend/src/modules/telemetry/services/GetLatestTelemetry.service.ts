@@ -1,30 +1,26 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { JourneyRepo } from '../../journey/repositories/journey/interface';
 import { TelemetryRepo } from '../repositories/telemetry/interface';
+import { VehicleRepo } from '../../vehicle/repositories/vehicle/interface';
 
 export type GetLatestTelemetryInput = {
-  userId: number;
-  journeyId: string;
+  vehicleId: string;
 };
 
 @Injectable()
 export class GetLatestTelemetryService {
   constructor(
-    private readonly journeyRepo: JourneyRepo,
+    private readonly vehicleRepo: VehicleRepo,
     private readonly telemetryRepo: TelemetryRepo,
   ) {}
 
   async exec(input: GetLatestTelemetryInput) {
-    const journey = await this.journeyRepo.findByIdForUser(
-      input.journeyId,
-      input.userId,
-    );
-    if (!journey) {
-      throw new NotFoundException('Jornada não encontrada.');
+    const vehicle = await this.vehicleRepo.findById(input.vehicleId);
+    if (!vehicle) {
+      throw new NotFoundException('Veículo não encontrado.');
     }
 
-    const latest = await this.telemetryRepo.findLatestByJourneyId(
-      input.journeyId,
+    const latest = await this.telemetryRepo.findLatestByVehicleId(
+      input.vehicleId,
     );
     if (!latest) {
       return {
@@ -35,13 +31,10 @@ export class GetLatestTelemetryService {
     return {
       temTelemetria: true as const,
       id: latest.id,
-      journeyId: latest.journeyId,
       vehicleId: latest.vehicleId,
       kmRodados: latest.kmRodados,
       combustivelGasto: latest.combustivelGasto,
       nivelCombustivel: latest.nivelCombustivel,
-      latitude: latest.latitude,
-      longitude: latest.longitude,
       velocidadeMedia: latest.velocidadeMedia,
       registradaEm: latest.recordedAt.toISOString(),
     };

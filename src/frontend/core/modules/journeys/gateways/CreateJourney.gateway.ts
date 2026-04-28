@@ -9,6 +9,7 @@ export type CreateJourneyParadaInput = {
 
 export type CreateJourneyInput = {
   idToken: string;
+  vehicleId: string;
   nome?: string;
   paradas: CreateJourneyParadaInput[];
 };
@@ -16,8 +17,12 @@ export type CreateJourneyInput = {
 export type CreateJourneyResponseBody = {
   id: string;
   userId: number;
+  vehicleId: string;
   nome?: string;
   status: string;
+  kmRodados: number;
+  combustivelGasto: number;
+  nivelCombustivel: number;
   iniciadaEm: string;
   paradas: {
     id: string;
@@ -38,6 +43,7 @@ export class CreateJourneyGateway {
         Authorization: `Bearer ${props.idToken}`,
       }),
       body: {
+        vehicleId: props.vehicleId,
         nome: props.nome,
         paradas: props.paradas,
       },

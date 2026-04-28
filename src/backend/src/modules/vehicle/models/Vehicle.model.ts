@@ -15,6 +15,9 @@ export type VehicleModelProps = {
   modelo: string;
   ano: number;
   placa: string;
+  fotoUrl: string;
+  tamanhoTanque: number;
+  consumoMedio: number;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -27,6 +30,9 @@ export type VehicleModelPropsInput = TReplace<
     modelo: string;
     ano: number;
     placa: string;
+    fotoUrl: string;
+    tamanhoTanque: number;
+    consumoMedio: number;
     createdAt?: Date;
     updatedAt?: Date;
   }
@@ -38,6 +44,9 @@ export type VehicleModelUpdateInput = {
   modelo?: string;
   ano?: number;
   placa?: string;
+  fotoUrl?: string;
+  tamanhoTanque?: number;
+  consumoMedio?: number;
 };
 
 export interface VehicleJsonProps extends VehicleModelProps {}
@@ -62,6 +71,15 @@ export class VehicleModel {
   @Column({ name: 'placa', length: 10, type: 'varchar' })
   placa: string;
 
+  @Column({ name: 'foto_url', length: 2048, type: 'varchar' })
+  fotoUrl: string;
+
+  @Column({ name: 'tamanho_tanque', type: 'double precision' })
+  tamanhoTanque: number;
+
+  @Column({ name: 'consumo_medio', type: 'double precision' })
+  consumoMedio: number;
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
@@ -76,6 +94,9 @@ export class VehicleModel {
     this.modelo = props.modelo;
     this.ano = props.ano;
     this.placa = props.placa;
+    this.fotoUrl = props.fotoUrl;
+    this.tamanhoTanque = props.tamanhoTanque;
+    this.consumoMedio = props.consumoMedio;
     this.createdAt = props.createdAt ?? new Date();
     this.updatedAt = props.updatedAt ?? new Date();
   }
@@ -87,6 +108,9 @@ export class VehicleModel {
       modelo: this.modelo,
       ano: this.ano,
       placa: this.placa,
+      fotoUrl: this.fotoUrl,
+      tamanhoTanque: this.tamanhoTanque,
+      consumoMedio: this.consumoMedio,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
     };
@@ -99,6 +123,9 @@ export class VehicleModel {
       modelo: this.modelo,
       ano: this.ano,
       placa: this.placa,
+      fotoUrl: this.fotoUrl,
+      tamanhoTanque: this.tamanhoTanque,
+      consumoMedio: this.consumoMedio,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
     };
