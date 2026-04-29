@@ -49,6 +49,9 @@
 }
 
 :root {
+  --font-sans:
+    var(--font-geist-sans), "Inter", "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
   --background: #f8fafc;
   --foreground: #1e293b;
   --card: #ffffff;

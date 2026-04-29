@@ -1,12 +1,12 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { User } from "firebase/auth";
 import {
   AlertTriangle,
   Car,
-  Building2,
   ChevronLeft,
   ChevronRight,
   Home,
@@ -25,6 +25,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import companyLogo from "../../../../docs/img/Gestao-frotas-imagens/logo-unitech.png";
 
 const nav = [
   { href: "/homepage", label: "Início", icon: Home },
@@ -75,8 +76,14 @@ export function AppSidebar({
               collapsed && "justify-center"
             )}
           >
-            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/15 text-primary ring-1 ring-primary/25">
-              <Building2 className="h-5 w-5" aria-hidden />
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-sidebar-border bg-card">
+              <Image
+                src={companyLogo}
+                alt="Logo Unitech"
+                width={36}
+                height={36}
+                className="h-full w-full object-contain"
+              />
             </span>
             {!collapsed && (
               <div className="min-w-0">

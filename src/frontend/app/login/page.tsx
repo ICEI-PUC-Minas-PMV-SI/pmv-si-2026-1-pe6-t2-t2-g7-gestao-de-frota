@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { Building2, MapPin, Moon, Route, Sun, Truck } from "lucide-react";
+import { MapPin, Moon, Route, Sun, Truck } from "lucide-react";
 import { LoginForm } from "@components/login/LoginForm";
 import { Button } from "@/components/ui/button";
+import companyLogo from "../../../../docs/img/Gestao-frotas-imagens/unitech-logo-sem-fundo.png";
 
 const highlights = [
   {
@@ -51,7 +52,7 @@ export default function LoginPage() {
       <main className="relative min-h-screen overflow-hidden bg-background text-foreground">
       <div className="flex min-h-screen flex-col lg:flex-row">
         {/* Painel visual — frota / matriz */}
-        <div className="relative h-[min(44vh,380px)] shrink-0 overflow-hidden lg:h-auto lg:min-h-screen lg:w-[54%]">
+        <div className="relative hidden shrink-0 overflow-hidden lg:block lg:min-h-screen lg:w-[54%]">
           <Image
             src="/unitech-fleet.png"
             alt="Sede Unitech e frota de distribuição"
@@ -78,8 +79,14 @@ export default function LoginPage() {
             <header className="flex items-start justify-between gap-4">
               <div className="space-y-1">
                 <div className="flex items-center gap-2 text-white">
-                  <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/10 ring-1 ring-white/20 backdrop-blur-sm">
-                    <Building2 className="h-5 w-5 text-cyan-200" aria-hidden />
+                  <span className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-lg bg-white/10 ring-1 ring-white/20 backdrop-blur-sm">
+                    <Image
+                      src={companyLogo}
+                      alt="Logo Unitech"
+                      width={56}
+                      height={56}
+                      className="h-full w-full object-contain"
+                    />
                   </span>
                   <div>
                     <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-200/90">
@@ -123,7 +130,7 @@ export default function LoginPage() {
         </div>
 
         {/* Área do formulário */}
-        <div className="relative flex flex-1 flex-col items-center justify-center px-5 py-10 sm:px-8 lg:px-12 lg:py-16">
+        <div className="relative flex min-h-screen flex-1 flex-col items-center justify-center px-5 py-10 sm:px-8 lg:px-12 lg:py-16">
           <div className="absolute right-5 top-5 z-20 sm:right-8 sm:top-8 lg:right-10 lg:top-10">
             <Button
               type="button"

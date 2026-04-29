@@ -7,7 +7,7 @@ Este documento descreve o estado **atual** do design da aplicação web, com bas
 - **Estilo predominante:** dashboard corporativo, com linguagem visual moderna e foco em operação.
 - **Tom visual:** sóbrio e técnico, com ênfase em azul (`--primary`) e variações de slate/cyan.
 - **Tema:** suporte a claro e escuro via variáveis CSS em `app/globals.css`.
-- **Tipografia:** família Geist (sans/mono) carregada no layout raiz.
+- **Tipografia:** padrão global não serifado (Geist Sans + fallback sans-serif) e monoespaçada apenas para conteúdos técnicos.
 - **Padrão de interface:** cards, badges, tabelas, chips de filtro, painéis laterais e folhas modais (sheet).
 
 ## 2) Tokens e sistema de design
@@ -53,6 +53,12 @@ Comparando a especificação com `app/globals.css`:
 - `--foreground` escuro (text): `#f1f5f9` (bate)
 
 Status: o que está implementado hoje está alinhado com essa especificação de paleta base.
+
+### Tipografia (decisão atual)
+
+- **Padrão oficial:** fonte sem serifa em toda a interface.
+- **Implementação:** variável `--font-sans` configurada com `Geist Sans` e fallback para `"Inter"`, `"Segoe UI"`, `Roboto`, `"Helvetica Neue"`, `Arial`, `sans-serif`.
+- **Uso monoespaçado:** restrito a trechos técnicos (ex.: IDs, tokens, placas em estilo código).
 
 ## 3) Estrutura de layout e navegação
 
