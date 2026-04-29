@@ -9,7 +9,7 @@ import {
 } from "react";
 import {
   User,
-  onAuthStateChanged,
+  onIdTokenChanged,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   updateProfile,
@@ -20,6 +20,7 @@ import {
 import { useRouter } from "next/navigation";
 import { auth, googleProvider } from "@config/firebase.config";
 import { userModule } from "@core/modules/users/users";
+import { AUTH_TOKEN_COOKIE_NAME } from "@/lib/auth-session";
  
 interface AuthContextType {
   user: User | null;
@@ -31,6 +32,19 @@ interface AuthContextType {
 }
  
 const AuthContext = createContext<AuthContextType | null>(null);
+
+function syncAuthCookie(token: string | null) {
+  if (typeof document === "undefined") return;
+
+  if (!token) {
+    document.cookie = `${AUTH_TOKEN_COOKIE_NAME}=; Path=/; Max-Age=0; SameSite=Lax`;
+    return;
+  }
+
+  document.cookie = `${AUTH_TOKEN_COOKIE_NAME}=${encodeURIComponent(
+    token,
+  )}; Path=/; Max-Age=3600; SameSite=Lax`;
+}
  
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -38,8 +52,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
  
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+    const unsubscribe = onIdTokenChanged(auth, async (firebaseUser) => {
       setUser(firebaseUser);
+      if (firebaseUser) {
+        const idToken = await firebaseUser.getIdToken();
+        syncAuthCookie(idToken);
+      } else {
+        syncAuthCookie(null);
+      }
       setLoading(false);
     });
  
@@ -53,6 +73,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const idToken = await auth.currentUser?.getIdToken()
       if(!idToken) throw new Error("Could not collect idToken!")
 
+      syncAuthCookie(idToken);
       await userModule.gateways.sync.exec({idToken})
       router.push("/homepage");
     } catch (err) {
@@ -68,6 +89,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const idToken = await auth.currentUser?.getIdToken()
       if(!idToken) throw new Error("Could not collect idToken!")
 
+      syncAuthCookie(idToken);
       await userModule.gateways.sync.exec({idToken, name})
       await updateProfile(user, { displayName: name });
       router.push("/homepage");
@@ -84,6 +106,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const idToken = await auth.currentUser?.getIdToken()
       if(!idToken) throw new Error("Could not collect idToken!")
 
+      syncAuthCookie(idToken);
       await userModule.gateways.sync.exec({idToken})
       router.push("/homepage");
     } catch (err) {
@@ -93,6 +116,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
  
   async function logout() {
+    syncAuthCookie(null);
     await signOut(auth);
     router.push("/login");
   }

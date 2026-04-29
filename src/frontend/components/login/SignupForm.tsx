@@ -47,10 +47,10 @@ export function SignupForm() {
   return (
     <div className="w-full max-w-sm space-y-6">
       <div className="space-y-1">
-        <h1 className="text-3xl font-semibold tracking-tight text-white">
+        <h1 className="text-3xl font-semibold tracking-tight text-foreground">
           Criar conta
         </h1>
-        <p className="text-sm text-zinc-400">
+        <p className="text-sm text-muted-foreground">
           Preencha os dados abaixo para se cadastrar
         </p>
       </div>
@@ -63,7 +63,7 @@ export function SignupForm() {
  
       <form onSubmit={handleSignup} className="space-y-4">
         <div className="space-y-2">
-          <label className="block text-xs font-medium uppercase tracking-widest text-zinc-500">
+          <label className="block text-xs font-medium uppercase tracking-widest text-muted-foreground">
             Nome
           </label>
           <input
@@ -72,12 +72,12 @@ export function SignupForm() {
             onChange={(e) => setName(e.target.value)}
             required
             placeholder="Seu nome completo"
-            className="w-full rounded-lg border border-zinc-700 bg-zinc-800/60 px-4 py-2.5 text-sm text-white placeholder-zinc-600 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+            className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
           />
         </div>
  
         <div className="space-y-2">
-          <label className="block text-xs font-medium uppercase tracking-widest text-zinc-500">
+          <label className="block text-xs font-medium uppercase tracking-widest text-muted-foreground">
             E-mail
           </label>
           <input
@@ -86,12 +86,12 @@ export function SignupForm() {
             onChange={(e) => setEmail(e.target.value)}
             required
             placeholder="voce@exemplo.com"
-            className="w-full rounded-lg border border-zinc-700 bg-zinc-800/60 px-4 py-2.5 text-sm text-white placeholder-zinc-600 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+            className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
           />
         </div>
  
         <div className="space-y-2">
-          <label className="block text-xs font-medium uppercase tracking-widest text-zinc-500">
+          <label className="block text-xs font-medium uppercase tracking-widest text-muted-foreground">
             Senha
           </label>
           <input
@@ -101,12 +101,12 @@ export function SignupForm() {
             required
             minLength={6}
             placeholder="Mínimo 6 caracteres"
-            className="w-full rounded-lg border border-zinc-700 bg-zinc-800/60 px-4 py-2.5 text-sm text-white placeholder-zinc-600 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+            className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
           />
         </div>
  
         <div className="space-y-2">
-          <label className="block text-xs font-medium uppercase tracking-widest text-zinc-500">
+          <label className="block text-xs font-medium uppercase tracking-widest text-muted-foreground">
             Confirmar senha
           </label>
           <input
@@ -115,11 +115,11 @@ export function SignupForm() {
             onChange={(e) => setConfirmPassword(e.target.value)}
             required
             placeholder="••••••••"
-            className={`w-full rounded-lg border px-4 py-2.5 text-sm text-white placeholder-zinc-600 outline-none transition focus:ring-2
+            className={`w-full rounded-lg border bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none transition focus:ring-2
               ${
                 confirmPassword && password !== confirmPassword
                   ? "border-red-500/60 bg-red-500/5 focus:border-red-500 focus:ring-red-500/20"
-                  : "border-zinc-700 bg-zinc-800/60 focus:border-indigo-500 focus:ring-indigo-500/20"
+                  : "border-border focus:border-primary focus:ring-primary/20"
               }`}
           />
           {confirmPassword && password !== confirmPassword && (
@@ -130,33 +130,33 @@ export function SignupForm() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-50"
+          className="w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {loading ? "Criando conta..." : "Criar conta"}
         </button>
       </form>
  
       <div className="flex items-center gap-3">
-        <div className="h-px flex-1 bg-zinc-700" />
-        <span className="text-xs text-zinc-500">ou</span>
-        <div className="h-px flex-1 bg-zinc-700" />
+        <div className="h-px flex-1 bg-border" />
+        <span className="text-xs text-muted-foreground">ou</span>
+        <div className="h-px flex-1 bg-border" />
       </div>
  
       <button
         type="button"
         onClick={handleGoogleSignup}
         disabled={loading}
-        className="flex w-full items-center justify-center gap-3 rounded-lg border border-zinc-700 bg-zinc-800/60 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-zinc-700 disabled:cursor-not-allowed disabled:opacity-50"
+        className="flex w-full items-center justify-center gap-3 rounded-lg border border-border bg-background px-4 py-2.5 text-sm font-medium text-foreground transition hover:bg-accent hover:text-accent-foreground disabled:cursor-not-allowed disabled:opacity-50"
       >
         <GoogleIcon />
         Continuar com Google
       </button>
  
-      <p className="text-center text-sm text-zinc-500">
+      <p className="text-center text-sm text-muted-foreground">
         Já tem uma conta?{" "}
         <Link
           href="/login"
-          className="text-indigo-400 transition hover:text-indigo-300"
+          className="text-primary transition hover:opacity-80"
         >
           Entrar
         </Link>

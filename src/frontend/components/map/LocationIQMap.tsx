@@ -72,27 +72,27 @@ export function LocationIQMap({ className }: LocationIQMapProps) {
   if (!token) {
     return (
       <div
-        className="flex min-h-[400px] flex-col items-center justify-center gap-2 rounded-xl border border-amber-900/50 bg-amber-950/30 px-6 text-center"
+        className="flex min-h-[400px] flex-col items-center justify-center gap-2 rounded-xl border border-primary/25 bg-card px-6 text-center"
         role="status"
       >
-        <p className="text-sm font-medium text-amber-200">
+        <p className="text-sm font-medium text-foreground">
           Token do LocationIQ não configurado
         </p>
-        <p className="max-w-md text-xs text-amber-200/80">
+        <p className="max-w-md text-xs text-muted-foreground">
           Crie uma conta em{" "}
           <a
             href="https://locationiq.com/"
-            className="underline underline-offset-2 hover:text-amber-100"
+            className="text-primary underline underline-offset-2 hover:opacity-80"
             target="_blank"
             rel="noopener noreferrer"
           >
             locationiq.com
           </a>{" "}
           e defina{" "}
-          <code className="rounded bg-zinc-800 px-1.5 py-0.5 text-amber-100/90">
+          <code className="rounded bg-muted px-1.5 py-0.5 text-foreground">
             NEXT_PUBLIC_LOCATIONIQ_ACCESS_TOKEN
           </code>{" "}
-          em <code className="rounded bg-zinc-800 px-1.5 py-0.5">.env.local</code>
+          em <code className="rounded bg-muted px-1.5 py-0.5 text-foreground">.env.local</code>
         </p>
       </div>
     );

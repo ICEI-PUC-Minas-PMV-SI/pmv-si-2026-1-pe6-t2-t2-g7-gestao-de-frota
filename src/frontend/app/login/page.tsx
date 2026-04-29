@@ -22,7 +22,7 @@ const highlights = [
 
 export default function LoginPage() {
   return (
-    <main className="relative min-h-screen overflow-hidden bg-zinc-950">
+    <main className="relative min-h-screen overflow-hidden bg-background text-foreground">
       <div className="flex min-h-screen flex-col lg:flex-row">
         {/* Painel visual — frota / matriz */}
         <div className="relative h-[min(44vh,380px)] shrink-0 overflow-hidden lg:h-auto lg:min-h-screen lg:w-[54%]">
@@ -106,11 +106,11 @@ export default function LoginPage() {
             <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-cyan-500/10 blur-[120px]" />
           </div>
 
-          <div className="relative z-10 w-full max-w-[min(100%,420px)] rounded-2xl border border-white/8 bg-zinc-950/75 p-8 shadow-[0_0_0_1px_rgba(255,255,255,0.03),0_32px_64px_-16px_rgba(0,0,0,0.65)] backdrop-blur-xl sm:p-10">
+          <div className="relative z-10 w-full max-w-[min(100%,420px)] rounded-2xl border border-border/80 bg-card/90 p-8 shadow-[0_0_0_1px_rgba(15,23,42,0.04),0_32px_64px_-20px_rgba(15,23,42,0.18)] backdrop-blur-xl dark:shadow-[0_0_0_1px_rgba(241,245,249,0.04),0_32px_64px_-20px_rgba(2,6,23,0.75)] sm:p-10">
             <LoginForm />
           </div>
 
-          <p className="relative z-10 mt-8 text-center text-[11px] text-zinc-600">
+          <p className="relative z-10 mt-8 text-center text-[11px] text-muted-foreground">
             © {new Date().getFullYear()} Unitech · Gestão de frota empresarial
           </p>
         </div>

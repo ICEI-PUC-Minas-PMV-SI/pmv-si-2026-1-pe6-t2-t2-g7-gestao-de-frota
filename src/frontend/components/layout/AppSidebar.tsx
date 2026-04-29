@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
 import type { User } from "firebase/auth";
 import {
   AlertTriangle,
@@ -12,10 +11,10 @@ import {
   ChevronRight,
   Home,
   LayoutDashboard,
-  LogOut,
   Map,
+  UserCog,
+  Users,
 } from "lucide-react";
-import { useAuth } from "@context/auth.context";
 import { cn } from "@/lib/utils";
 import {
   Tooltip,
@@ -24,51 +23,38 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-const STORAGE_KEY = "unitech-sidebar-collapsed";
-
 const nav = [
   { href: "/homepage", label: "Início", icon: Home },
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/map", label: "Mapa", icon: Map },
   { href: "/vehicles", label: "Veículos", icon: Car },
   { href: "/incidents", label: "Incidentes", icon: AlertTriangle },
+  { href: "/members", label: "Membros", icon: Users },
+  { href: "/account", label: "Conta", icon: UserCog },
 ] as const;
 
-export function AppSidebar({ user }: { user: User }) {
+export function AppSidebar({
+  user,
+  collapsed,
+  onCollapsedChange,
+}: {
+  user: User;
+  collapsed: boolean;
+  onCollapsedChange: (collapsed: boolean) => void;
+}) {
   const pathname = usePathname();
-  const { logout } = useAuth();
-  const [collapsed, setCollapsed] = useState(false);
-  const [hydrated, setHydrated] = useState(false);
-
-  useEffect(() => {
-    try {
-      setCollapsed(localStorage.getItem(STORAGE_KEY) === "1");
-    } catch {
-      /* ignore */
-    }
-    setHydrated(true);
-  }, []);
-
-  useEffect(() => {
-    if (!hydrated) return;
-    try {
-      localStorage.setItem(STORAGE_KEY, collapsed ? "1" : "0");
-    } catch {
-      /* ignore */
-    }
-  }, [collapsed, hydrated]);
 
   return (
     <TooltipProvider delayDuration={0}>
       <aside
         className={cn(
-          "flex shrink-0 flex-col border-r border-zinc-800 bg-zinc-900/80 transition-[width] duration-200 ease-out",
+          "fixed inset-y-0 left-0 z-40 flex flex-col overflow-y-auto border-r border-sidebar-border bg-sidebar/95 text-sidebar-foreground transition-[width] duration-200 ease-out",
           collapsed ? "w-17" : "w-60"
         )}
       >
         <div
           className={cn(
-            "flex border-b border-zinc-800",
+            "flex border-b border-sidebar-border",
             collapsed
               ? "flex-col items-center gap-2 px-2 py-4"
               : "items-center gap-2 px-4 py-5"
@@ -80,15 +66,15 @@ export function AppSidebar({ user }: { user: User }) {
               collapsed && "justify-center"
             )}
           >
-            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-indigo-600/20 text-indigo-300 ring-1 ring-indigo-500/30">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/15 text-primary ring-1 ring-primary/25">
               <Building2 className="h-5 w-5" aria-hidden />
             </span>
             {!collapsed && (
               <div className="min-w-0">
-                <p className="text-sm font-semibold tracking-tight text-white">
+                <p className="text-sm font-semibold tracking-tight text-sidebar-foreground">
                   Unitech
                 </p>
-                <p className="truncate text-[11px] text-zinc-500">
+                <p className="truncate text-[11px] text-muted-foreground">
                   Gestão de frota
                 </p>
               </div>
@@ -99,9 +85,9 @@ export function AppSidebar({ user }: { user: User }) {
             <TooltipTrigger asChild>
               <button
                 type="button"
-                onClick={() => setCollapsed((c) => !c)}
+                onClick={() => onCollapsedChange(!collapsed)}
                 className={cn(
-                  "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-zinc-700/80 bg-zinc-950/40 text-zinc-400 transition hover:bg-zinc-800 hover:text-white",
+                  "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-sidebar-border bg-background/60 text-muted-foreground transition hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                   collapsed ? "mt-1" : "ml-auto"
                 )}
                 aria-expanded={!collapsed}
@@ -135,8 +121,8 @@ export function AppSidebar({ user }: { user: User }) {
                     ? "justify-center px-0 py-2.5"
                     : "gap-3 px-3 py-2.5",
                   active
-                    ? "bg-zinc-800 text-white"
-                    : "text-zinc-400 hover:bg-zinc-800/60 hover:text-zinc-200"
+                    ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                    : "text-muted-foreground hover:bg-sidebar-accent/70 hover:text-sidebar-accent-foreground"
                 )}
               >
                 <Icon className="h-4 w-4 shrink-0 opacity-80" aria-hidden />
@@ -157,44 +143,6 @@ export function AppSidebar({ user }: { user: User }) {
             );
           })}
         </nav>
-
-        <div className="border-t border-zinc-800 p-3">
-          {!collapsed && (
-            <p
-              className="truncate px-1 text-xs text-zinc-500"
-              title={user.email ?? undefined}
-            >
-              {user.email}
-            </p>
-          )}
-
-          {collapsed ? (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  type="button"
-                  onClick={() => logout()}
-                  className="mt-2 flex w-full items-center justify-center rounded-lg border border-zinc-700 bg-zinc-950/50 py-2 text-zinc-300 transition hover:bg-zinc-800"
-                  aria-label="Sair"
-                >
-                  <LogOut className="h-3.5 w-3.5" aria-hidden />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent side="right" sideOffset={8}>
-                Sair ({user.email ?? "conta"})
-              </TooltipContent>
-            </Tooltip>
-          ) : (
-            <button
-              type="button"
-              onClick={() => logout()}
-              className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg border border-zinc-700 bg-zinc-950/50 px-3 py-2 text-xs font-medium text-zinc-300 transition hover:bg-zinc-800"
-            >
-              <LogOut className="h-3.5 w-3.5" aria-hidden />
-              Sair
-            </button>
-          )}
-        </div>
       </aside>
     </TooltipProvider>
   );
