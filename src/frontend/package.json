@@ -9,7 +9,9 @@
     "lint": "eslint src --max-warnings=0",
     "lint:fix": "eslint --fix",
     "prettier": "prettier --write",
-    "pre-commit": "lint-staged --allow-empty"
+    "pre-commit": "lint-staged --allow-empty",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run"
   },
   "config": {
     "commitizen": {
@@ -58,6 +60,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "cypress": "^15.14.1",
     "eslint": "^9",
     "eslint-config-next": "16.2.1",
     "tailwindcss": "^4",
