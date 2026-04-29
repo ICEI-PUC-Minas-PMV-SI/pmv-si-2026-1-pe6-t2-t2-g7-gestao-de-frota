@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { MapPin, Moon, Route, Sun, Truck } from "lucide-react";
 import { LoginForm } from "@components/login/LoginForm";
 import { Button } from "@/components/ui/button";
@@ -79,7 +80,11 @@ export default function LoginPage() {
             <header className="flex items-start justify-between gap-4">
               <div className="space-y-1">
                 <div className="flex items-center gap-2 text-white">
-                  <span className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-lg bg-white/10 ring-1 ring-white/20 backdrop-blur-sm">
+                  <Link
+                    href="/"
+                    className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-lg bg-white/10 ring-1 ring-white/20 backdrop-blur-sm transition hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/70"
+                    aria-label="Ir para a página inicial"
+                  >
                     <Image
                       src={companyLogo}
                       alt="Logo Unitech"
@@ -87,7 +92,7 @@ export default function LoginPage() {
                       height={56}
                       className="h-full w-full object-contain"
                     />
-                  </span>
+                  </Link>
                   <div>
                     <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-200/90">
                       Unitech
