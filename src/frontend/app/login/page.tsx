@@ -1,6 +1,10 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import { Building2, MapPin, Route, Truck } from "lucide-react";
+import { Building2, MapPin, Moon, Route, Sun, Truck } from "lucide-react";
 import { LoginForm } from "@components/login/LoginForm";
+import { Button } from "@/components/ui/button";
 
 const highlights = [
   {
@@ -21,8 +25,30 @@ const highlights = [
 ] as const;
 
 export default function LoginPage() {
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("unitech-theme");
+      if (stored === "dark") {
+        setTheme("dark");
+      }
+    } catch {
+      /* ignore */
+    }
+  }, []);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("unitech-theme", theme);
+    } catch {
+      /* ignore */
+    }
+  }, [theme]);
+
   return (
-    <main className="relative min-h-screen overflow-hidden bg-background text-foreground">
+    <div className={theme === "dark" ? "dark" : undefined}>
+      <main className="relative min-h-screen overflow-hidden bg-background text-foreground">
       <div className="flex min-h-screen flex-col lg:flex-row">
         {/* Painel visual — frota / matriz */}
         <div className="relative h-[min(44vh,380px)] shrink-0 overflow-hidden lg:h-auto lg:min-h-screen lg:w-[54%]">
@@ -98,6 +124,17 @@ export default function LoginPage() {
 
         {/* Área do formulário */}
         <div className="relative flex flex-1 flex-col items-center justify-center px-5 py-10 sm:px-8 lg:px-12 lg:py-16">
+          <div className="absolute right-5 top-5 z-20 sm:right-8 sm:top-8 lg:right-10 lg:top-10">
+            <Button
+              type="button"
+              variant="outline"
+              size="icon-sm"
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              aria-label={theme === "dark" ? "Ativar modo claro" : "Ativar modo escuro"}
+            >
+              {theme === "dark" ? <Sun aria-hidden /> : <Moon aria-hidden />}
+            </Button>
+          </div>
           <div
             className="pointer-events-none absolute inset-0 opacity-[0.35] lg:opacity-50"
             aria-hidden
@@ -115,6 +152,7 @@ export default function LoginPage() {
           </p>
         </div>
       </div>
-    </main>
+      </main>
+    </div>
   );
 }

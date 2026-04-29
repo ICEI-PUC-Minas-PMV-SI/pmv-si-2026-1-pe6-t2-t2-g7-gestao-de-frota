@@ -11,7 +11,10 @@ import {
   ChevronRight,
   Home,
   LayoutDashboard,
+  LogOut,
   Map,
+  Moon,
+  Sun,
   UserCog,
   Users,
 } from "lucide-react";
@@ -37,10 +40,16 @@ export function AppSidebar({
   user,
   collapsed,
   onCollapsedChange,
+  theme,
+  onThemeChange,
+  onLogout,
 }: {
   user: User;
   collapsed: boolean;
   onCollapsedChange: (collapsed: boolean) => void;
+  theme: "light" | "dark";
+  onThemeChange: (theme: "light" | "dark") => void;
+  onLogout: () => Promise<void>;
 }) {
   const pathname = usePathname();
 
@@ -143,6 +152,50 @@ export function AppSidebar({
             );
           })}
         </nav>
+
+        <div className="border-t border-sidebar-border p-3">
+          <div className={cn("flex gap-2", collapsed && "flex-col")}>
+          <button
+            type="button"
+            onClick={() => onThemeChange(theme === "dark" ? "light" : "dark")}
+            className={cn(
+              "flex w-full cursor-pointer items-center rounded-lg border border-sidebar-border bg-background/60 text-sm font-medium text-muted-foreground transition hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+              !collapsed && "flex-1",
+              collapsed ? "justify-center px-0 py-2.5" : "justify-center px-3 py-2.5"
+            )}
+            aria-label={theme === "dark" ? "Ativar modo claro" : "Ativar modo escuro"}
+          >
+            {theme === "dark" ? (
+              <Sun className="h-4 w-4 shrink-0" aria-hidden />
+            ) : (
+              <Moon className="h-4 w-4 shrink-0" aria-hidden />
+            )}
+          </button>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                type="button"
+                onClick={() => void onLogout()}
+                className={cn(
+                  "flex w-full cursor-pointer items-center rounded-lg border border-red-500/25 bg-red-500/8 text-sm font-medium text-red-700 dark:text-red-300 transition hover:bg-red-500/14",
+                  !collapsed && "flex-1",
+                  collapsed ? "justify-center px-0 py-2.5" : "gap-2.5 px-3 py-2.5"
+                )}
+                aria-label="Sair da conta"
+              >
+                <LogOut className="h-4 w-4 shrink-0" aria-hidden />
+                {!collapsed && <span>Sair</span>}
+              </button>
+            </TooltipTrigger>
+            {collapsed && (
+              <TooltipContent side="right" sideOffset={8}>
+                Sair
+              </TooltipContent>
+            )}
+          </Tooltip>
+          </div>
+        </div>
       </aside>
     </TooltipProvider>
   );

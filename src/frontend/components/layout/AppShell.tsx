@@ -6,9 +6,11 @@ import { useAuth } from "@context/auth.context";
 import { AppSidebar } from "./AppSidebar";
 
 const STORAGE_KEY = "unitech-sidebar-collapsed";
+const THEME_STORAGE_KEY = "unitech-theme";
+type AppTheme = "light" | "dark";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAuth();
+  const { user, loading, logout } = useAuth();
   const router = useRouter();
   const [collapsed, setCollapsed] = useState(() => {
     if (typeof window === "undefined") {
@@ -19,6 +21,17 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       return localStorage.getItem(STORAGE_KEY) === "1";
     } catch {
       return false;
+    }
+  });
+  const [theme, setTheme] = useState<AppTheme>(() => {
+    if (typeof window === "undefined") {
+      return "light";
+    }
+    try {
+      const stored = localStorage.getItem(THEME_STORAGE_KEY);
+      return stored === "dark" ? "dark" : "light";
+    } catch {
+      return "light";
     }
   });
 
@@ -36,6 +49,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     }
   }, [collapsed]);
 
+  useEffect(() => {
+    try {
+      localStorage.setItem(THEME_STORAGE_KEY, theme);
+    } catch {
+      /* ignore */
+    }
+  }, [theme]);
+
   if (loading || !user) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
@@ -45,11 +66,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="flex min-h-screen bg-background text-foreground">
+    <div className={theme === "dark" ? "dark" : undefined}>
+      <div className="flex min-h-screen bg-background text-foreground">
       <AppSidebar
         user={user}
         collapsed={collapsed}
         onCollapsedChange={setCollapsed}
+        theme={theme}
+        onThemeChange={setTheme}
+        onLogout={logout}
       />
       <div
         className={`flex min-h-screen min-w-0 flex-1 flex-col transition-[padding-left] duration-200 ease-out ${
@@ -57,6 +82,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         }`}
       >
         {children}
+      </div>
       </div>
     </div>
   );
