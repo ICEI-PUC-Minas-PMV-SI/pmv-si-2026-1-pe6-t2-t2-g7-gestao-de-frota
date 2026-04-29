@@ -55,13 +55,19 @@ export function LoginForm() {
  
       <form onSubmit={handlePasswordLogin} className="space-y-4">
         <div className="space-y-2">
-          <label className="block text-xs font-medium uppercase tracking-widest text-muted-foreground">
+          <label
+            htmlFor="login-email"
+            className="block text-xs font-medium uppercase tracking-widest text-muted-foreground"
+          >
             E-mail
           </label>
           <input
+            id="login-email"
+            name="email"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            autoComplete="email"
             required
             placeholder="voce@exemplo.com"
             className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
@@ -69,13 +75,19 @@ export function LoginForm() {
         </div>
  
         <div className="space-y-2">
-          <label className="block text-xs font-medium uppercase tracking-widest text-muted-foreground">
+          <label
+            htmlFor="login-password"
+            className="block text-xs font-medium uppercase tracking-widest text-muted-foreground"
+          >
             Senha
           </label>
           <input
+            id="login-password"
+            name="password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            autoComplete="current-password"
             required
             placeholder="••••••••"
             className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"

@@ -18,18 +18,19 @@ describe("Validacao e CRUD de veiculo", () => {
     const validPlate = `CYP${randomDigit}${randomLetter}${randomTail}`;
 
     cy.visit("/signup");
-    cy.get('input[placeholder="Seu nome completo"]').type(displayName);
-    cy.get('input[placeholder="voce@exemplo.com"]').type(email);
-    cy.get('input[placeholder="Mínimo 6 caracteres"]').type(password);
-    cy.get('input[placeholder="••••••••"]').first().type(password);
+    cy.get("#signup-name").clear().type(displayName).should("have.value", displayName);
+    cy.get("#signup-email").clear().type(email).should("have.value", email);
+    cy.get("#signup-name").should("have.value", displayName);
+    cy.get("#signup-password").clear().type(password);
+    cy.get("#signup-password-confirm").clear().type(password);
     cy.contains("button", "Criar conta").click();
 
     cy.url({ timeout: 20000 }).should("include", "/homepage");
     cy.get('aside button[aria-label="Sair da conta"]').click();
     cy.url({ timeout: 20000 }).should("include", "/login");
 
-    cy.get('input[placeholder="voce@exemplo.com"]').type(email);
-    cy.get('input[placeholder="••••••••"]').type(password);
+    cy.get("#login-email").clear().type(email);
+    cy.get("#login-password").clear().type(password);
     cy.contains("button", "Entrar com e-mail").click();
     cy.url({ timeout: 20000 }).should("include", "/homepage");
 

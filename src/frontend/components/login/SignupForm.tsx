@@ -6,6 +6,9 @@ import { useAuth } from "@context/auth.context";
  
 export function SignupForm() {
   const { signUpWithPassword, signInWithGoogle } = useAuth();
+  const isCypress =
+    typeof window !== "undefined" &&
+    Boolean((window as { Cypress?: unknown }).Cypress);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -61,15 +64,25 @@ export function SignupForm() {
         </div>
       )}
  
-      <form onSubmit={handleSignup} className="space-y-4">
+      <form
+        onSubmit={handleSignup}
+        className="space-y-4"
+        autoComplete={isCypress ? "off" : "on"}
+      >
         <div className="space-y-2">
-          <label className="block text-xs font-medium uppercase tracking-widest text-muted-foreground">
+          <label
+            htmlFor="signup-name"
+            className="block text-xs font-medium uppercase tracking-widest text-muted-foreground"
+          >
             Nome
           </label>
           <input
+            id="signup-name"
+            name="name"
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            autoComplete={isCypress ? "off" : "name"}
             required
             placeholder="Seu nome completo"
             className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
@@ -77,13 +90,19 @@ export function SignupForm() {
         </div>
  
         <div className="space-y-2">
-          <label className="block text-xs font-medium uppercase tracking-widest text-muted-foreground">
+          <label
+            htmlFor="signup-email"
+            className="block text-xs font-medium uppercase tracking-widest text-muted-foreground"
+          >
             E-mail
           </label>
           <input
+            id="signup-email"
+            name="email"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            autoComplete={isCypress ? "off" : "email"}
             required
             placeholder="voce@exemplo.com"
             className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
@@ -91,13 +110,19 @@ export function SignupForm() {
         </div>
  
         <div className="space-y-2">
-          <label className="block text-xs font-medium uppercase tracking-widest text-muted-foreground">
+          <label
+            htmlFor="signup-password"
+            className="block text-xs font-medium uppercase tracking-widest text-muted-foreground"
+          >
             Senha
           </label>
           <input
+            id="signup-password"
+            name="password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            autoComplete={isCypress ? "off" : "new-password"}
             required
             minLength={6}
             placeholder="Mínimo 6 caracteres"
@@ -106,13 +131,19 @@ export function SignupForm() {
         </div>
  
         <div className="space-y-2">
-          <label className="block text-xs font-medium uppercase tracking-widest text-muted-foreground">
+          <label
+            htmlFor="signup-password-confirm"
+            className="block text-xs font-medium uppercase tracking-widest text-muted-foreground"
+          >
             Confirmar senha
           </label>
           <input
+            id="signup-password-confirm"
+            name="confirmPassword"
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
+            autoComplete={isCypress ? "off" : "new-password"}
             required
             placeholder="••••••••"
             className={`w-full rounded-lg border bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none transition focus:ring-2
