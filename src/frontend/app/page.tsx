@@ -3,11 +3,27 @@
 import { useEffect, useState } from "react"
 import localFont from "next/font/local"
 import { motion } from "motion/react"
-import { Palette } from "lucide-react"
+import { Activity, Gauge, Palette, ShieldCheck } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import FloatingLines from "@/components/FloatingLines"
 
-const quickActions = ["Painel operacional", "Historico de manutencao", "Indicadores em tempo real"]
+const featureCards = [
+  {
+    title: "Painel operacional",
+    description: "Visualize o status da frota em uma unica tela e aja mais rapido com prioridades claras.",
+    icon: Gauge,
+  },
+  {
+    title: "Historico de manutencao",
+    description: "Acompanhe revisoes, custos e recorrencias para reduzir paradas inesperadas.",
+    icon: ShieldCheck,
+  },
+  {
+    title: "Indicadores em tempo real",
+    description: "Monitore consumo, disponibilidade e desempenho com dados atualizados continuamente.",
+    icon: Activity,
+  },
+] as const
 const frizon = localFont({
   src: "../fonts/frizon.ttf",
   display: "swap",
@@ -171,15 +187,25 @@ export default function home({
             </Button>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-2 text-sm text-black/75">
-            {quickActions.map((action) => (
-              <span
-                key={action}
-                className="rounded-full px-3 py-1 border border-black/20 bg-white/45 backdrop-blur-sm shadow-[0_0_16px_rgba(56,189,248,0.16)]"
-              >
-                {action}
-              </span>
-            ))}
+          <div className="mx-auto grid max-w-5xl grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 md:gap-4 text-left">
+            {featureCards.map((card, index) => {
+              const Icon = card.icon
+              return (
+                <motion.article
+                  key={card.title}
+                  initial={{ y: 24, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.15 + index * 0.08, duration: 0.45 }}
+                  className="group rounded-2xl border border-white/35 bg-white/55 p-4 backdrop-blur-md shadow-[0_12px_38px_rgba(15,23,42,0.12)] transition-all duration-300 hover:-translate-y-1 hover:bg-white/70 hover:shadow-[0_14px_42px_rgba(56,189,248,0.24)]"
+                >
+                  <div className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-xl border border-black/15 bg-white/75 text-black/85 transition-transform duration-300 group-hover:scale-105">
+                    <Icon className="h-4 w-4" aria-hidden />
+                  </div>
+                  <h3 className="mb-1.5 text-sm font-semibold text-black/90">{card.title}</h3>
+                  <p className="text-xs leading-relaxed text-black/70">{card.description}</p>
+                </motion.article>
+              )
+            })}
           </div>
         </motion.div>
       </div>
