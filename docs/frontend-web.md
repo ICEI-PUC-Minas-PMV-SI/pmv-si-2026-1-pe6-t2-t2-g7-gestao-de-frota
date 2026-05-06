@@ -84,6 +84,9 @@ Resumo de integrações:
 - **API de negócio**: backend da aplicação (veículos, incidentes, membros, conta, jornadas);
 - **Mapas/rotas**: LocationIQ + OSRM (com fallback quando indisponível).
 
+![Fluxo de dados Frontend](../docs/img/Gestao-frotas-imagens/fluxo-dados-front.jpg)
+
+
 ## Tecnologias Utilizadas
 
 - **Framework Web**: Next.js 16 (React 19, App Router);
