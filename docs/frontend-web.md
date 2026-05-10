@@ -137,9 +137,13 @@ A estratégia atual prioriza **testes end-to-end (E2E)** para validar jornadas r
 
 - Navegação em páginas públicas;
 - Fluxo completo de criação de conta e login;
+- Tratamento de erros de autenticação e proteção de rotas privadas;
 - Navegação entre módulos protegidos;
 - CRUD de veículos e incidentes;
-- Jornada de mapa com validação de disponibilidade de veículo e simulação;
+- Edição de perfil e ações da conta;
+- Gestão de membros com listagem, busca e bloqueio de ações no próprio usuário;
+- Jornada de mapa com validação de disponibilidade de veículo, fallback de rota e controles de planejamento;
+- Atalhos e navegação da homepage/dashboard;
 - Alternância de tema e logout.
 
 Ferramenta adotada:
@@ -149,9 +153,31 @@ Ferramenta adotada:
 Casos de teste E2E abordados (resumo):
 
 - **`public-pages.cy.ts`**: valida acesso às páginas públicas e transição da landing para login/cadastro;
-- **`full-journey.cy.ts`**: executa jornada completa do usuário (cadastro, login, navegação entre módulos, criação/remoção de veículo e incidente, troca de tema e logout);
-- **`vehicle-validation.cy.ts`**: verifica validação de placa inválida e fluxo de correção até criação/exclusão bem-sucedida de veículo;
-- **`map-journey-vehicle-validation.cy.ts`**: valida planejamento/início de jornada no mapa, incluindo garantia de veículo disponível e conclusão do fluxo.
+- **`full-journey.cy.ts`**: smoke test da área autenticada, cobrindo cadastro, login, navegação entre módulos principais, troca de tema e logout;
+- **`auth-edge-cases.cy.ts`**: cobre senha divergente no cadastro, senha incorreta no login, tentativa de reutilizar e-mail já cadastrado e redirecionamento de rota protegida para `/login`;
+- **`dashboard-home.cy.ts`**: valida atalhos da homepage, navegação para o dashboard e links principais entre módulos;
+- **`vehicles-management.cy.ts`**: cobre criação, busca, edição e abertura do modal de telemetria/histórico de um veículo;
+- **`incidents-management.cy.ts`**: valida criação, edição, atualização rápida de status, filtros, visualização de detalhes, seleção inválida de veículo e remoção;
+- **`members-management.cy.ts`**: testa listagem e busca de membros, além do bloqueio das ações no próprio usuário;
+- **`account-management.cy.ts`**: valida atualização de nome, descarte de alterações, visualização/cópia de identificadores e logout pela tela de conta;
+- **`map-edge-cases.cy.ts`**: concentra os cenários do mapa, cobrindo bloqueio de início sem pré-requisitos, remoção de paradas, cópia do JSON da rota, limpeza do planejamento, fallback de OSRM e conclusão da jornada completa.
+
+### Cobertura funcional por módulo
+
+- **Páginas públicas**: landing page, login, signup, navegação entre páginas e validações de autenticação.
+- **Homepage / Dashboard**: atalhos e links de navegação entre homepage, dashboard e veículos.
+- **Veículos**: criação, edição, busca, telemetria, histórico e exclusão.
+- **Incidentes**: criação, edição, filtros, atualização de status, detalhes e exclusão.
+- **Membros**: listagem, busca e bloqueio de ações no próprio usuário.
+- **Conta**: atualização de perfil, descarte de alterações, exposição controlada de identificadores e encerramento de sessão.
+- **Mapa / Jornadas**: criação de rota, fallback visual sem OSRM, regras mínimas para iniciar jornada e utilitários do planejador.
+
+### Observações de execução
+
+- Os testes E2E assumem frontend e backend disponíveis, além das integrações já configuradas de Firebase e serviços de mapa.
+- Para executar localmente, use `pnpm cy:open` ou `pnpm cy:run` dentro de `src/frontend`.
+- Os cenários atuais de membros não exercitam fluxos administrativos felizes; a cobertura está concentrada em listagem, busca e restrição de ações no próprio usuário.
+- A tipagem TypeScript do workspace ainda não está preparada para validar a pasta `cypress` via `tsc --noEmit`; atualmente a suíte é validada pela execução do Cypress.
 
 ### Evidências dos testes (Cypress)
 

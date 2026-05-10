@@ -10,12 +10,12 @@ import FloatingLines from "@/components/FloatingLines"
 const featureCards = [
   {
     title: "Painel operacional",
-    description: "Visualize o status da frota em uma unica tela e aja mais rapido com prioridades claras.",
+    description: "Visualize o status da frota em uma única tela e aja mais rápido com prioridades claras.",
     icon: Gauge,
   },
   {
-    title: "Historico de manutencao",
-    description: "Acompanhe revisoes, custos e recorrencias para reduzir paradas inesperadas.",
+    title: "Histórico de manutenção",
+    description: "Acompanhe revisões, custos e recorrências para reduzir paradas inesperadas.",
     icon: ShieldCheck,
   },
   {
@@ -122,7 +122,7 @@ export default function home({
             transition={{ duration: 0.8 }}
             className="inline-flex items-center rounded-full border border-black/20 bg-white/60 px-4 py-1.5 text-xs sm:text-sm font-medium tracking-wide mb-6 text-black/90 backdrop-blur-md shadow-[0_0_24px_rgba(125,211,252,0.18)]"
           >
-            Plataforma inteligente para gestao de frotas
+            Plataforma inteligente para gestão de frotas
           </motion.p>
 
           <h1 className={`${frizon.className} text-5xl sm:text-7xl md:text-8xl font-bold mb-8 tracking-tighter`}>
@@ -149,8 +149,8 @@ export default function home({
           </h1>
 
           <p className="text-base sm:text-lg md:text-xl text-black/80 max-w-2xl mx-auto mb-8 leading-relaxed">
-            Tome decisoes com dados em tempo real, reduza custos operacionais e acompanhe desempenho da frota com
-            seguranca e previsibilidade.
+            Tome decisões com dados em tempo real, reduza custos operacionais e acompanhe desempenho da frota com
+            segurança e previsibilidade.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-10">
@@ -240,4 +240,3 @@ export default function home({
     </div>
   )
 }
-
