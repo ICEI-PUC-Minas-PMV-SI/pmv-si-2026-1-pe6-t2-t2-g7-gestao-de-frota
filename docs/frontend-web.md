@@ -181,11 +181,24 @@ Casos de teste E2E abordados (resumo):
 
 ### Evidências dos testes (Cypress)
 
-![Evidência teste Cypress 1](img/Gestao-frotas-imagens/cypress-teste1.png)
+<img width="345" height="511" alt="screenshot_2026-05-10_16-20-26" src="https://github.com/user-attachments/assets/cb001101-4a31-4b9e-b4a6-5725dbf2764c" />
 
-![Evidência teste Cypress 2](img/Gestao-frotas-imagens/cypress-teste2.png)
+<img width="369" height="465" alt="screenshot_2026-05-10_16-21-54" src="https://github.com/user-attachments/assets/51843358-0fba-485a-86b9-08c833dcac5f" />
 
-![Evidência teste Cypress 3](img/Gestao-frotas-imagens/cypress-teste3.png)
+<img width="350" height="518" alt="screenshot_2026-05-10_16-22-55" src="https://github.com/user-attachments/assets/97ab1026-38c6-4fc0-a154-11858395ae4d" />
+
+<img width="353" height="530" alt="screenshot_2026-05-10_16-23-44" src="https://github.com/user-attachments/assets/8fe5b6a3-bfe0-4f8b-ba46-7eff8a5dfe0c" />
+
+<img width="350" height="518" alt="screenshot_2026-05-10_16-28-46" src="https://github.com/user-attachments/assets/d11e036e-d1ec-4087-b805-93628e277165" />
+
+<img width="365" height="302" alt="screenshot_2026-05-10_16-31-16" src="https://github.com/user-attachments/assets/cdff6d61-661b-4537-853f-263b63d949f4" />
+
+<img width="351" height="522" alt="screenshot_2026-05-10_16-31-54" src="https://github.com/user-attachments/assets/b40b9d8a-eb07-481b-b866-b543421f6f06" />
+
+<img width="363" height="357" alt="screenshot_2026-05-10_16-32-28" src="https://github.com/user-attachments/assets/c023f1e3-3d5d-4a54-bd0d-eff0a8bbd12f" />
+
+<img width="355" height="499" alt="screenshot_2026-05-10_16-33-49" src="https://github.com/user-attachments/assets/072e21dd-d028-4d23-b04c-3011edd99003" />
+
 
 # Referências
 
