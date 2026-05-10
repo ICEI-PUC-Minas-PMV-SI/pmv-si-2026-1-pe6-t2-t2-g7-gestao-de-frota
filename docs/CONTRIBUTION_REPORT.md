@@ -1,6 +1,6 @@
 # 📊 Relatório de Contribuições do Projeto
 
-**Última atualização:** 10/05/2026 17:29
+**Última atualização:** 10/05/2026 19:12
 
 ---
 
@@ -12,9 +12,9 @@
 | João Borges                   |         4 |        16 |        17 |          2 |              4 |               2 |
 | João Pedro Reis Martins       |        11 |      1542 |        34 |         33 |             11 |               5 |
 | Nícolas                       |        18 |        63 |        77 |          3 |             11 |               3 |
-| Nícolas Cleiton Basilio Viana |        30 |     35562 |      2335 |        176 |             14 |               3 |
+| Nícolas Cleiton Basilio Viana |        32 |     36284 |      2659 |        191 |             16 |               4 |
 | Vitor Sales                   |        15 |      1476 |        31 |         33 |             15 |               8 |
-| github-actions[bot]           |        45 |       337 |       323 |          3 |             45 |               1 |
+| github-actions[bot]           |        46 |       353 |       337 |          3 |             46 |               1 |
 | github-classroom[bot]         |         1 |      2152 |         0 |         45 |              1 |              13 |
 | gregorystevao19               |        32 |     24712 |      1860 |        272 |             15 |               4 |
 | monezero                      |         2 |      4559 |       917 |         19 |              0 |               0 |
@@ -22,17 +22,17 @@
 
 ## 📅 Contribuições Semanais (Todo o Semestre)
 
-**2026-05-03**: github-actions[bot]: 3, gregorystevao19: 3
+**2026-05-03**: Nícolas Cleiton Basilio Viana: 1, github-actions[bot]: 4, gregorystevao19: 3
 
 **2026-04-26**: Nícolas Cleiton Basilio Viana: 1, github-actions[bot]: 10, gregorystevao19: 10
 
 **2026-04-19**: github-actions[bot]: 1
 
-**2026-04-12**: João Borges: 1, Nícolas Cleiton Basilio Viana: 1, github-actions[bot]: 3
+**2026-04-12**: Nícolas Cleiton Basilio Viana: 1, github-actions[bot]: 2
 
-**2026-04-05**: Grégory Stevão: 1, João Borges: 1, João Pedro Reis Martins: 4, Nícolas: 9, Nícolas Cleiton Basilio Viana: 25, Vitor Sales: 3, github-actions[bot]: 22, gregorystevao19: 6, monezero: 2
+**2026-04-05**: Grégory Stevão: 1, João Borges: 2, João Pedro Reis Martins: 4, Nícolas: 9, Nícolas Cleiton Basilio Viana: 25, Vitor Sales: 3, github-actions[bot]: 23, gregorystevao19: 6, monezero: 1
 
-**2026-03-29**: Grégory Stevão: 2, João Pedro Reis Martins: 1, github-actions[bot]: 3
+**2026-03-29**: Grégory Stevão: 2, João Pedro Reis Martins: 1, github-actions[bot]: 3, monezero: 1
 
 **2026-03-22**: Nícolas: 1, Nícolas Cleiton Basilio Viana: 2, Vitor Sales: 2, github-actions[bot]: 3, gregorystevao19: 5
 
