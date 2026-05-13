@@ -1,0 +1,82 @@
+# Unitech Frota — Mobile (Expo)
+
+Aplicativo móvel do projeto Gestão de Frota construído com **Expo Router** + **React Native** + **NativeWind**. Consome o mesmo backend NestJS (`src/backend`) que o frontend web (`src/frontend`).
+
+## Stack
+
+| Camada | Tecnologia |
+|---|---|
+| Framework | Expo SDK 54, Expo Router, React Native 0.81 |
+| Linguagem | TypeScript |
+| Estilo | NativeWind v4 (Tailwind CSS) |
+| HTTP | Axios (via `AxiosAdapter` portado do web) |
+| Auth | Firebase JS SDK + `expo-auth-session` (Google) |
+| Mapa / GPS | `react-native-maps` + `expo-location` |
+| Persistência local | `@react-native-async-storage/async-storage` |
+
+## Setup
+
+1. Copie o template de variáveis e preencha:
+   ```sh
+   cp .env.example .env
+   ```
+   - `EXPO_PUBLIC_API_URL` deve apontar para o IP da máquina rodando o backend acessível pelo celular (não use `localhost` em dispositivo físico).
+   - As `EXPO_PUBLIC_FIREBASE_*` são as mesmas usadas em `src/frontend/.env.local`.
+   - Os `EXPO_PUBLIC_GOOGLE_*_CLIENT_ID` vêm do Firebase Console → Authentication → Sign-in method → Google → OAuth client IDs (Web, iOS, Android).
+
+2. Instale dependências:
+   ```sh
+   npm install
+   ```
+
+3. Inicie o Metro bundler:
+   ```sh
+   npx expo start
+   ```
+   Escaneie o QR code com o app **Expo Go** (iOS/Android).
+
+## Scripts
+
+| Script | Função |
+|---|---|
+| `npx expo start` | Inicia Metro + abre Expo Dev Tools |
+| `npx tsc --noEmit` | Type-check |
+| `npm run lint` | ESLint (`expo lint`) |
+
+## Estrutura
+
+```
+app/                 # Rotas (file-based)
+  _layout.tsx        # Root: AuthProvider + Stack
+  index.tsx          # Gate de autenticação
+  login.tsx, signup.tsx
+  (app)/             # Protegido (redireciona para /login se deslogado)
+    _layout.tsx      # Bottom tabs
+    homepage.tsx, map.tsx, vehicles.tsx, incidents.tsx, account.tsx
+src/
+  config/firebase.config.ts
+  context/auth.context.tsx
+  core/
+    adapters/http/   # AxiosAdapter, idêntico ao web
+    constants.ts     # API_BASE
+    modules/         # users, vehicles, incidents, journeys
+  components/        # ui/, layout/
+  hooks/             # useAuthorizedToken, useLiveLocation
+```
+
+## Mapa & GPS
+
+A tela `/(app)/map` usa `expo-location` para obter coordenadas em tempo real e `react-native-maps` para renderizar (Google Maps no Android, Apple Maps no iOS). Para Android em build standalone, é necessário preencher `android.config.googleMaps.apiKey` em `app.json` com uma chave da Google Cloud Console (Maps SDK for Android).
+
+## Backend
+
+O app consome `${EXPO_PUBLIC_API_URL}/...`. Endpoints utilizados:
+
+- `POST /account/sync` — sincroniza usuário após login
+- `GET /vehicle` — lista veículos
+- `GET /incident` — lista incidentes
+- `POST /journey` — inicia jornada
+- `POST /journey/:id/positions` — registra posição GPS
+- `PATCH /journey/:id/complete` — finaliza jornada
+
+A autenticação é via JWT do Firebase enviado em `Authorization: Bearer <idToken>`.
