@@ -7,13 +7,23 @@ import {
   View,
 } from "react-native";
 import { Link } from "expo-router";
+import { Image } from "expo-image";
 
+import { AuthGate } from "../src/components/auth/AuthGate";
 import { Button } from "../src/components/ui/Button";
 import { Input } from "../src/components/ui/Input";
 import { ScreenContainer } from "../src/components/layout/ScreenContainer";
 import { useAuth } from "../src/context/auth.context";
 
 export default function SignupScreen() {
+  return (
+    <AuthGate mode="guest">
+      <SignupForm />
+    </AuthGate>
+  );
+}
+
+function SignupForm() {
   const { signUpWithPassword } = useAuth();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -44,6 +54,17 @@ export default function SignupScreen() {
           className="px-6"
           keyboardShouldPersistTaps="handled"
         >
+          <View className="mb-8 items-center">
+            <Image
+              source={require("../assets/images/logo-unitech.png")}
+              style={{ width: 56, height: 56 }}
+              contentFit="contain"
+            />
+            <Text className="mt-3 text-lg font-semibold text-primary">
+              Unitech Frota
+            </Text>
+          </View>
+
           <View className="gap-y-6">
             <View className="gap-y-1">
               <Text className="text-3xl font-semibold text-foreground">
@@ -55,7 +76,7 @@ export default function SignupScreen() {
             </View>
 
             {error ? (
-              <View className="rounded-md bg-[#fee2e2] px-4 py-3">
+              <View className="rounded-md border border-destructive/30 bg-[#fee2e2] px-4 py-3">
                 <Text className="text-sm text-[#991b1b]">{error}</Text>
               </View>
             ) : null}
@@ -72,6 +93,7 @@ export default function SignupScreen() {
                 placeholder="voce@exemplo.com"
                 autoCapitalize="none"
                 keyboardType="email-address"
+                autoComplete="email"
                 value={email}
                 onChangeText={setEmail}
               />

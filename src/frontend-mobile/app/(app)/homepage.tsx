@@ -1,95 +1,100 @@
-import { Pressable, ScrollView, Text, View } from "react-native";
-import { Link } from "expo-router";
+import { Text, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { Image } from "expo-image";
 
+import { AppScreen } from "../../src/components/layout/AppScreen";
 import { Card } from "../../src/components/ui/Card";
+import { Chip } from "../../src/components/ui/Chip";
+import { ShortcutCard } from "../../src/components/ui/ShortcutCard";
 import { useAuth } from "../../src/context/auth.context";
-
-type Shortcut = {
-  href: "/(app)/map" | "/(app)/vehicles" | "/(app)/incidents" | "/(app)/account";
-  title: string;
-  description: string;
-  icon: keyof typeof Ionicons.glyphMap;
-};
-
-const shortcuts: Shortcut[] = [
-  {
-    href: "/(app)/map",
-    title: "Mapa",
-    description: "Inicie uma jornada com GPS ao vivo",
-    icon: "map-outline",
-  },
-  {
-    href: "/(app)/vehicles",
-    title: "Veículos",
-    description: "Consulte a frota disponível",
-    icon: "car-outline",
-  },
-  {
-    href: "/(app)/incidents",
-    title: "Incidentes",
-    description: "Multas e sinistros recentes",
-    icon: "alert-circle-outline",
-  },
-  {
-    href: "/(app)/account",
-    title: "Conta",
-    description: "Seu perfil e preferências",
-    icon: "person-outline",
-  },
-];
 
 export default function HomepageScreen() {
   const { user } = useAuth();
   const firstName =
-    user?.displayName?.split(" ")[0] ?? user?.email?.split("@")[0] ?? "motorista";
+    user?.displayName?.split(" ")[0] ?? user?.email?.split("@")[0] ?? "operador";
 
   return (
-    <ScrollView className="flex-1 bg-background">
-      <View className="gap-y-6 px-5 py-5">
-        <Card>
-          <Text className="text-xs font-medium uppercase tracking-widest text-primary">
-            Área logada
-          </Text>
-          <Text className="mt-2 text-2xl font-semibold text-foreground">
-            Olá, <Text className="text-primary">{firstName}</Text>
-          </Text>
-          <Text className="mt-2 text-sm text-muted-foreground">
-            Central de operações Unitech. Acompanhe sua frota e jornadas no
-            celular.
-          </Text>
-        </Card>
-
+    <AppScreen
+      header={
+        <View className="border-b border-border/70 px-5 pb-6 pt-2">
+          <Card className="overflow-hidden border-primary/10 bg-card">
+            <View className="flex-row items-center gap-3">
+              <Image
+                source={require("../../assets/images/logo-unitech.png")}
+                style={{ width: 44, height: 44, borderRadius: 10 }}
+                contentFit="contain"
+              />
+              <View className="flex-1">
+                <Text className="text-xs font-medium uppercase tracking-widest text-primary">
+                  Área logada
+                </Text>
+                <Text className="mt-1 text-2xl font-semibold text-foreground">
+                  Olá,{" "}
+                  <Text className="text-primary">{firstName}</Text>
+                </Text>
+              </View>
+            </View>
+            <Text className="mt-3 text-sm leading-5 text-muted-foreground">
+              Central de operações Unitech: acompanhe frota, rotas e indicadores
+              no celular. Use o menu inferior ou os atalhos abaixo.
+            </Text>
+            <View className="mt-4 flex-row flex-wrap gap-2">
+              <Chip variant="primary">Monitoramento contínuo</Chip>
+              <Chip>Operação em tempo real</Chip>
+              <Chip>Decisões guiadas por dados</Chip>
+            </View>
+          </Card>
+        </View>
+      }
+    >
+      <View>
+        <View className="mb-3 flex-row items-center justify-between">
+          <Text className="text-sm font-medium text-muted-foreground">Atalhos</Text>
+          <Text className="text-xs text-muted-foreground">Acesso rápido</Text>
+        </View>
         <View className="gap-y-3">
-          <Text className="text-sm font-medium text-muted-foreground">
-            Atalhos
-          </Text>
-          {shortcuts.map((s) => (
-            <Link key={s.href} href={s.href} asChild>
-              <Pressable>
-                <Card className="flex-row items-center">
-                  <View className="mr-4 h-10 w-10 items-center justify-center rounded-lg bg-accent">
-                    <Ionicons name={s.icon} size={20} color="#1a237e" />
-                  </View>
-                  <View className="flex-1">
-                    <Text className="text-base font-semibold text-foreground">
-                      {s.title}
-                    </Text>
-                    <Text className="text-xs text-muted-foreground">
-                      {s.description}
-                    </Text>
-                  </View>
-                  <Ionicons
-                    name="chevron-forward"
-                    size={20}
-                    color="#94a3b8"
-                  />
-                </Card>
-              </Pressable>
-            </Link>
-          ))}
+          <ShortcutCard
+            href="/(app)/dashboard"
+            title="Painel"
+            description="Visão consolidada de desempenho e incidentes."
+            icon="grid-outline"
+          />
+          <ShortcutCard
+            href="/(app)/map"
+            title="Mapa"
+            description="Planejamento de jornadas com GPS ao vivo."
+            icon="map-outline"
+          />
+          <ShortcutCard
+            href="/(app)/vehicles"
+            title="Veículos"
+            description="Consulte e acompanhe a frota cadastrada."
+            icon="car-outline"
+          />
+          <ShortcutCard
+            href="/(app)/incidents"
+            title="Incidentes"
+            description="Multas e sinistros dos veículos."
+            icon="alert-circle-outline"
+          />
         </View>
       </View>
-    </ScrollView>
+
+      <Card>
+        <View className="flex-row items-start gap-3">
+          <View className="h-9 w-9 items-center justify-center rounded-lg bg-[#dcfce7]">
+            <Ionicons name="shield-checkmark-outline" size={20} color="#16a34a" />
+          </View>
+          <View className="flex-1">
+            <Text className="text-base font-semibold text-foreground">
+              Operação estável
+            </Text>
+            <Text className="mt-1 text-sm text-muted-foreground">
+              Todos os serviços principais estão respondendo normalmente.
+            </Text>
+          </View>
+        </View>
+      </Card>
+    </AppScreen>
   );
 }

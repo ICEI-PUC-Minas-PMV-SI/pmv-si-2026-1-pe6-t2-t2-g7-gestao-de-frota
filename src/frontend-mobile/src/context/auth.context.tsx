@@ -3,13 +3,16 @@ import {
   ReactNode,
   useContext,
   useEffect,
+  useRef,
   useState,
 } from "react";
 import {
   AuthError,
+  GoogleAuthProvider,
   User,
   createUserWithEmailAndPassword,
   onIdTokenChanged,
+  signInWithCredential,
   signInWithEmailAndPassword,
   signOut,
   updateProfile,
@@ -18,6 +21,8 @@ import { useRouter } from "expo-router";
 
 import { auth, skipFirebaseAuth } from "../config/firebase.config";
 import { userModule } from "../core/modules/users/users";
+import { useGoogleSignIn } from "../hooks/useGoogleSignIn";
+import { getAuthErrorMessage } from "../lib/auth-errors";
 
 interface AuthContextType {
   user: User | null;
@@ -41,38 +46,71 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const user = mockUser ?? firebaseUser;
   const [loading, setLoading] = useState(!skipFirebaseAuth);
   const router = useRouter();
-
-  const googleReady = false;
+  const { response, promptAsync, ready: googleReady } = useGoogleSignIn();
+  const googleFlowRef = useRef<{
+    resolve: () => void;
+    reject: (err: Error) => void;
+  } | null>(null);
 
   useEffect(() => {
-    if (skipFirebaseAuth || !auth) return;
-    const unsubscribe = onIdTokenChanged(
-      auth,
-      (u) => {
-        setFirebaseUser(u);
-        setLoading(false);
-      },
-      () => {
-        setFirebaseUser(null);
-        setLoading(false);
-      },
-    );
+    if (skipFirebaseAuth || !auth) {
+      setLoading(false);
+      return;
+    }
+    const unsubscribe = onIdTokenChanged(auth, (u) => {
+      setFirebaseUser(u);
+      setLoading(false);
+    });
     return () => unsubscribe();
   }, []);
 
+  useEffect(() => {
+    if (skipFirebaseAuth || !auth || !response) return;
+
+    if (response.type === "success") {
+      void (async () => {
+        try {
+          const idTokenGoogle = response.params.id_token;
+          if (!idTokenGoogle) {
+            throw new Error("Token do Google ausente na resposta.");
+          }
+          const credential = GoogleAuthProvider.credential(idTokenGoogle);
+          await signInWithCredential(auth!, credential);
+          const idToken = await auth!.currentUser?.getIdToken();
+          if (!idToken) throw new Error("Could not collect idToken!");
+          await userModule.gateways.sync.exec({ idToken });
+          router.replace("/(app)/homepage");
+          googleFlowRef.current?.resolve();
+        } catch (err) {
+          const message =
+            err instanceof Error
+              ? err.message
+              : getAuthErrorMessage((err as AuthError).code);
+          googleFlowRef.current?.reject(new Error(message));
+        } finally {
+          googleFlowRef.current = null;
+        }
+      })();
+      return;
+    }
+
+    if (
+      response.type === "cancel" ||
+      response.type === "dismiss" ||
+      response.type === "error"
+    ) {
+      const message =
+        response.type === "error"
+          ? response.error?.message ?? "Erro no login com Google."
+          : getAuthErrorMessage("auth/popup-closed-by-user");
+      googleFlowRef.current?.reject(new Error(message));
+      googleFlowRef.current = null;
+    }
+  }, [response, router]);
+
   async function signInWithPassword(email: string, password: string) {
     if (skipFirebaseAuth) {
-      const created = createDevMockUser();
-      setMockUser(created);
-      const idToken = await created.getIdToken();
-      if (idToken) {
-        try {
-          await userModule.gateways.sync.exec({ idToken });
-        } catch {
-          // sync opcional em modo sem Firebase
-        }
-      }
-      router.replace("/(app)/homepage");
+      await devBypassLogin();
       return;
     }
     if (!auth) throw new Error("Firebase não configurado.");
@@ -94,17 +132,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     password: string,
   ) {
     if (skipFirebaseAuth) {
-      const created = createDevMockUser(name);
-      setMockUser(created);
-      const idToken = await created.getIdToken();
-      if (idToken) {
-        try {
-          await userModule.gateways.sync.exec({ idToken, name });
-        } catch {
-          // sync opcional em modo sem Firebase
-        }
-      }
-      router.replace("/(app)/homepage");
+      await devBypassLogin(name);
       return;
     }
     if (!auth) throw new Error("Firebase não configurado.");
@@ -126,7 +154,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   async function signInWithGoogle() {
-    throw new Error("Login com Google desativado neste protótipo.");
+    if (skipFirebaseAuth) {
+      throw new Error(
+        "Login com Google requer Firebase configurado (remova EXPO_PUBLIC_SKIP_FIREBASE_AUTH).",
+      );
+    }
+    if (!auth) throw new Error("Firebase não configurado.");
+    if (!googleReady) {
+      throw new Error(
+        "Google Sign-In não configurado. Defina EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID no .env.",
+      );
+    }
+    return new Promise<void>((resolve, reject) => {
+      googleFlowRef.current = { resolve, reject };
+      promptAsync().catch((err) => {
+        googleFlowRef.current = null;
+        reject(err instanceof Error ? err : new Error(String(err)));
+      });
+    });
   }
 
   async function logout() {
@@ -140,12 +185,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     router.replace("/login");
   }
 
+  async function devBypassLogin(displayName?: string) {
+    const created = createDevMockUser(displayName);
+    setMockUser(created);
+    const idToken = await created.getIdToken();
+    if (idToken) {
+      try {
+        await userModule.gateways.sync.exec({ idToken, name: displayName });
+      } catch {
+        // sync opcional se API/token indisponível em dev
+      }
+    }
+    router.replace("/(app)/homepage");
+  }
+
   return (
     <AuthContext.Provider
       value={{
         user,
         loading,
-        googleReady,
+        googleReady: skipFirebaseAuth ? false : googleReady,
         signInWithPassword,
         signUpWithPassword,
         signInWithGoogle,
@@ -161,23 +220,6 @@ export function useAuth() {
   const ctx = useContext(AuthContext);
   if (!ctx) throw new Error("useAuth must be used within <AuthProvider>");
   return ctx;
-}
-
-function getAuthErrorMessage(code: string): string {
-  const messages: Record<string, string> = {
-    "auth/user-not-found": "Usuário não encontrado.",
-    "auth/wrong-password": "Senha incorreta.",
-    "auth/invalid-credential": "E-mail ou senha incorretos.",
-    "auth/invalid-email": "E-mail inválido.",
-    "auth/user-disabled": "Usuário desativado.",
-    "auth/email-already-in-use": "Este e-mail já está em uso.",
-    "auth/weak-password": "A senha deve ter no mínimo 6 caracteres.",
-    "auth/too-many-requests": "Muitas tentativas. Tente novamente mais tarde.",
-    "auth/popup-closed-by-user": "Login com Google cancelado.",
-    "auth/invalid-api-key":
-      "Chave de API do Firebase rejeitada (incorreta ou restrita no Google Cloud). Corrija EXPO_PUBLIC_FIREBASE_API_KEY ou defina EXPO_PUBLIC_SKIP_FIREBASE_AUTH=1 / EXPO_PUBLIC_FIREBASE_DISABLE=1 para desenvolvimento. Reinicie o Expo com cache limpo: npx expo start --clear.",
-  };
-  return messages[code] ?? "Ocorreu um erro. Tente novamente.";
 }
 
 function createDevMockUser(displayName?: string): User {

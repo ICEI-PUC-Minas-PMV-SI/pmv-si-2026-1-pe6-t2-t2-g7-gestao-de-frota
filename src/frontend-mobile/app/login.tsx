@@ -7,14 +7,27 @@ import {
   View,
 } from "react-native";
 import { Link } from "expo-router";
+import { Image } from "expo-image";
 
+import { AuthGate } from "../src/components/auth/AuthGate";
+import { GoogleIcon } from "../src/components/auth/GoogleIcon";
 import { Button } from "../src/components/ui/Button";
 import { Input } from "../src/components/ui/Input";
 import { ScreenContainer } from "../src/components/layout/ScreenContainer";
 import { useAuth } from "../src/context/auth.context";
+import { getGoogleOAuthRedirectUriHints } from "../src/lib/google-auth";
 
 export default function LoginScreen() {
+  return (
+    <AuthGate mode="guest">
+      <LoginForm />
+    </AuthGate>
+  );
+}
+
+function LoginForm() {
   const { signInWithPassword, signInWithGoogle, googleReady } = useAuth();
+  const redirectHints = __DEV__ ? getGoogleOAuthRedirectUriHints() : [];
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -34,10 +47,13 @@ export default function LoginScreen() {
 
   async function onGoogle() {
     setError(null);
+    setLoading(true);
     try {
       await signInWithGoogle();
     } catch (err) {
       setError((err as Error).message);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -52,6 +68,17 @@ export default function LoginScreen() {
           className="px-6"
           keyboardShouldPersistTaps="handled"
         >
+          <View className="mb-8 items-center">
+            <Image
+              source={require("../assets/images/logo-unitech.png")}
+              style={{ width: 56, height: 56 }}
+              contentFit="contain"
+            />
+            <Text className="mt-3 text-lg font-semibold text-primary">
+              Unitech Frota
+            </Text>
+          </View>
+
           <View className="gap-y-6">
             <View className="gap-y-1">
               <Text className="text-3xl font-semibold text-foreground">
@@ -63,7 +90,7 @@ export default function LoginScreen() {
             </View>
 
             {error ? (
-              <View className="rounded-md bg-[#fee2e2] px-4 py-3">
+              <View className="rounded-md border border-destructive/30 bg-[#fee2e2] px-4 py-3">
                 <Text className="text-sm text-[#991b1b]">{error}</Text>
               </View>
             ) : null}
@@ -100,10 +127,29 @@ export default function LoginScreen() {
             <Button
               variant="outline"
               onPress={onGoogle}
-              disabled={!googleReady}
+              disabled={!googleReady || loading}
+              leftIcon={<GoogleIcon />}
             >
-              {googleReady ? "Entrar com Google" : "Google indisponível"}
+              {googleReady ? "Entrar com Google" : "Google não configurado"}
             </Button>
+
+            {__DEV__ && googleReady && redirectHints.length > 0 ? (
+              <View className="rounded-lg border border-border bg-muted/30 px-3 py-2">
+                <Text className="text-[10px] font-medium text-muted-foreground">
+                  Erro redirect_uri_mismatch? No Google Cloud (cliente Web), adicione
+                  estas URIs de redirecionamento:
+                </Text>
+                {redirectHints.map((uri) => (
+                  <Text
+                    key={uri}
+                    className="mt-1 font-mono text-[10px] text-foreground"
+                    selectable
+                  >
+                    {uri}
+                  </Text>
+                ))}
+              </View>
+            ) : null}
 
             <View className="flex-row justify-center">
               <Text className="text-sm text-muted-foreground">

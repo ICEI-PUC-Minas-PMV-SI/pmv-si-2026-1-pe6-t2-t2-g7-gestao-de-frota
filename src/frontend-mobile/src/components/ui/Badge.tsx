@@ -1,6 +1,6 @@
 import { Text, View } from "react-native";
 
-type Tone = "neutral" | "primary" | "success" | "warning" | "destructive";
+export type Tone = "neutral" | "primary" | "success" | "warning" | "destructive";
 
 const tones: Record<Tone, string> = {
   neutral: "bg-muted",

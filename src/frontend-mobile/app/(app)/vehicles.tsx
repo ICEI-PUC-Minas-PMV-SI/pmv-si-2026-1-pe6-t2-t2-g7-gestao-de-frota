@@ -1,101 +1,146 @@
-import { useCallback, useEffect, useState } from "react";
-import {
-  ActivityIndicator,
-  FlatList,
-  RefreshControl,
-  Text,
-  View,
-} from "react-native";
+import { useMemo, useState } from "react";
+import { Alert, FlatList, Text, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { Badge } from "../../src/components/ui/Badge";
 import { Card } from "../../src/components/ui/Card";
+import { Button } from "../../src/components/ui/Button";
+import { KpiCard } from "../../src/components/ui/KpiCard";
+import { KpiGrid } from "../../src/components/ui/KpiGrid";
+import {
+  VehicleFormSheet,
+  confirmDeleteVehicle,
+} from "../../src/components/vehicles/VehicleFormSheet";
+import { VehicleCard } from "../../src/components/vehicles/VehicleCard";
+import { ModuleHeader } from "../../src/components/ui/ModuleHeader";
+import { ScreenLoader } from "../../src/components/ui/ScreenLoader";
+import { SearchInput } from "../../src/components/ui/SearchInput";
 import { useAuthorizedToken } from "../../src/hooks/useAuthorizedToken";
-import { vehicleModule, Vehicle } from "../../src/core/modules/vehicles/vehicles";
+import { useFleetData } from "../../src/hooks/useFleetData";
+import { vehicleModule, type Vehicle } from "../../src/core/modules/vehicles/vehicles";
 
 export default function VehiclesScreen() {
+  const insets = useSafeAreaInsets();
   const getToken = useAuthorizedToken();
-  const [items, setItems] = useState<Vehicle[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { vehicles, loading, refreshing, error, refresh } = useFleetData();
+  const [query, setQuery] = useState("");
+  const [formOpen, setFormOpen] = useState(false);
+  const [editing, setEditing] = useState<Vehicle | null>(null);
 
-  const load = useCallback(async () => {
-    try {
-      setError(null);
-      const idToken = await getToken();
-      const res = await vehicleModule.gateways.list.exec({ idToken });
-      setItems(res.body);
-    } catch (err: any) {
-      setError(err?.message ?? "Erro ao carregar veículos.");
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
-  }, [getToken]);
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return vehicles;
+    return vehicles.filter(
+      (v) =>
+        v.placa.toLowerCase().includes(q) ||
+        v.marca.toLowerCase().includes(q) ||
+        v.modelo.toLowerCase().includes(q),
+    );
+  }, [vehicles, query]);
 
-  useEffect(() => {
-    load();
-  }, [load]);
+  function openCreate() {
+    setEditing(null);
+    setFormOpen(true);
+  }
+
+  function openEdit(vehicle: Vehicle) {
+    setEditing(vehicle);
+    setFormOpen(true);
+  }
+
+  function handleDelete(vehicle: Vehicle) {
+    confirmDeleteVehicle(vehicle, async () => {
+      try {
+        const idToken = await getToken();
+        await vehicleModule.gateways.delete.exec({
+          idToken,
+          vehicleId: vehicle.id,
+        });
+        await refresh();
+      } catch (err: unknown) {
+        const message =
+          err instanceof Error ? err.message : "Erro ao excluir veículo.";
+        Alert.alert("Erro", message);
+      }
+    });
+  }
 
   if (loading) {
-    return (
-      <View className="flex-1 items-center justify-center bg-background">
-        <ActivityIndicator color="#1a237e" />
-      </View>
-    );
+    return <ScreenLoader message="Carregando frota..." />;
   }
 
   return (
-    <FlatList
-      className="flex-1 bg-background"
-      contentContainerStyle={{ padding: 20, gap: 12 }}
-      data={items}
-      keyExtractor={(v) => v.id}
-      refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={() => {
-            setRefreshing(true);
-            load();
-          }}
-        />
-      }
-      ListEmptyComponent={
-        <View className="items-center pt-10">
-          <Text className="text-sm text-muted-foreground">
-            {error ?? "Nenhum veículo cadastrado."}
-          </Text>
-        </View>
-      }
-      renderItem={({ item }) => (
-        <Card>
-          <View className="flex-row items-center justify-between">
-            <Text className="text-base font-semibold text-foreground">
-              {item.marca} {item.modelo}
-            </Text>
-            <Badge tone="primary">{item.placa}</Badge>
-          </View>
-          <View className="mt-3 flex-row flex-wrap gap-3">
-            <Stat label="Ano" value={String(item.ano)} />
-            <Stat label="Tanque" value={`${item.tamanhoTanque} L`} />
-            <Stat
-              label="Consumo"
-              value={`${item.consumoMedio.toFixed(1)} km/L`}
+    <View className="flex-1 bg-background" style={{ paddingTop: insets.top }}>
+      <ModuleHeader
+        eyebrow="Gestão de frota"
+        title="Veículos"
+        description="Cadastre, edite e remova veículos da frota."
+      />
+      <FlatList
+        className="flex-1"
+        data={filtered}
+        keyExtractor={(v) => v.id}
+        refreshing={refreshing}
+        onRefresh={refresh}
+        contentContainerStyle={{ padding: 20, gap: 12, paddingBottom: 100 }}
+        ListHeaderComponent={
+          <View className="mb-4 gap-y-4">
+            {error ? (
+              <Card>
+                <Text className="text-sm text-destructive">{error}</Text>
+              </Card>
+            ) : null}
+            <KpiGrid>
+              <KpiCard
+                label="Total"
+                value={vehicles.length}
+                unit="veículos"
+                icon="car-outline"
+              />
+              <KpiCard
+                label="Consumo médio"
+                value={
+                  vehicles.length
+                    ? (
+                        vehicles.reduce((s, v) => s + v.consumoMedio, 0) /
+                        vehicles.length
+                      ).toFixed(1)
+                    : "—"
+                }
+                unit="km/L"
+                icon="speedometer-outline"
+                tone="emerald"
+              />
+            </KpiGrid>
+            <Button onPress={openCreate}>Novo veículo</Button>
+            <SearchInput
+              value={query}
+              onChangeText={setQuery}
+              placeholder="Buscar por placa, marca ou modelo..."
             />
           </View>
-        </Card>
-      )}
-    />
-  );
-}
+        }
+        ListEmptyComponent={
+          <View className="items-center pt-8">
+            <Text className="text-sm text-muted-foreground">
+              {error ?? "Nenhum veículo encontrado."}
+            </Text>
+          </View>
+        }
+        renderItem={({ item }) => (
+          <VehicleCard
+            vehicle={item}
+            onEdit={() => openEdit(item)}
+            onDelete={() => handleDelete(item)}
+          />
+        )}
+      />
 
-function Stat({ label, value }: { label: string; value: string }) {
-  return (
-    <View>
-      <Text className="text-[11px] uppercase tracking-widest text-muted-foreground">
-        {label}
-      </Text>
-      <Text className="text-sm font-medium text-foreground">{value}</Text>
+      <VehicleFormSheet
+        visible={formOpen}
+        vehicle={editing}
+        onClose={() => setFormOpen(false)}
+        onSaved={() => refresh()}
+      />
     </View>
   );
 }
