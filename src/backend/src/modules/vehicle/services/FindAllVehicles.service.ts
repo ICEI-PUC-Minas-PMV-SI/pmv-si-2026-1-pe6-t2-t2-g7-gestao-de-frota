@@ -5,7 +5,7 @@ import { VehicleRepo } from '../repositories/vehicle/interface';
 export class FindAllVehiclesService {
   constructor(private readonly vehicleRepo: VehicleRepo) {}
 
-  async exec() {
-    return await this.vehicleRepo.findAll();
+  async exec(userId: number) {
+    return await this.vehicleRepo.findAllByUserId(userId);
   }
 }

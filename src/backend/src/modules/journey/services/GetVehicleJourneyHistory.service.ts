@@ -4,6 +4,7 @@ import { VehicleRepo } from '../../vehicle/repositories/vehicle/interface';
 
 export type GetVehicleJourneyHistoryInput = {
   vehicleId: string;
+  userId: number;
 };
 
 @Injectable()
@@ -14,7 +15,10 @@ export class GetVehicleJourneyHistoryService {
   ) {}
 
   async exec(input: GetVehicleJourneyHistoryInput) {
-    const vehicle = await this.vehicleRepo.findById(input.vehicleId);
+    const vehicle = await this.vehicleRepo.findByIdForUser(
+      input.vehicleId,
+      input.userId,
+    );
     if (!vehicle) {
       throw new NotFoundException('Veículo não encontrado.');
     }

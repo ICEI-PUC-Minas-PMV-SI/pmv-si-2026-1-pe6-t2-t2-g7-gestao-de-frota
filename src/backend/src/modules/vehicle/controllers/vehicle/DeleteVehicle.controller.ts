@@ -1,6 +1,8 @@
 import { Controller, Delete, HttpCode, Param } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { DeleteVehicleService } from '../../services/DeleteVehicle.service';
+import { UserContainer } from 'src/modules/commons/utils/getUserContainer';
+import { IUserContainer } from 'src/modules/commons/auth/auth.types';
 
 @Controller('vehicle')
 export class DeleteVehicleController {
@@ -11,7 +13,10 @@ export class DeleteVehicleController {
   @ApiResponse({ status: 204 })
   @ApiParam({ name: 'id', required: true })
   @HttpCode(204)
-  async exec(@Param('id') id: string): Promise<void> {
-    await this.deleteVehicle.exec(id);
+  async exec(
+    @Param('id') id: string,
+    @UserContainer() container: IUserContainer,
+  ): Promise<void> {
+    await this.deleteVehicle.exec(id, container.user.id);
   }
 }

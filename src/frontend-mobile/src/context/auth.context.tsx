@@ -5,10 +5,16 @@ import {
   useEffect,
   useState,
 } from "react";
+import { Platform } from "react-native";
+import * as WebBrowser from "expo-web-browser";
+import * as Google from "expo-auth-session/providers/google";
 import {
   AuthError,
+  GoogleAuthProvider,
   User,
   createUserWithEmailAndPassword,
+  signInWithCredential,
+  signInWithPopup,
   onIdTokenChanged,
   signInWithEmailAndPassword,
   signOut,
@@ -18,6 +24,8 @@ import { useRouter } from "expo-router";
 
 import { auth, skipFirebaseAuth } from "../config/firebase.config";
 import { userModule } from "../core/modules/users/users";
+
+WebBrowser.maybeCompleteAuthSession();
 
 interface AuthContextType {
   user: User | null;
@@ -42,7 +50,38 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(!skipFirebaseAuth);
   const router = useRouter();
 
-  const googleReady = false;
+  const googleWebClientId = process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID?.trim();
+  const googleIosClientId = process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID?.trim();
+  const googleAndroidClientId =
+    process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID?.trim();
+  const googleClientIdForPlatform = Platform.select({
+    web: googleWebClientId,
+    ios: googleIosClientId || googleWebClientId,
+    android: googleAndroidClientId || googleWebClientId,
+    default: googleWebClientId,
+  });
+  const googleClientIdFallback =
+    googleClientIdForPlatform ||
+    googleWebClientId ||
+    googleIosClientId ||
+    googleAndroidClientId ||
+    "missing-google-client-id";
+
+  const [googleRequest, , promptGoogleAsync] = Google.useAuthRequest({
+    clientId: googleClientIdFallback,
+    webClientId: googleWebClientId || googleClientIdFallback,
+    iosClientId: googleIosClientId || googleClientIdFallback,
+    androidClientId: googleAndroidClientId || googleClientIdFallback,
+    scopes: ["openid", "profile", "email"],
+  });
+
+  const googleReady =
+    Platform.OS === "web"
+      ? !skipFirebaseAuth && Boolean(auth)
+      : !skipFirebaseAuth &&
+          Boolean(auth) &&
+          Boolean(googleRequest) &&
+          Boolean(googleClientIdForPlatform);
 
   useEffect(() => {
     if (skipFirebaseAuth || !auth) return;
@@ -72,7 +111,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           // sync opcional em modo sem Firebase
         }
       }
-      router.replace("/(app)/homepage");
+      router.replace("/(app)/vehicles");
       return;
     }
     if (!auth) throw new Error("Firebase não configurado.");
@@ -81,7 +120,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const idToken = await auth.currentUser?.getIdToken();
       if (!idToken) throw new Error("Could not collect idToken!");
       await userModule.gateways.sync.exec({ idToken });
-      router.replace("/(app)/homepage");
+      router.replace("/(app)/vehicles");
     } catch (err) {
       const error = err as AuthError;
       throw new Error(getAuthErrorMessage(error.code));
@@ -104,7 +143,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           // sync opcional em modo sem Firebase
         }
       }
-      router.replace("/(app)/homepage");
+      router.replace("/(app)/vehicles");
       return;
     }
     if (!auth) throw new Error("Firebase não configurado.");
@@ -118,7 +157,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const idToken = await auth.currentUser?.getIdToken();
       if (!idToken) throw new Error("Could not collect idToken!");
       await userModule.gateways.sync.exec({ idToken, name });
-      router.replace("/(app)/homepage");
+      router.replace("/(app)/vehicles");
     } catch (err) {
       const error = err as AuthError;
       throw new Error(getAuthErrorMessage(error.code));
@@ -126,7 +165,68 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   async function signInWithGoogle() {
-    throw new Error("Login com Google desativado neste protótipo.");
+    if (skipFirebaseAuth) {
+      throw new Error("Login com Google indisponível com Firebase desativado.");
+    }
+    if (!auth) throw new Error("Firebase não configurado.");
+
+    if (Platform.OS === "web") {
+      try {
+        await signInWithPopup(auth, new GoogleAuthProvider());
+
+        const firebaseIdToken = await auth.currentUser?.getIdToken();
+        if (!firebaseIdToken) throw new Error("Could not collect idToken!");
+
+        await userModule.gateways.sync.exec({ idToken: firebaseIdToken });
+        router.replace("/(app)/vehicles");
+        return;
+      } catch (err) {
+        const error = err as AuthError | Error;
+        if ("code" in error && typeof error.code === "string") {
+          throw new Error(getAuthErrorMessage(error.code));
+        }
+        throw new Error(error.message || "Ocorreu um erro. Tente novamente.");
+      }
+    }
+
+    if (!googleRequest) {
+      throw new Error("Login com Google ainda não está pronto.");
+    }
+
+    if (!googleClientIdForPlatform) {
+      throw new Error(
+        Platform.OS === "web"
+          ? "Configure EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID para usar Google na web."
+          : "Configure o client ID Google da plataforma atual e, preferencialmente, também o EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID.",
+      );
+    }
+
+    try {
+      const result = await promptGoogleAsync();
+      if (result.type !== "success") {
+        throw new Error("Login com Google cancelado.");
+      }
+
+      const idToken = result.params.id_token;
+      if (!idToken) {
+        throw new Error("Google não retornou id_token.");
+      }
+
+      const credential = GoogleAuthProvider.credential(idToken);
+      await signInWithCredential(auth, credential);
+
+      const firebaseIdToken = await auth.currentUser?.getIdToken();
+      if (!firebaseIdToken) throw new Error("Could not collect idToken!");
+
+      await userModule.gateways.sync.exec({ idToken: firebaseIdToken });
+      router.replace("/(app)/vehicles");
+    } catch (err) {
+      const error = err as AuthError | Error;
+      if ("code" in error && typeof error.code === "string") {
+        throw new Error(getAuthErrorMessage(error.code));
+      }
+      throw new Error(error.message || "Ocorreu um erro. Tente novamente.");
+    }
   }
 
   async function logout() {

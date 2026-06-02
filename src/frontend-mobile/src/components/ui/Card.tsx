@@ -6,7 +6,7 @@ type Props = ViewProps & { children: ReactNode };
 export function Card({ children, className, ...rest }: Props & { className?: string }) {
   return (
     <View
-      className={`rounded-xl border border-border bg-card p-5 ${className ?? ""}`}
+      className={`rounded-2xl border border-border bg-card p-5 ${className ?? ""}`}
       {...rest}
     >
       {children}

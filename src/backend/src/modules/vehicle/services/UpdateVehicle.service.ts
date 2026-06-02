@@ -10,14 +10,14 @@ import {
 export class UpdateVehicleService {
   constructor(private readonly vehicleRepo: VehicleRepo) {}
 
-  async exec(vehicle: VehicleModelUpdateInput) {
+  async exec(vehicle: VehicleModelUpdateInput, userId: number) {
     if (vehicle.placa !== undefined) {
       validatePlacaMercosul(vehicle.placa);
     }
     if (vehicle.ano !== undefined) {
       validateAnoQuatroDigitos(vehicle.ano);
     }
-    const existing = await this.vehicleRepo.findById(vehicle.id);
+    const existing = await this.vehicleRepo.findByIdForUser(vehicle.id, userId);
     if (!existing) {
       throw new NotFoundException('Veículo não encontrado.');
     }

@@ -3,6 +3,8 @@ import { ApiBody, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { UpdateVehicleRequestDto } from '../../dtos/vehicle/UpdateRequest.dto';
 import { GetVehicleResponseDto } from '../../dtos/vehicle/GetResponse.dto';
 import { UpdateVehicleService } from '../../services/UpdateVehicle.service';
+import { UserContainer } from 'src/modules/commons/utils/getUserContainer';
+import { IUserContainer } from 'src/modules/commons/auth/auth.types';
 
 @Controller('vehicle')
 export class UpdateVehicleController {
@@ -17,21 +19,25 @@ export class UpdateVehicleController {
   async exec(
     @Body() body: UpdateVehicleRequestDto,
     @Param('id') id: string,
+    @UserContainer() container: IUserContainer,
   ): Promise<GetVehicleResponseDto> {
-    const vehicle = await this.updateVehicle.exec({
-      id,
-      ...(body.marca !== undefined && { marca: body.marca }),
-      ...(body.modelo !== undefined && { modelo: body.modelo }),
-      ...(body.ano !== undefined && { ano: body.ano }),
-      ...(body.placa !== undefined && { placa: body.placa }),
-      ...(body.fotoUrl !== undefined && { fotoUrl: body.fotoUrl }),
-      ...(body.tamanhoTanque !== undefined && {
-        tamanhoTanque: body.tamanhoTanque,
-      }),
-      ...(body.consumoMedio !== undefined && {
-        consumoMedio: body.consumoMedio,
-      }),
-    });
+    const vehicle = await this.updateVehicle.exec(
+      {
+        id,
+        ...(body.marca !== undefined && { marca: body.marca }),
+        ...(body.modelo !== undefined && { modelo: body.modelo }),
+        ...(body.ano !== undefined && { ano: body.ano }),
+        ...(body.placa !== undefined && { placa: body.placa }),
+        ...(body.fotoUrl !== undefined && { fotoUrl: body.fotoUrl }),
+        ...(body.tamanhoTanque !== undefined && {
+          tamanhoTanque: body.tamanhoTanque,
+        }),
+        ...(body.consumoMedio !== undefined && {
+          consumoMedio: body.consumoMedio,
+        }),
+      },
+      container.user.id,
+    );
     return vehicle.toJSON();
   }
 }

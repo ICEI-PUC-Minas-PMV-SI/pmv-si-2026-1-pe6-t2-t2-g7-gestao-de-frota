@@ -19,7 +19,10 @@ export class CreateJourneyService {
   ) {}
 
   async exec(input: CreateJourneyInput) {
-    const vehicle = await this.vehicleRepo.findById(input.vehicleId);
+    const vehicle = await this.vehicleRepo.findByIdForUser(
+      input.vehicleId,
+      input.userId,
+    );
     if (!vehicle) {
       throw new NotFoundException('Veículo não encontrado.');
     }

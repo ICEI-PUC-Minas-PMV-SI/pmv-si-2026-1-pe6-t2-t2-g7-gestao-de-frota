@@ -25,15 +25,36 @@ export default function AppLayout() {
         headerShown: true,
         tabBarActiveTintColor: "#1a237e",
         tabBarInactiveTintColor: "#94a3b8",
-        headerTitleStyle: { color: "#1e293b" },
+        headerStyle: {
+          backgroundColor: "#f8fafc",
+        },
+        headerShadowVisible: false,
+        headerTitleStyle: {
+          color: "#1e293b",
+          fontWeight: "700",
+        },
+        sceneStyle: {
+          backgroundColor: "#f8fafc",
+        },
+        tabBarStyle: {
+          backgroundColor: "#ffffff",
+          borderTopColor: "#cbd5e1",
+          height: 72,
+          paddingTop: 8,
+          paddingBottom: 10,
+        },
+        tabBarLabelStyle: {
+          fontSize: 11,
+          fontWeight: "600",
+        },
       }}
     >
       <Tabs.Screen
-        name="homepage"
+        name="vehicles"
         options={{
-          title: "Início",
+          title: "Meus veículos",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home-outline" color={color} size={size} />
+            <Ionicons name="car-sport-outline" color={color} size={size} />
           ),
         }}
       />
@@ -47,20 +68,11 @@ export default function AppLayout() {
         }}
       />
       <Tabs.Screen
-        name="vehicles"
+        name="members"
         options={{
-          title: "Veículos",
+          title: "Membros",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="car-outline" color={color} size={size} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="incidents"
-        options={{
-          title: "Incidentes",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="alert-circle-outline" color={color} size={size} />
+            <Ionicons name="people-outline" color={color} size={size} />
           ),
         }}
       />
@@ -71,6 +83,42 @@ export default function AppLayout() {
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="person-outline" color={color} size={size} />
           ),
+        }}
+      />
+      <Tabs.Screen
+        name="homepage"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="incidents"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="vehicle/[id]"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="vehicles/[id]"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="vehicle/[id]/incidents"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="vehicle/[id]/journeys"
+        options={{
+          href: null,
         }}
       />
     </Tabs>

@@ -3,8 +3,8 @@ import { Text, View } from "react-native";
 type Tone = "neutral" | "primary" | "success" | "warning" | "destructive";
 
 const tones: Record<Tone, string> = {
-  neutral: "bg-muted",
-  primary: "bg-accent",
+  neutral: "bg-muted border border-border",
+  primary: "bg-accent border border-[#bfdbfe]",
   success: "bg-[#dcfce7]",
   warning: "bg-[#fef3c7]",
   destructive: "bg-[#fee2e2]",
@@ -27,7 +27,7 @@ export function Badge({
 }) {
   return (
     <View className={`self-start rounded-full px-2.5 py-1 ${tones[tone]}`}>
-      <Text className={`text-[11px] font-semibold ${textTones[tone]}`}>
+      <Text className={`text-[11px] font-semibold uppercase tracking-[0.12em] ${textTones[tone]}`}>
         {children}
       </Text>
     </View>

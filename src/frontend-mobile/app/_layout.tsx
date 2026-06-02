@@ -3,6 +3,7 @@ import "../global.css";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { AuthProvider } from "../src/context/auth.context";
+import { ToastViewport } from "../src/components/ui/ToastViewport";
 
 export default function RootLayout() {
   return (
@@ -14,6 +15,7 @@ export default function RootLayout() {
         <Stack.Screen name="signup" />
         <Stack.Screen name="(app)" />
       </Stack>
+      <ToastViewport />
     </AuthProvider>
   );
 }

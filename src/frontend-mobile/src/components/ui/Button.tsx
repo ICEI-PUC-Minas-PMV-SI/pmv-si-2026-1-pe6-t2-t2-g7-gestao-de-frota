@@ -13,10 +13,10 @@ type Props = {
 };
 
 const containerByVariant: Record<Variant, string> = {
-  primary: "bg-primary",
-  secondary: "bg-secondary",
+  primary: "bg-primary border border-primary",
+  secondary: "bg-secondary border border-secondary",
   outline: "bg-card border border-border",
-  destructive: "bg-destructive",
+  destructive: "bg-destructive border border-destructive",
   ghost: "bg-transparent",
 };
 
@@ -41,14 +41,14 @@ export function Button({
     <Pressable
       onPress={onPress}
       disabled={isDisabled}
-      className={`flex-row items-center justify-center rounded-lg px-4 py-3 ${containerByVariant[variant]} ${isDisabled ? "opacity-50" : ""}`}
+      className={`min-h-[48px] flex-row items-center justify-center rounded-xl px-4 py-3 ${containerByVariant[variant]} ${isDisabled ? "opacity-50" : ""}`}
     >
       {loading ? (
         <ActivityIndicator color={variant === "primary" || variant === "destructive" ? "#f8fafc" : "#1a237e"} />
       ) : (
         <>
           {leftIcon}
-          <Text className={`text-sm font-medium ${textByVariant[variant]} ${leftIcon ? "ml-2" : ""}`}>
+          <Text className={`text-sm font-semibold ${textByVariant[variant]} ${leftIcon ? "ml-2" : ""}`}>
             {children}
           </Text>
         </>

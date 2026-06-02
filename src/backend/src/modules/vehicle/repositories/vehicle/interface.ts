@@ -5,5 +5,10 @@ export abstract class VehicleRepo {
   abstract update(vehicle: VehicleModel): Promise<VehicleModel>;
   abstract delete(id: string): Promise<void>;
   abstract findById(id: string): Promise<VehicleModel | null>;
+  abstract findByIdForUser(
+    id: string,
+    userId: number,
+  ): Promise<VehicleModel | null>;
   abstract findAll(): Promise<VehicleModel[]>;
+  abstract findAllByUserId(userId: number): Promise<VehicleModel[]>;
 }

@@ -22,7 +22,9 @@ Aplicativo móvel do projeto Gestão de Frota construído com **Expo Router** + 
    ```
    - `EXPO_PUBLIC_API_URL` deve apontar para o IP da máquina rodando o backend acessível pelo celular (não use `localhost` em dispositivo físico).
    - As `EXPO_PUBLIC_FIREBASE_*` são as mesmas usadas em `src/frontend/.env.local`.
-   - Os `EXPO_PUBLIC_GOOGLE_*_CLIENT_ID` vêm do Firebase Console → Authentication → Sign-in method → Google → OAuth client IDs (Web, iOS, Android).
+   - O frontend web usa apenas `NEXT_PUBLIC_FIREBASE_*`; o backend valida o `idToken` do Firebase e sincroniza o usuário em `POST /account/sync`.
+   - Para Google no mobile, preencha `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID` e, preferencialmente, também `EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID` e `EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID`.
+   - Esses client IDs vêm do Firebase Console → Authentication → Sign-in method → Google → OAuth client IDs.
 
 2. Instale dependências:
    ```sh
@@ -80,3 +82,5 @@ O app consome `${EXPO_PUBLIC_API_URL}/...`. Endpoints utilizados:
 - `PATCH /journey/:id/complete` — finaliza jornada
 
 A autenticação é via JWT do Firebase enviado em `Authorization: Bearer <idToken>`.
+
+No fluxo Google, não existe rota especial dedicada no backend: o mobile autentica no Google/Firebase, obtém o `idToken` Firebase e chama o mesmo `POST /account/sync` usado pelo frontend web.
