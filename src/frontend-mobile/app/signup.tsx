@@ -60,6 +60,7 @@ export default function SignupScreen() {
         <View className="gap-y-4">
           <AuthField
             label="Nome"
+            nativeID="signup-name"
             placeholder="Seu nome completo"
             autoComplete="name"
             value={name}
@@ -67,6 +68,7 @@ export default function SignupScreen() {
           />
           <AuthField
             label="E-mail"
+            nativeID="signup-email"
             placeholder="voce@exemplo.com"
             autoCapitalize="none"
             autoComplete="email"
@@ -76,6 +78,7 @@ export default function SignupScreen() {
           />
           <AuthField
             label="Senha"
+            nativeID="signup-password"
             placeholder="Mínimo 6 caracteres"
             secureTextEntry
             autoComplete="new-password"
@@ -84,6 +87,7 @@ export default function SignupScreen() {
           />
           <AuthField
             label="Confirmar senha"
+            nativeID="signup-password-confirm"
             placeholder="••••••••"
             secureTextEntry
             autoComplete="new-password"

@@ -1,4 +1,4 @@
-import { Text, TextInput, TextInputProps, View } from "react-native";
+import { Platform, Text, TextInput, TextInputProps, View } from "react-native";
 
 type Props = TextInputProps & {
   label?: string;
@@ -14,6 +14,9 @@ export function Input({ label, ...props }: Props) {
       ) : null}
       <TextInput
         placeholderTextColor="#94a3b8"
+        {...(Platform.OS === "web"
+          ? ({ readOnly: false, "aria-disabled": false } as const)
+          : {})}
         className="min-h-[52px] rounded-2xl border border-border bg-background px-4 py-3.5 text-base text-foreground"
         {...props}
       />

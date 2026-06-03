@@ -1,4 +1,4 @@
-import { Text, TextInput, TextInputProps, View } from "react-native";
+import { Platform, Text, TextInput, TextInputProps, View } from "react-native";
 
 type AuthFieldProps = TextInputProps & {
   label: string;
@@ -13,6 +13,9 @@ export function AuthField({ label, error, ...props }: AuthFieldProps) {
       </Text>
       <TextInput
         placeholderTextColor="#94a3b8"
+        {...(Platform.OS === "web"
+          ? ({ readOnly: false, "aria-disabled": false } as const)
+          : {})}
         className={`rounded-2xl border bg-background px-4 py-3.5 text-base text-foreground ${
           error
             ? "border-red-500/60 bg-red-500/5"

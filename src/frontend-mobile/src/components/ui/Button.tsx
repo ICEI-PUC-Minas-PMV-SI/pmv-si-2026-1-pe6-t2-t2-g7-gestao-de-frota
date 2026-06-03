@@ -45,6 +45,7 @@ export function Button({
     <Pressable
       onPress={onPress}
       disabled={isDisabled}
+      accessibilityRole="button"
       style={style}
       className={`min-h-[48px] flex-row items-center justify-center rounded-xl px-4 py-3 ${containerByVariant[variant]} ${isDisabled ? "opacity-50" : ""} ${className ?? ""}`}
     >

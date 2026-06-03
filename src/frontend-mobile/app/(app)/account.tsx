@@ -192,6 +192,7 @@ export default function AccountScreen() {
         <View className="gap-y-4">
           <Input
             label="Nome completo"
+            nativeID="account-name"
             placeholder="Como você quer ser chamado(a)"
             value={displayName}
             onChangeText={setDisplayName}

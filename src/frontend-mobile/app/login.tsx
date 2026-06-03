@@ -54,6 +54,7 @@ export default function LoginScreen() {
         <View className="gap-y-4">
           <AuthField
             label="E-mail"
+            nativeID="login-email"
             placeholder="voce@exemplo.com"
             autoCapitalize="none"
             autoComplete="email"
@@ -63,6 +64,7 @@ export default function LoginScreen() {
           />
           <AuthField
             label="Senha"
+            nativeID="login-password"
             placeholder="••••••••"
             secureTextEntry
             autoComplete="password"

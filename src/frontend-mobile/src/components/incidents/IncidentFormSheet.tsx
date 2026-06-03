@@ -223,6 +223,7 @@ export function IncidentFormSheet({
         />
         <Input
           label="Descrição"
+          nativeID="incident-descricao"
           value={descricao}
           onChangeText={setDescricao}
           placeholder="Descreva o ocorrido..."
@@ -239,17 +240,20 @@ export function IncidentFormSheet({
           <>
             <Input
               label="Código da infração"
+              nativeID="incident-codigoInfracao"
               value={codigoInfracao}
               onChangeText={setCodigoInfracao}
               placeholder="Ex.: 745-50"
             />
             <CurrencyInput
               label="Valor (R$)"
+              nativeID="incident-valor"
               value={valor}
               onChangeValue={setValor}
             />
             <Input
               label="Local da infração"
+              nativeID="incident-localInfracao"
               value={localInfracao}
               onChangeText={setLocalInfracao}
               placeholder="Onde ocorreu a multa"
