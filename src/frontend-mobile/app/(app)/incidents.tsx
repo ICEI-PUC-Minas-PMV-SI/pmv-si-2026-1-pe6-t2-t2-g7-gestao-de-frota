@@ -138,7 +138,7 @@ export default function IncidentsScreen() {
         <FlatList
           data={filtered}
           keyExtractor={(item) => item.id}
-          contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 24 }}
+          contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 16 }}
           refreshControl={
             <RefreshControl
               refreshing={refreshing}

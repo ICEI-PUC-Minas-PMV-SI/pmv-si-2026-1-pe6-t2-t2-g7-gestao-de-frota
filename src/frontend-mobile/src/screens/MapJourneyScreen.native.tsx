@@ -3,7 +3,7 @@ import { ActivityIndicator, Text, View } from "react-native";
 import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from "react-native-maps";
 import type { default as MapViewType } from "react-native-maps";
 import { JourneyMapOverlay } from "../components/map/JourneyMapOverlay";
-import { VehicleMapMarker } from "../components/map/VehicleMapMarker";
+import { MapVehicleMarker as VehicleMapMarker } from "../components/map/VehicleMapMarker";
 import { useMapJourney } from "../hooks/useMapJourney";
 
 export default function MapJourneyScreen() {

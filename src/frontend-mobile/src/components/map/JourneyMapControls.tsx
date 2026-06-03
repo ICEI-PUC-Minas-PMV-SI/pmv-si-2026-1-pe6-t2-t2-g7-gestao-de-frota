@@ -1,4 +1,5 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { useTheme } from "../../context/theme.context";
 import type { RoutePreviewStatus } from "../../hooks/useMapJourney";
@@ -84,24 +85,22 @@ export function JourneyMapControls({
               </Button>
             </View>
             <View style={styles.actionCell}>
-              <Button
-                variant="outline"
-                className="w-full"
+              <TonedActionButton
+                label="Desfazer"
+                icon="arrow-undo"
+                tone="undo"
                 onPress={onUndoPlannedStop}
                 disabled={plannedStopsCount === 0 || busy}
-              >
-                Desfazer
-              </Button>
+              />
             </View>
             <View style={styles.actionCell}>
-              <Button
-                variant="outline"
-                className="w-full"
+              <TonedActionButton
+                label="Limpar"
+                icon="trash-outline"
+                tone="clear"
                 onPress={onClearPlannedStops}
                 disabled={plannedStopsCount === 0 || busy}
-              >
-                Limpar
-              </Button>
+              />
             </View>
           </View>
           <Button
@@ -119,6 +118,45 @@ export function JourneyMapControls({
         </Button>
       )}
     </View>
+  );
+}
+
+type TonedActionButtonProps = {
+  label: string;
+  icon: keyof typeof Ionicons.glyphMap;
+  tone: "undo" | "clear";
+  onPress: () => void;
+  disabled?: boolean;
+};
+
+function TonedActionButton({
+  label,
+  icon,
+  tone,
+  onPress,
+  disabled,
+}: TonedActionButtonProps) {
+  const isUndo = tone === "undo";
+
+  return (
+    <Pressable
+      onPress={onPress}
+      disabled={disabled}
+      style={[
+        styles.tonedBtn,
+        isUndo ? styles.undoBtn : styles.clearBtn,
+        disabled ? styles.tonedBtnDisabled : null,
+      ]}
+    >
+      <Ionicons
+        name={icon}
+        size={16}
+        color={isUndo ? "#a16207" : "#b91c1c"}
+      />
+      <Text style={[styles.tonedBtnText, isUndo ? styles.undoText : styles.clearText]}>
+        {label}
+      </Text>
+    </Pressable>
   );
 }
 
@@ -159,5 +197,38 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     flexShrink: 1,
     minWidth: "30%",
+  },
+  tonedBtn: {
+    minHeight: 48,
+    width: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 12,
+    borderWidth: 1,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    gap: 6,
+  },
+  undoBtn: {
+    backgroundColor: "#fef9c3",
+    borderColor: "#fde68a",
+  },
+  clearBtn: {
+    backgroundColor: "#fee2e2",
+    borderColor: "#fecaca",
+  },
+  tonedBtnText: {
+    fontSize: 14,
+    fontWeight: "600",
+  },
+  undoText: {
+    color: "#a16207",
+  },
+  clearText: {
+    color: "#b91c1c",
+  },
+  tonedBtnDisabled: {
+    opacity: 0.5,
   },
 });

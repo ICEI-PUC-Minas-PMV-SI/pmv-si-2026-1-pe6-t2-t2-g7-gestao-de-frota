@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import {
   ActivityIndicator,
   FlatList,
@@ -11,11 +11,18 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { useTabScreenBottomInset } from "../../src/components/layout/useTabScreenBottomInset";
+
 import { Badge } from "../../src/components/ui/Badge";
 import { BottomSheetModal } from "../../src/components/ui/BottomSheetModal";
 import { Button } from "../../src/components/ui/Button";
 import { Card } from "../../src/components/ui/Card";
 import { Input } from "../../src/components/ui/Input";
+import {
+  confirmDeleteVehicle,
+  VehicleFormSheet,
+} from "../../src/components/vehicles/VehicleFormSheet";
+import { VehicleDetailSheet } from "../../src/components/vehicles/VehicleDetailSheet";
 import {
   incidentModule,
   Incident,
@@ -26,7 +33,6 @@ import { vehicleModule, Vehicle } from "../../src/core/modules/vehicles/vehicles
 import { useAuthorizedToken } from "../../src/hooks/useAuthorizedToken";
 import { notifySuccess, showToast } from "../../src/components/ui/toast";
 import { getApiErrorMessage } from "../../src/utils/apiError";
-import { validateVehicleForm } from "../../src/utils/vehicleValidation";
 
 const incidentTypes: IncidentType[] = ["sinistro", "multa"];
 const incidentSeverityOptions: IncidentSeverity[] = [
@@ -37,16 +43,6 @@ const incidentSeverityOptions: IncidentSeverity[] = [
 ];
 const VEHICLE_PAGE_SIZE = 3;
 
-type VehicleFormState = {
-  marca: string;
-  modelo: string;
-  ano: string;
-  placa: string;
-  fotoUrl: string;
-  tamanhoTanque: string;
-  consumoMedio: string;
-};
-
 type IncidentFormState = {
   vehicleId: string | null;
   tipo: IncidentType;
@@ -54,16 +50,6 @@ type IncidentFormState = {
   descricao: string;
   valor: string;
   local: string;
-};
-
-const vehicleInitialState: VehicleFormState = {
-  marca: "",
-  modelo: "",
-  ano: "",
-  placa: "",
-  fotoUrl: "",
-  tamanhoTanque: "",
-  consumoMedio: "",
 };
 
 const incidentInitialState: IncidentFormState = {
@@ -77,20 +63,29 @@ const incidentInitialState: IncidentFormState = {
 
 export default function VehiclesScreen() {
   const insets = useSafeAreaInsets();
+  const bottomInset = useTabScreenBottomInset();
   const router = useRouter();
+  const { openVehicle, view } = useLocalSearchParams<{
+    openVehicle?: string;
+    view?: string;
+  }>();
   const getToken = useAuthorizedToken();
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [incidents, setIncidents] = useState<Incident[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [screenError, setScreenError] = useState<string | null>(null);
-  const [vehicleForm, setVehicleForm] = useState<VehicleFormState>(vehicleInitialState);
   const [incidentForm, setIncidentForm] = useState<IncidentFormState>(incidentInitialState);
-  const [savingVehicle, setSavingVehicle] = useState(false);
   const [savingIncident, setSavingIncident] = useState(false);
   const [visibleVehicleCount, setVisibleVehicleCount] = useState(VEHICLE_PAGE_SIZE);
-  const [createOpen, setCreateOpen] = useState(false);
+  const [vehicleFormOpen, setVehicleFormOpen] = useState(false);
+  const [editingVehicle, setEditingVehicle] = useState<Vehicle | null>(null);
+  const [deletingVehicleId, setDeletingVehicleId] = useState<string | null>(null);
   const [incidentModalVehicle, setIncidentModalVehicle] = useState<Vehicle | null>(null);
+  const [detailVehicle, setDetailVehicle] = useState<Vehicle | null>(null);
+  const [detailSubView, setDetailSubView] = useState<"incidents" | "journeys" | null>(
+    null,
+  );
 
   const load = useCallback(async () => {
     try {
@@ -115,38 +110,49 @@ export default function VehiclesScreen() {
     load();
   }, [load]);
 
-  async function onCreateVehicle() {
-    const payload = {
-      marca: vehicleForm.marca.trim(),
-      modelo: vehicleForm.modelo.trim(),
-      ano: Number(vehicleForm.ano),
-      placa: vehicleForm.placa.trim().toUpperCase(),
-      fotoUrl: vehicleForm.fotoUrl.trim(),
-      tamanhoTanque: Number(vehicleForm.tamanhoTanque),
-      consumoMedio: Number(vehicleForm.consumoMedio),
-    };
+  useEffect(() => {
+    if (!openVehicle || loading) return;
 
-    const validationError = validateVehicleForm(payload);
-    if (validationError) {
-      showToast({ message: validationError, tone: "error" });
-      return;
+    const match = vehicles.find((item) => item.id === openVehicle);
+    if (match) {
+      setDetailVehicle(match);
+      if (view === "incidents" || view === "journeys") {
+        setDetailSubView(view);
+      }
     }
 
-    setSavingVehicle(true);
+    router.replace("/(app)/vehicles");
+  }, [openVehicle, view, loading, vehicles, router]);
+
+  function openVehicleDetail(vehicle: Vehicle) {
+    setDetailSubView(null);
+    setDetailVehicle(vehicle);
+  }
+
+  function closeVehicleDetail() {
+    setDetailVehicle(null);
+    setDetailSubView(null);
+  }
+
+  function openVehicleForm(vehicle: Vehicle | null) {
+    setEditingVehicle(vehicle);
+    setVehicleFormOpen(true);
+  }
+
+  async function onDeleteVehicle(vehicle: Vehicle) {
+    setDeletingVehicleId(vehicle.id);
     try {
       const idToken = await getToken();
-      await vehicleModule.gateways.create.exec({
+      await vehicleModule.gateways.delete.exec({
         idToken,
-        ...payload,
+        vehicleId: vehicle.id,
       });
-      setVehicleForm(vehicleInitialState);
-      setCreateOpen(false);
-      notifySuccess("Veículo cadastrado com sucesso.");
+      notifySuccess("Veículo excluído com sucesso.");
       await load();
     } catch {
-      // Toast exibido pelo AxiosAdapter (mensagem de negócio da API).
+      // Toast exibido pelo AxiosAdapter.
     } finally {
-      setSavingVehicle(false);
+      setDeletingVehicleId(null);
     }
   }
 
@@ -207,6 +213,7 @@ export default function VehiclesScreen() {
         contentContainerStyle={{
           padding: 20,
           paddingTop: 20 + insets.top,
+          paddingBottom: bottomInset,
           gap: 20,
         }}
         data={vehicles.slice(0, visibleVehicleCount)}
@@ -251,7 +258,7 @@ export default function VehiclesScreen() {
                     Cadastre placa, foto e consumo.
                   </Text>
                 </View>
-                <Button onPress={() => setCreateOpen(true)}>Novo veículo</Button>
+                <Button onPress={() => openVehicleForm(null)}>Novo veículo</Button>
               </View>
             </Card>
 
@@ -317,7 +324,7 @@ export default function VehiclesScreen() {
                 <View className="flex-1">
                   <Button
                     variant="outline"
-                    onPress={() => router.push(`/(app)/vehicle/${vehicle.id}`)}
+                    onPress={() => openVehicleDetail(vehicle)}
                   >
                     Abrir veículo
                   </Button>
@@ -338,10 +345,30 @@ export default function VehiclesScreen() {
                 </View>
               </View>
 
+              <View className="flex-row gap-3">
+                <View className="flex-1">
+                  <Button variant="outline" onPress={() => openVehicleForm(vehicle)}>
+                    Editar
+                  </Button>
+                </View>
+                <View className="flex-1">
+                  <Button
+                    variant="destructive"
+                    loading={deletingVehicleId === vehicle.id}
+                    disabled={Boolean(deletingVehicleId)}
+                    onPress={() =>
+                      confirmDeleteVehicle(vehicle, () => void onDeleteVehicle(vehicle))
+                    }
+                  >
+                    Excluir
+                  </Button>
+                </View>
+              </View>
+
               <Text className="text-sm text-muted-foreground">
                 {vehicleIncidents.length === 0
                   ? "Nenhum incidente registrado."
-                  : `${vehicleIncidents.length} incidente(s) registrado(s). Veja tudo na página do veículo.`}
+                  : `${vehicleIncidents.length} incidente(s) registrado(s). Abra o veículo para ver tudo.`}
               </Text>
             </View>
           </Card>
@@ -349,79 +376,19 @@ export default function VehiclesScreen() {
         }}
       />
 
-      <BottomSheetModal
-        open={createOpen}
-        onClose={() => setCreateOpen(false)}
-        title="Criar veículo"
-        description="Cadastre um veículo próprio com imagem pública."
-      >
-        <View className="gap-y-4">
-          <Input
-            label="Marca"
-            placeholder="Fiat"
-            value={vehicleForm.marca}
-            onChangeText={(value) =>
-              setVehicleForm((current) => ({ ...current, marca: value }))
-            }
-          />
-          <Input
-            label="Modelo"
-            placeholder="Uno"
-            value={vehicleForm.modelo}
-            onChangeText={(value) =>
-              setVehicleForm((current) => ({ ...current, modelo: value }))
-            }
-          />
-          <Input
-            label="Ano"
-            placeholder="2022"
-            keyboardType="number-pad"
-            value={vehicleForm.ano}
-            onChangeText={(value) =>
-              setVehicleForm((current) => ({ ...current, ano: value }))
-            }
-          />
-          <Input
-            label="Placa"
-            placeholder="ABC1D23"
-            autoCapitalize="characters"
-            value={vehicleForm.placa}
-            onChangeText={(value) =>
-              setVehicleForm((current) => ({ ...current, placa: value }))
-            }
-          />
-          <Input
-            label="Foto URL"
-            placeholder="https://..."
-            autoCapitalize="none"
-            value={vehicleForm.fotoUrl}
-            onChangeText={(value) =>
-              setVehicleForm((current) => ({ ...current, fotoUrl: value }))
-            }
-          />
-          <Input
-            label="Tanque (L)"
-            placeholder="55"
-            keyboardType="decimal-pad"
-            value={vehicleForm.tamanhoTanque}
-            onChangeText={(value) =>
-              setVehicleForm((current) => ({ ...current, tamanhoTanque: value }))
-            }
-          />
-          <Input
-            label="Consumo médio (km/L)"
-            placeholder="12.5"
-            keyboardType="decimal-pad"
-            value={vehicleForm.consumoMedio}
-            onChangeText={(value) =>
-              setVehicleForm((current) => ({ ...current, consumoMedio: value }))
-            }
-          />
-          <Button onPress={onCreateVehicle} loading={savingVehicle}>
-            Salvar veículo
-          </Button>
-        </View>
-      </BottomSheetModal>
+      <VehicleFormSheet
+        visible={vehicleFormOpen}
+        vehicle={editingVehicle}
+        onClose={() => setVehicleFormOpen(false)}
+        onSaved={load}
+      />
+
+      <VehicleDetailSheet
+        open={Boolean(detailVehicle)}
+        vehicle={detailVehicle}
+        initialSubView={detailSubView}
+        onClose={closeVehicleDetail}
+      />
 
       <BottomSheetModal
         open={Boolean(incidentModalVehicle)}

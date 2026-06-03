@@ -7,7 +7,7 @@ export const palettes = {
     tabActive: "#1a237e",
     tabInactive: "#94a3b8",
     tabBar: "#ffffff",
-    tabBarBorder: "#cbd5e1",
+    tabBarBorder: "#94a3b8",
     headerBg: "#f8fafc",
     headerTitle: "#1e293b",
     sceneBg: "#f8fafc",

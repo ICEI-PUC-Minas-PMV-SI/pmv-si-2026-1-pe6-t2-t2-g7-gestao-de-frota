@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { useTabScreenBottomInset } from "../../src/components/layout/useTabScreenBottomInset";
+
 import { BottomSheetModal } from "../../src/components/ui/BottomSheetModal";
 import { Badge } from "../../src/components/ui/Badge";
 import { Button } from "../../src/components/ui/Button";
@@ -34,6 +36,7 @@ function ReadOnlyRow({ label, value }: { label: string; value: string }) {
 
 export default function AccountScreen() {
   const insets = useSafeAreaInsets();
+  const bottomInset = useTabScreenBottomInset();
   const { user, logout } = useAuth();
   const { profile, loading, error, saveName, reload } = useAccountProfile(
     user?.displayName,
@@ -71,7 +74,7 @@ export default function AccountScreen() {
   return (
     <ScrollView
       className="flex-1 bg-background"
-      contentContainerStyle={{ paddingTop: insets.top, paddingBottom: 24 }}
+      contentContainerStyle={{ paddingTop: insets.top, paddingBottom: bottomInset }}
     >
       <View className="gap-y-4 px-5 py-5">
         <View className="gap-y-2 px-1">

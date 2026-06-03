@@ -2,6 +2,8 @@ import { ReactNode } from "react";
 import { RefreshControl, ScrollView, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { useTabScreenBottomInset } from "./useTabScreenBottomInset";
+
 type Props = {
   children: ReactNode;
   header?: ReactNode;
@@ -20,13 +22,14 @@ export function AppScreen({
   onRefresh,
 }: Props) {
   const insets = useSafeAreaInsets();
+  const bottomInset = useTabScreenBottomInset();
   const paddingClass = padded ? "px-5" : "";
 
   if (!scroll) {
     return (
       <View
         className="flex-1 bg-background"
-        style={{ paddingTop: insets.top }}
+        style={{ paddingTop: insets.top, paddingBottom: bottomInset }}
       >
         {header}
         <View className={`flex-1 ${paddingClass}`}>{children}</View>
@@ -40,7 +43,7 @@ export function AppScreen({
       <ScrollView
         className="flex-1"
         contentContainerStyle={{
-          paddingBottom: insets.bottom + 24,
+          paddingBottom: bottomInset,
           flexGrow: 1,
         }}
         showsVerticalScrollIndicator={false}

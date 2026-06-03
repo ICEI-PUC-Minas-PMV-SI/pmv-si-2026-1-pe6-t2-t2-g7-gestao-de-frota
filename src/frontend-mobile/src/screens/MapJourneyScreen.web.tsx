@@ -223,9 +223,9 @@ export default function MapJourneyScreen() {
         ];
         const icon = L.divIcon({
           className: "",
-          html: `<div style="font-size:28px;line-height:1;pointer-events:none;filter:drop-shadow(0 2px 4px rgba(0,0,0,.5))">🚗</div>`,
-          iconSize: [32, 32],
-          iconAnchor: [16, 16],
+          html: `<div style="width:44px;height:44px;border-radius:22px;background:#1a237e;border:2.5px solid #fff;box-shadow:0 6px 14px rgba(26,35,126,0.32);display:flex;align-items:center;justify-content:center;pointer-events:none"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 512 512" fill="#ffffff"><path d="M447.68 220.78 392.68 96.11A32 32 0 0 0 362.67 80H149.33a32 32 0 0 0-30.99 16.11L63.32 220.78A64 64 0 0 0 32 276.47V400a16 16 0 0 0 16 16h32a16 16 0 0 0 16-16v-16h320v16a16 16 0 0 0 16 16h32a16 16 0 0 0 16-16V276.47a64 64 0 0 0-31.32-55.69ZM149.33 112h213.34l39.47 96H109.86ZM80 400v-16h352v16Zm0-96V276.47a16 16 0 0 1 7.83-13.77l.09-.06 14.14-7.64v112Zm352 0V256.6l14.09 7.65.09.06A16 16 0 0 1 464 276.47V304Z"/><circle cx="144" cy="288" r="32"/><circle cx="368" cy="288" r="32"/></svg></div>`,
+          iconSize: [44, 44],
+          iconAnchor: [22, 22],
         });
         if (!carMarkerRef.current) {
           carMarkerRef.current = L.marker(point, {

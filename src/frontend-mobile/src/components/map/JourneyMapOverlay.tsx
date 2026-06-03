@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import {
   Dimensions,
-  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -15,6 +14,7 @@ import { useTheme } from "../../context/theme.context";
 import type { RoutePreviewStatus } from "../../hooks/useMapJourney";
 import { surfaceFor } from "../../theme/surfaceColors";
 import { AnimatedBottomSheetShell } from "../ui/AnimatedBottomSheetShell";
+import { JourneyMapFabVisual } from "./VehicleMapMarker";
 import { JourneyMapControls } from "./JourneyMapControls";
 
 /** Acima das camadas do Leaflet (tiles ~200–400). */
@@ -41,89 +41,39 @@ function JourneyFabButton({
   onPress,
   badge,
   primaryColor,
+  ringColor,
+  surfaceColor,
+  active,
+  subtitle,
 }: {
   onPress: () => void;
   badge: string | null;
   primaryColor: string;
+  ringColor: string;
+  surfaceColor: string;
+  active: boolean;
+  subtitle: string;
 }) {
-  if (Platform.OS === "web") {
-    return (
-      <div
-        role="button"
-        tabIndex={0}
-        aria-label="Abrir painel de jornada"
-        onClick={onPress}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            onPress();
-          }
-        }}
-        style={{
-          position: "absolute",
-          top: 12,
-          right: 12,
-          zIndex: FAB_Z_INDEX,
-          width: 48,
-          height: 48,
-          borderRadius: 24,
-          backgroundColor: primaryColor,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          cursor: "pointer",
-          boxShadow: "0 4px 14px rgba(15, 23, 42, 0.35)",
-          border: "none",
-          outline: "none",
-        }}
-      >
-        <span style={{ fontSize: 22, lineHeight: 1 }} aria-hidden>
-          🚗
-        </span>
-        {badge ? (
-          <span
-            style={{
-              position: "absolute",
-              top: -2,
-              right: -2,
-              minWidth: 18,
-              height: 18,
-              borderRadius: 9,
-              backgroundColor: "#dc2626",
-              color: "#fff",
-              fontSize: 10,
-              fontWeight: 700,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              padding: "0 4px",
-            }}
-          >
-            {badge}
-          </span>
-        ) : null}
-      </div>
-    );
-  }
-
   return (
     <Pressable
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel="Abrir painel de jornada"
-      style={{
-        position: "absolute",
-        top: 12,
-        right: 12,
-        zIndex: FAB_Z_INDEX,
-        elevation: FAB_Z_INDEX,
-      }}
-      className="h-12 w-12 items-center justify-center rounded-full bg-primary shadow-lg"
+      style={({ pressed }) => [
+        fabStyles.host,
+        { opacity: pressed ? 0.92 : 1, transform: [{ scale: pressed ? 0.98 : 1 }] },
+      ]}
     >
-      <Ionicons name="car-sport" size={22} color="#ffffff" />
+      <JourneyMapFabVisual
+        color={primaryColor}
+        ringColor={ringColor}
+        surfaceColor={surfaceColor}
+        active={active}
+        subtitle={subtitle}
+      />
       {badge ? (
-        <View className="absolute -right-0.5 -top-0.5 min-h-[18px] min-w-[18px] items-center justify-center rounded-full bg-destructive px-1">
-          <Text className="text-[10px] font-bold text-white">{badge}</Text>
+        <View style={fabStyles.badge}>
+          <Text style={fabStyles.badgeText}>{badge}</Text>
         </View>
       ) : null}
     </Pressable>
@@ -151,6 +101,13 @@ export function JourneyMapOverlay({
         ? String(plannedStopsCount)
         : null;
 
+  const fabSubtitle =
+    journeyId != null
+      ? "Em andamento"
+      : plannedStopsCount > 0
+        ? `${plannedStopsCount} parada${plannedStopsCount > 1 ? "s" : ""}`
+        : "Planejar rota";
+
   const sheetPaddingBottom = Math.max(insets.bottom, 16);
 
   return (
@@ -171,6 +128,10 @@ export function JourneyMapOverlay({
           onPress={() => setOpen(true)}
           badge={badge}
           primaryColor={colors.primary}
+          ringColor={theme === "light" ? "#e2e8f0" : "rgba(255,255,255,0.16)"}
+          surfaceColor={colors.card}
+          active={Boolean(journeyId)}
+          subtitle={fabSubtitle}
         />
       </View>
 
@@ -245,6 +206,35 @@ export function JourneyMapOverlay({
     </>
   );
 }
+
+const fabStyles = StyleSheet.create({
+  host: {
+    position: "absolute",
+    top: 12,
+    right: 12,
+    zIndex: FAB_Z_INDEX,
+    elevation: FAB_Z_INDEX,
+  },
+  badge: {
+    position: "absolute",
+    top: -4,
+    right: -2,
+    minWidth: 20,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: "#dc2626",
+    borderWidth: 2,
+    borderColor: "#ffffff",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 4,
+  },
+  badgeText: {
+    color: "#ffffff",
+    fontSize: 10,
+    fontWeight: "700",
+  },
+});
 
 const styles = StyleSheet.create({
   sheet: {
