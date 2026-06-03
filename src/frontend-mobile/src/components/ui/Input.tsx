@@ -14,7 +14,7 @@ export function Input({ label, ...props }: Props) {
       ) : null}
       <TextInput
         placeholderTextColor="#94a3b8"
-        className="rounded-lg border border-border bg-background px-4 py-3 text-base text-foreground"
+        className="min-h-[52px] rounded-2xl border border-border bg-background px-4 py-3.5 text-base text-foreground"
         {...props}
       />
     </View>

@@ -1,1 +1,3 @@
-export { default } from "../../src/screens/MapJourneyScreen";
+import MapScreen from "../../src/screens/map-screen";
+
+export default MapScreen;

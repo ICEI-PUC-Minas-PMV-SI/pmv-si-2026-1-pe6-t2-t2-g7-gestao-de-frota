@@ -1,17 +1,17 @@
+import { ActivityIndicator, View } from "react-native";
 import { Redirect } from "expo-router";
-
-import { AuthGate } from "../src/components/auth/AuthGate";
 import { useAuth } from "../src/context/auth.context";
 
-function IndexRedirect() {
-  const { user } = useAuth();
-  return <Redirect href={user ? "/(app)/homepage" : "/login"} />;
-}
-
 export default function Index() {
-  return (
-    <AuthGate mode="guest">
-      <IndexRedirect />
-    </AuthGate>
-  );
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <View className="flex-1 items-center justify-center bg-background">
+        <ActivityIndicator color="#1a237e" />
+      </View>
+    );
+  }
+
+  return user ? <Redirect href="/(app)/vehicles" /> : <Redirect href="/login" />;
 }

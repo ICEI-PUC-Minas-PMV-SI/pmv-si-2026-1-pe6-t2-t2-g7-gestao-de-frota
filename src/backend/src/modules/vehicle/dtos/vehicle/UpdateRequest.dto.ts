@@ -11,6 +11,15 @@ import {
 } from 'class-validator';
 
 export class UpdateVehicleRequestDto {
+  @ApiProperty({
+    example: 12,
+    required: false,
+    description: 'Vínculo opcional do veículo com o usuário/membro',
+  })
+  @IsInt()
+  @IsOptional()
+  userId?: number;
+
   @ApiProperty({ example: 'Fiat' })
   @IsString()
   @IsOptional()

@@ -12,6 +12,7 @@ import {
 } from "@expo-google-fonts/inter";
 
 import { AuthProvider } from "../src/context/auth.context";
+import { ToastViewport } from "../src/components/ui/ToastViewport";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -37,6 +38,7 @@ export default function RootLayout() {
         <Stack.Screen name="signup" />
         <Stack.Screen name="(app)" />
       </Stack>
+      <ToastViewport />
     </AuthProvider>
   );
 }

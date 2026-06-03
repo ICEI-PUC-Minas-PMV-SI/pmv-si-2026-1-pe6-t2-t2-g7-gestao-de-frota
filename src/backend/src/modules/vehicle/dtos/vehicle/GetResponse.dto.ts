@@ -19,6 +19,10 @@ export class GetVehicleResponseDto {
   @IsUUID()
   id: string;
 
+  @ApiProperty({ example: 12, required: false, nullable: true })
+  @IsInt()
+  userId?: number;
+
   @ApiProperty({ example: 'Fiat' })
   @IsString()
   @MaxLength(255)

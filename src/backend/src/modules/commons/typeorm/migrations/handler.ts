@@ -12,6 +12,7 @@ import { Default1777378570930 } from './1777378570930-default';
 import { Default1777379041197 } from './1777379041197-default';
 import { Default1777381505441 } from './1777381505441-default';
 import { Default1777384691511 } from './1777384691511-default';
+import { Default1777401000000 } from './1777401000000-default';
 
 const config: DataSourceOptions = {
   type: 'cockroachdb',
@@ -35,6 +36,7 @@ const config: DataSourceOptions = {
     Default1777379041197,
     Default1777381505441,
     Default1777384691511,
+    Default1777401000000,
   ],
   synchronize: false,
   migrationsRun: false,

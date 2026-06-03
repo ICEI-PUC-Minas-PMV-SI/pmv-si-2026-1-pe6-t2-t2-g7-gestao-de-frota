@@ -11,6 +11,7 @@ import { randomUUID } from 'crypto';
 
 export type VehicleModelProps = {
   id: string;
+  userId?: number;
   marca: string;
   modelo: string;
   ano: number;
@@ -26,6 +27,7 @@ export type VehicleModelPropsInput = TReplace<
   VehicleModelProps,
   {
     id?: string;
+    userId?: number;
     marca: string;
     modelo: string;
     ano: number;
@@ -47,6 +49,7 @@ export type VehicleModelUpdateInput = {
   fotoUrl?: string;
   tamanhoTanque?: number;
   consumoMedio?: number;
+  userId?: number;
 };
 
 export interface VehicleJsonProps extends VehicleModelProps {}
@@ -61,6 +64,9 @@ export class VehicleModel {
 
   @Column({ name: 'marca', length: 255, type: 'varchar' })
   marca: string;
+
+  @Column({ name: 'user_id', type: 'integer', nullable: true })
+  userId?: number;
 
   @Column({ name: 'modelo', length: 255, type: 'varchar' })
   modelo: string;
@@ -90,6 +96,7 @@ export class VehicleModel {
     if (!props) return;
 
     this.id = props.id ?? randomUUID();
+    this.userId = props.userId;
     this.marca = props.marca;
     this.modelo = props.modelo;
     this.ano = props.ano;
@@ -104,6 +111,7 @@ export class VehicleModel {
   toJSON(): VehicleJsonProps {
     return {
       id: this.id,
+      userId: this.userId,
       marca: this.marca,
       modelo: this.modelo,
       ano: this.ano,
@@ -119,6 +127,7 @@ export class VehicleModel {
   get props() {
     return {
       id: this.id,
+      userId: this.userId,
       marca: this.marca,
       modelo: this.modelo,
       ano: this.ano,

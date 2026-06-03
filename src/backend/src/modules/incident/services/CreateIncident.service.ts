@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { IncidentRepo } from '../repositories/incident/interface';
 import {
   IncidentModel,
@@ -6,6 +6,7 @@ import {
   IncidentStatus,
   IncidentType,
 } from '../models/Incident.model';
+import { VehicleRepo } from '../../vehicle/repositories/vehicle/interface';
 
 export type CreateIncidentInput = {
   vehicleId: string;
@@ -23,9 +24,20 @@ export type CreateIncidentInput = {
 
 @Injectable()
 export class CreateIncidentService {
-  constructor(private readonly incidentRepo: IncidentRepo) {}
+  constructor(
+    private readonly incidentRepo: IncidentRepo,
+    private readonly vehicleRepo: VehicleRepo,
+  ) {}
 
-  async exec(input: CreateIncidentInput) {
+  async exec(input: CreateIncidentInput, userId: number) {
+    const vehicle = await this.vehicleRepo.findByIdForUser(
+      input.vehicleId,
+      userId,
+    );
+    if (!vehicle) {
+      throw new NotFoundException('Veículo não encontrado.');
+    }
+
     const incident = new IncidentModel({
       vehicleId: input.vehicleId,
       tipo: input.tipo,

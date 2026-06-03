@@ -2,6 +2,8 @@ import { Controller, Get, HttpCode, Param } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { GetIncidentResponseDto } from '../../dtos/incident/GetResponse.dto';
 import { FindIncidentsByVehicleService } from '../../services/FindIncidentsByVehicle.service';
+import { UserContainer } from 'src/modules/commons/utils/getUserContainer';
+import { IUserContainer } from 'src/modules/commons/auth/auth.types';
 
 @Controller('incident')
 export class FindIncidentsByVehicleController {
@@ -19,8 +21,12 @@ export class FindIncidentsByVehicleController {
   @HttpCode(200)
   async exec(
     @Param('vehicleId') vehicleId: string,
+    @UserContainer() container: IUserContainer,
   ): Promise<GetIncidentResponseDto[]> {
-    const incidents = await this.findIncidentsByVehicle.exec(vehicleId);
+    const incidents = await this.findIncidentsByVehicle.exec(
+      vehicleId,
+      container.user.id,
+    );
     return incidents.map((incident) => incident.toJSON());
   }
 }

@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   IsInt,
   IsNumber,
+  IsOptional,
   IsString,
   IsUrl,
   Max,
@@ -10,6 +11,15 @@ import {
 } from 'class-validator';
 
 export class CreateVehicleRequestDto {
+  @ApiProperty({
+    example: 12,
+    required: false,
+    description: 'Vínculo opcional do veículo com o usuário/membro',
+  })
+  @IsInt()
+  @IsOptional()
+  userId?: number;
+
   @ApiProperty({ example: 'Fiat' })
   @IsString()
   @MaxLength(255)

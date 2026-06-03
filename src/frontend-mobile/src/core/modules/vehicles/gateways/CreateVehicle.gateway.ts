@@ -20,7 +20,6 @@ export class CreateVehicleGateway {
       url: `${url}/vehicle`,
       headers: new Headers({
         Authorization: `Bearer ${props.idToken}`,
-        "Content-Type": "application/json",
       }),
       body: {
         marca: props.marca,

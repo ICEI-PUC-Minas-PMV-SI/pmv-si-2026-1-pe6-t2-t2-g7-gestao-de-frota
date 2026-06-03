@@ -43,8 +43,22 @@ export class VehicleRepoImpl implements VehicleRepo {
     return result;
   }
 
+  async findByIdForUser(id: string, userId: number) {
+    const result = await this.dataSource
+      .getRepository(VehicleModel)
+      .findOneBy({ id, userId });
+    return result;
+  }
+
   async findAll() {
     const result = await this.dataSource.getRepository(VehicleModel).find();
+    return result;
+  }
+
+  async findAllByUserId(userId: number) {
+    const result = await this.dataSource
+      .getRepository(VehicleModel)
+      .findBy({ userId });
     return result;
   }
 }
