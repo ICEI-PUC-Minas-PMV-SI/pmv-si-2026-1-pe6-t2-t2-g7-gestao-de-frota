@@ -1,20 +1,25 @@
 import { useEffect, useState } from "react";
 import {
-  Modal,
+  Dimensions,
   Platform,
   Pressable,
   ScrollView,
+  StyleSheet,
   Text,
   View,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { JourneyMapControls } from "./JourneyMapControls";
+import { useTheme } from "../../context/theme.context";
 import type { RoutePreviewStatus } from "../../hooks/useMapJourney";
+import { surfaceFor } from "../../theme/surfaceColors";
+import { AnimatedBottomSheetShell } from "../ui/AnimatedBottomSheetShell";
+import { JourneyMapControls } from "./JourneyMapControls";
 
 /** Acima das camadas do Leaflet (tiles ~200–400). */
 const FAB_Z_INDEX = 1000;
+const SHEET_MAX_HEIGHT = Math.min(Dimensions.get("window").height * 0.72, 520);
 
 type Props = {
   journeyId: string | null;
@@ -35,9 +40,11 @@ type Props = {
 function JourneyFabButton({
   onPress,
   badge,
+  primaryColor,
 }: {
   onPress: () => void;
   badge: string | null;
+  primaryColor: string;
 }) {
   if (Platform.OS === "web") {
     return (
@@ -60,7 +67,7 @@ function JourneyFabButton({
           width: 48,
           height: 48,
           borderRadius: 24,
-          backgroundColor: "#1a237e",
+          backgroundColor: primaryColor,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -129,6 +136,8 @@ export function JourneyMapOverlay({
   ...controls
 }: Props) {
   const insets = useSafeAreaInsets();
+  const { theme } = useTheme();
+  const colors = surfaceFor(theme);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -141,6 +150,8 @@ export function JourneyMapOverlay({
       : plannedStopsCount > 0
         ? String(plannedStopsCount)
         : null;
+
+  const sheetPaddingBottom = Math.max(insets.bottom, 16);
 
   return (
     <>
@@ -156,69 +167,145 @@ export function JourneyMapOverlay({
           elevation: FAB_Z_INDEX,
         }}
       >
-        <JourneyFabButton onPress={() => setOpen(true)} badge={badge} />
+        <JourneyFabButton
+          onPress={() => setOpen(true)}
+          badge={badge}
+          primaryColor={colors.primary}
+        />
       </View>
 
-      <Modal
-        visible={open}
-        transparent
-        animationType="slide"
-        onRequestClose={() => setOpen(false)}
-      >
-        <Pressable
-          className="flex-1 justify-end bg-black/45"
-          onPress={() => setOpen(false)}
+      <AnimatedBottomSheetShell open={open} onClose={() => setOpen(false)}>
+        <View
+          style={[
+            styles.sheet,
+            {
+              backgroundColor: colors.card,
+              borderTopColor: colors.border,
+              maxHeight: SHEET_MAX_HEIGHT + sheetPaddingBottom,
+              paddingBottom: sheetPaddingBottom,
+            },
+          ]}
         >
-          <Pressable
-            onPress={(e) => e.stopPropagation()}
-            className="max-h-[85%] rounded-t-2xl bg-background"
-            style={{ paddingBottom: Math.max(insets.bottom, 16) }}
-          >
-            <View className="items-center py-2">
-              <View className="h-1 w-10 rounded-full bg-border" />
+          <View style={styles.handleWrap}>
+            <View style={[styles.handle, { backgroundColor: colors.border }]} />
+          </View>
+
+          <View style={styles.header}>
+            <View style={styles.headerLeft}>
+              <Text style={[styles.title, { color: colors.foreground }]}>
+                Jornada
+              </Text>
+              {journeyId ? (
+                <View
+                  style={[
+                    styles.badge,
+                    { backgroundColor: colors.successBg },
+                  ]}
+                >
+                  <Text style={[styles.badgeText, { color: colors.success }]}>
+                    Em andamento
+                  </Text>
+                </View>
+              ) : plannedStopsCount > 0 ? (
+                <View
+                  style={[styles.badge, { backgroundColor: colors.accent }]}
+                >
+                  <Text style={[styles.badgeText, { color: colors.primary }]}>
+                    {plannedStopsCount} parada
+                    {plannedStopsCount > 1 ? "s" : ""}
+                  </Text>
+                </View>
+              ) : null}
             </View>
-            <View className="flex-row items-center justify-between px-5 pb-2">
-              <View className="flex-row items-center gap-2">
-                <Text className="text-base font-semibold text-foreground">
-                  Jornada
-                </Text>
-                {journeyId ? (
-                  <View className="rounded-full bg-[#dcfce7] px-2 py-0.5">
-                    <Text className="text-[10px] font-medium text-[#16a34a]">
-                      Em andamento
-                    </Text>
-                  </View>
-                ) : plannedStopsCount > 0 ? (
-                  <View className="rounded-full bg-accent px-2 py-0.5">
-                    <Text className="text-[10px] font-medium text-primary">
-                      {plannedStopsCount} parada
-                      {plannedStopsCount > 1 ? "s" : ""}
-                    </Text>
-                  </View>
-                ) : null}
-              </View>
-              <Pressable
-                onPress={() => setOpen(false)}
-                hitSlop={12}
-                accessibilityLabel="Fechar"
-              >
-                <Ionicons name="close" size={24} color="#64748b" />
-              </Pressable>
-            </View>
-            <ScrollView
-              className="px-5"
-              keyboardShouldPersistTaps="handled"
-              showsVerticalScrollIndicator={false}
+            <Pressable
+              onPress={() => setOpen(false)}
+              hitSlop={12}
+              accessibilityLabel="Fechar"
+              style={[styles.closeBtn, { borderColor: colors.border }]}
             >
-              <JourneyMapControls
-                journeyId={journeyId}
-                plannedStopsCount={plannedStopsCount}
-                {...controls}
-              />
-            </ScrollView>
-          </Pressable>
-        </Pressable>
-      </Modal>
+              <Ionicons name="close" size={22} color={colors.mutedForeground} />
+            </Pressable>
+          </View>
+
+          <ScrollView
+            style={styles.scroll}
+            contentContainerStyle={styles.scrollContent}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+            bounces={false}
+          >
+            <JourneyMapControls
+              journeyId={journeyId}
+              plannedStopsCount={plannedStopsCount}
+              {...controls}
+            />
+          </ScrollView>
+        </View>
+      </AnimatedBottomSheetShell>
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  sheet: {
+    width: "100%",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    overflow: "hidden",
+  },
+  handleWrap: {
+    alignItems: "center",
+    paddingTop: 10,
+    paddingBottom: 6,
+  },
+  handle: {
+    width: 40,
+    height: 4,
+    borderRadius: 2,
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 20,
+    paddingBottom: 12,
+  },
+  headerLeft: {
+    flex: 1,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "center",
+    gap: 8,
+    minWidth: 0,
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  badge: {
+    borderRadius: 999,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+  },
+  badgeText: {
+    fontSize: 10,
+    fontWeight: "600",
+  },
+  closeBtn: {
+    marginLeft: 8,
+    height: 36,
+    width: 36,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 18,
+    borderWidth: StyleSheet.hairlineWidth,
+  },
+  scroll: {
+    maxHeight: SHEET_MAX_HEIGHT - 72,
+  },
+  scrollContent: {
+    paddingHorizontal: 20,
+    paddingBottom: 4,
+  },
+});

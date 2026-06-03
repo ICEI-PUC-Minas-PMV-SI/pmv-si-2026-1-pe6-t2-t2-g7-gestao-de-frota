@@ -21,7 +21,7 @@ export function AuthGate({
   }
 
   if (mode === "guest" && user) {
-    return <Redirect href="/(app)/homepage" />;
+    return <Redirect href="/(app)/dashboard" />;
   }
 
   if (mode === "auth" && !user) {

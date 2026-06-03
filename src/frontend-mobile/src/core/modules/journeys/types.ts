@@ -13,3 +13,10 @@ export type JourneyHistory = {
   criadaEm: string;
   atualizadaEm: string;
 };
+
+export type JourneyStats = {
+  total: number;
+  inProgress: number;
+  completed: number;
+  totalKm: number;
+};

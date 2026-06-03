@@ -12,4 +12,8 @@ export const journeyModule = {
   },
 };
 
-export type { JourneyHistory, JourneyHistoryStatus } from "./types";
+export type {
+  JourneyHistory,
+  JourneyHistoryStatus,
+  JourneyStats,
+} from "./types";

@@ -6,7 +6,9 @@ import { FormSheet } from "../ui/FormSheet";
 import { Input } from "../ui/Input";
 import { useAuthorizedToken } from "../../hooks/useAuthorizedToken";
 import { vehicleModule, type Vehicle } from "../../core/modules/vehicles/vehicles";
+import { notifySuccess, showToast } from "../ui/toast";
 import { FALLBACK_VEHICLE_IMAGE } from "../../utils/vehicleImage";
+import { validateVehicleForm } from "../../utils/vehicleValidation";
 
 type Props = {
   visible: boolean;
@@ -26,11 +28,9 @@ export function VehicleFormSheet({ visible, vehicle, onClose, onSaved }: Props) 
   const [tamanhoTanque, setTamanhoTanque] = useState("");
   const [consumoMedio, setConsumoMedio] = useState("");
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!visible) return;
-    setError(null);
     if (vehicle) {
       setMarca(vehicle.marca);
       setModelo(vehicle.modelo);
@@ -51,7 +51,6 @@ export function VehicleFormSheet({ visible, vehicle, onClose, onSaved }: Props) 
   }, [visible, vehicle]);
 
   async function onSubmit() {
-    setError(null);
     const payload = {
       marca: marca.trim(),
       modelo: modelo.trim(),
@@ -62,15 +61,9 @@ export function VehicleFormSheet({ visible, vehicle, onClose, onSaved }: Props) 
       consumoMedio: Number(consumoMedio),
     };
 
-    if (
-      !payload.marca ||
-      !payload.modelo ||
-      !payload.placa ||
-      !Number.isFinite(payload.ano) ||
-      !Number.isFinite(payload.tamanhoTanque) ||
-      !Number.isFinite(payload.consumoMedio)
-    ) {
-      setError("Preencha todos os campos obrigatórios com valores válidos.");
+    const validationError = validateVehicleForm(payload);
+    if (validationError) {
+      showToast({ message: validationError, tone: "error" });
       return;
     }
 
@@ -86,10 +79,11 @@ export function VehicleFormSheet({ visible, vehicle, onClose, onSaved }: Props) 
       } else {
         await vehicleModule.gateways.create.exec({ idToken, ...payload });
       }
+      notifySuccess(isEdit ? "Veículo atualizado com sucesso." : "Veículo cadastrado com sucesso.");
       onSaved();
       onClose();
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Erro ao salvar veículo.");
+    } catch {
+      // Toast exibido pelo AxiosAdapter; mantém formulário aberto.
     } finally {
       setSaving(false);
     }
@@ -108,9 +102,6 @@ export function VehicleFormSheet({ visible, vehicle, onClose, onSaved }: Props) 
       }
     >
       <View className="gap-y-4 pb-6">
-        {error ? (
-          <Text className="text-sm text-destructive">{error}</Text>
-        ) : null}
         <Input label="Marca" value={marca} onChangeText={setMarca} placeholder="Fiat" />
         <Input
           label="Modelo"

@@ -9,6 +9,7 @@ import {
   Text,
   View,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Badge } from "../../src/components/ui/Badge";
 import { BottomSheetModal } from "../../src/components/ui/BottomSheetModal";
@@ -23,6 +24,9 @@ import {
 } from "../../src/core/modules/incidents/incidents";
 import { vehicleModule, Vehicle } from "../../src/core/modules/vehicles/vehicles";
 import { useAuthorizedToken } from "../../src/hooks/useAuthorizedToken";
+import { notifySuccess, showToast } from "../../src/components/ui/toast";
+import { getApiErrorMessage } from "../../src/utils/apiError";
+import { validateVehicleForm } from "../../src/utils/vehicleValidation";
 
 const incidentTypes: IncidentType[] = ["sinistro", "multa"];
 const incidentSeverityOptions: IncidentSeverity[] = [
@@ -72,6 +76,7 @@ const incidentInitialState: IncidentFormState = {
 };
 
 export default function VehiclesScreen() {
+  const insets = useSafeAreaInsets();
   const router = useRouter();
   const getToken = useAuthorizedToken();
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
@@ -83,7 +88,6 @@ export default function VehiclesScreen() {
   const [incidentForm, setIncidentForm] = useState<IncidentFormState>(incidentInitialState);
   const [savingVehicle, setSavingVehicle] = useState(false);
   const [savingIncident, setSavingIncident] = useState(false);
-  const [feedback, setFeedback] = useState<string | null>(null);
   const [visibleVehicleCount, setVisibleVehicleCount] = useState(VEHICLE_PAGE_SIZE);
   const [createOpen, setCreateOpen] = useState(false);
   const [incidentModalVehicle, setIncidentModalVehicle] = useState<Vehicle | null>(null);
@@ -99,8 +103,8 @@ export default function VehiclesScreen() {
       setVehicles(vehiclesRes.body);
       setIncidents(incidentsRes.body);
       setVisibleVehicleCount(VEHICLE_PAGE_SIZE);
-    } catch (err: any) {
-      setScreenError(err?.message ?? "Erro ao carregar seus veículos.");
+    } catch (err: unknown) {
+      setScreenError(getApiErrorMessage(err));
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -112,34 +116,50 @@ export default function VehiclesScreen() {
   }, [load]);
 
   async function onCreateVehicle() {
-    setFeedback(null);
+    const payload = {
+      marca: vehicleForm.marca.trim(),
+      modelo: vehicleForm.modelo.trim(),
+      ano: Number(vehicleForm.ano),
+      placa: vehicleForm.placa.trim().toUpperCase(),
+      fotoUrl: vehicleForm.fotoUrl.trim(),
+      tamanhoTanque: Number(vehicleForm.tamanhoTanque),
+      consumoMedio: Number(vehicleForm.consumoMedio),
+    };
+
+    const validationError = validateVehicleForm(payload);
+    if (validationError) {
+      showToast({ message: validationError, tone: "error" });
+      return;
+    }
+
     setSavingVehicle(true);
     try {
       const idToken = await getToken();
       await vehicleModule.gateways.create.exec({
         idToken,
-        marca: vehicleForm.marca.trim(),
-        modelo: vehicleForm.modelo.trim(),
-        ano: Number(vehicleForm.ano),
-        placa: vehicleForm.placa.trim().toUpperCase(),
-        fotoUrl: vehicleForm.fotoUrl.trim(),
-        tamanhoTanque: Number(vehicleForm.tamanhoTanque),
-        consumoMedio: Number(vehicleForm.consumoMedio),
+        ...payload,
       });
       setVehicleForm(vehicleInitialState);
       setCreateOpen(false);
-      setFeedback("Veículo cadastrado com sucesso.");
+      notifySuccess("Veículo cadastrado com sucesso.");
       await load();
-    } catch (err: any) {
-      setFeedback(err?.message ?? "Não foi possível cadastrar o veículo.");
+    } catch {
+      // Toast exibido pelo AxiosAdapter (mensagem de negócio da API).
     } finally {
       setSavingVehicle(false);
     }
   }
 
   async function onCreateIncident() {
-    if (!incidentForm.vehicleId) return;
-    setFeedback(null);
+    if (!incidentForm.vehicleId) {
+      showToast({ message: "Selecione um veículo.", tone: "error" });
+      return;
+    }
+    if (!incidentForm.descricao.trim()) {
+      showToast({ message: "Informe a descrição do incidente.", tone: "error" });
+      return;
+    }
+
     setSavingIncident(true);
     try {
       const idToken = await getToken();
@@ -156,10 +176,10 @@ export default function VehiclesScreen() {
       });
       setIncidentForm(incidentInitialState);
       setIncidentModalVehicle(null);
-      setFeedback("Incidente registrado com sucesso.");
+      notifySuccess("Incidente registrado com sucesso.");
       await load();
-    } catch (err: any) {
-      setFeedback(err?.message ?? "Não foi possível registrar o incidente.");
+    } catch {
+      // Toast exibido pelo AxiosAdapter.
     } finally {
       setSavingIncident(false);
     }
@@ -184,7 +204,11 @@ export default function VehiclesScreen() {
     <>
       <FlatList
         className="flex-1 bg-background"
-        contentContainerStyle={{ padding: 20, gap: 20 }}
+        contentContainerStyle={{
+          padding: 20,
+          paddingTop: 20 + insets.top,
+          gap: 20,
+        }}
         data={vehicles.slice(0, visibleVehicleCount)}
         keyExtractor={(item) => item.id}
         onEndReached={onLoadMoreVehicles}
@@ -230,12 +254,6 @@ export default function VehiclesScreen() {
                 <Button onPress={() => setCreateOpen(true)}>Novo veículo</Button>
               </View>
             </Card>
-
-            {feedback ? (
-              <Card>
-                <Text className="text-sm text-muted-foreground">{feedback}</Text>
-              </Card>
-            ) : null}
 
             {screenError ? (
               <Card>

@@ -1,6 +1,8 @@
-import { Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
+import { useTheme } from "../../context/theme.context";
 import type { RoutePreviewStatus } from "../../hooks/useMapJourney";
+import { surfaceFor } from "../../theme/surfaceColors";
 import { Button } from "../ui/Button";
 
 const ROUTE_STATUS_LABEL: Record<RoutePreviewStatus, string> = {
@@ -41,54 +43,69 @@ export function JourneyMapControls({
   onUndoPlannedStop,
   onClearPlannedStops,
 }: Props) {
+  const { theme } = useTheme();
+  const colors = surfaceFor(theme);
+
   return (
-    <View className="gap-y-3 pb-4">
+    <View style={styles.root}>
       {!journeyId ? (
-        <Text className="text-xs text-muted-foreground">
+        <Text style={[styles.muted, { color: colors.mutedForeground }]}>
           {ROUTE_STATUS_LABEL[routePreviewStatus]}
         </Text>
       ) : null}
 
       {geoHint ? (
-        <Text className="text-xs leading-5 text-primary">{geoHint}</Text>
+        <Text style={[styles.hint, { color: colors.primary }]}>{geoHint}</Text>
       ) : null}
       {positionError ? (
-        <Text className="text-xs text-destructive">{positionError}</Text>
+        <Text style={[styles.error, { color: colors.destructive }]}>
+          {positionError}
+        </Text>
       ) : null}
 
       {!journeyId ? (
         <>
-          <Text className="text-xs leading-5 text-muted-foreground">
+          <Text style={[styles.body, { color: colors.mutedForeground }]}>
             Toque no mapa para marcar paradas (mín. 2). A rota segue as ruas via
-            OSRM, como no frontend web.
+            OSRM.
           </Text>
-          <Text className="text-xs font-medium text-foreground">
+          <Text style={[styles.label, { color: colors.foreground }]}>
             Paradas: {plannedStopsCount}
           </Text>
-          <View className="flex-row flex-wrap gap-2">
-            <Button
-              variant="outline"
-              onPress={onAddCurrentLocation}
-              disabled={!hasGps || busy}
-            >
-              Minha posição
-            </Button>
-            <Button
-              variant="outline"
-              onPress={onUndoPlannedStop}
-              disabled={plannedStopsCount === 0 || busy}
-            >
-              Desfazer
-            </Button>
-            <Button
-              variant="outline"
-              onPress={onClearPlannedStops}
-              disabled={plannedStopsCount === 0 || busy}
-            >
-              Limpar
-            </Button>
+          <View style={styles.actionRow}>
+            <View style={styles.actionCell}>
+              <Button
+                variant="outline"
+                className="w-full"
+                onPress={onAddCurrentLocation}
+                disabled={!hasGps || busy}
+              >
+                Minha posição
+              </Button>
+            </View>
+            <View style={styles.actionCell}>
+              <Button
+                variant="outline"
+                className="w-full"
+                onPress={onUndoPlannedStop}
+                disabled={plannedStopsCount === 0 || busy}
+              >
+                Desfazer
+              </Button>
+            </View>
+            <View style={styles.actionCell}>
+              <Button
+                variant="outline"
+                className="w-full"
+                onPress={onClearPlannedStops}
+                disabled={plannedStopsCount === 0 || busy}
+              >
+                Limpar
+              </Button>
+            </View>
           </View>
           <Button
+            className="w-full"
             onPress={onStart}
             loading={busy}
             disabled={!canStartJourney || routePreviewStatus === "loading"}
@@ -97,10 +114,50 @@ export function JourneyMapControls({
           </Button>
         </>
       ) : (
-        <Button variant="destructive" onPress={onStop} loading={busy}>
+        <Button className="w-full" variant="destructive" onPress={onStop} loading={busy}>
           Encerrar jornada
         </Button>
       )}
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  root: {
+    width: "100%",
+    gap: 12,
+    paddingBottom: 8,
+  },
+  muted: {
+    fontSize: 12,
+    lineHeight: 18,
+  },
+  hint: {
+    fontSize: 12,
+    lineHeight: 18,
+    fontWeight: "500",
+  },
+  error: {
+    fontSize: 12,
+    lineHeight: 18,
+  },
+  body: {
+    fontSize: 12,
+    lineHeight: 18,
+  },
+  label: {
+    fontSize: 12,
+    fontWeight: "600",
+  },
+  actionRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
+    width: "100%",
+  },
+  actionCell: {
+    flexGrow: 1,
+    flexShrink: 1,
+    minWidth: "30%",
+  },
+});

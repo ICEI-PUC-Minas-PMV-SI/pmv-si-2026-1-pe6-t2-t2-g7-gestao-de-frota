@@ -1,9 +1,10 @@
-import { Pressable, Text, View } from "react-native";
+import { Pressable, View } from "react-native";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { colors } from "../../theme/tokens";
+import { useTheme } from "../../context/theme.context";
+import { paletteFor } from "../../theme/tokens";
 
 type TabConfig = {
   routeName: string;
@@ -48,6 +49,8 @@ const TAB_BY_ROUTE = Object.fromEntries(
 
 export function AppTabBar({ state, navigation }: BottomTabBarProps) {
   const insets = useSafeAreaInsets();
+  const { theme } = useTheme();
+  const palette = paletteFor(theme);
 
   const visibleRoutes = state.routes.filter((r) => TAB_BY_ROUTE[r.name]);
 
@@ -64,14 +67,14 @@ export function AppTabBar({ state, navigation }: BottomTabBarProps) {
         elevation: 8,
       }}
     >
-      <View className="flex-row items-stretch px-0.5">
+      <View className="flex-row items-center px-0.5">
         {visibleRoutes.map((route) => {
           const index = state.routes.findIndex((r) => r.key === route.key);
           const config = TAB_BY_ROUTE[route.name];
           if (!config) return null;
 
           const focused = state.index === index;
-          const color = focused ? colors.primary : colors.tabInactive;
+          const color = focused ? palette.tabActive : palette.tabInactive;
 
           return (
             <Pressable
@@ -86,28 +89,20 @@ export function AppTabBar({ state, navigation }: BottomTabBarProps) {
                   navigation.navigate(route.name);
                 }
               }}
-              className="min-w-0 flex-1 items-center justify-center py-1"
+              className="min-w-0 flex-1 items-center justify-center py-2"
               accessibilityRole="button"
               accessibilityState={{ selected: focused }}
               accessibilityLabel={config.label}
             >
               <View
-                className={`mb-0.5 items-center justify-center rounded-lg px-2 py-1 ${focused ? "bg-accent" : ""}`}
+                className={`items-center justify-center rounded-lg px-2.5 py-2 ${focused ? "bg-accent" : ""}`}
               >
                 <Ionicons
                   name={focused ? config.iconFocused : config.icon}
-                  size={focused ? 21 : 20}
+                  size={24}
                   color={color}
                 />
               </View>
-              <Text
-                numberOfLines={1}
-                className={`max-w-full px-0.5 text-center text-[9px] font-medium leading-tight ${
-                  focused ? "text-primary" : "text-muted-foreground"
-                }`}
-              >
-                {config.label}
-              </Text>
             </Pressable>
           );
         })}

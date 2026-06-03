@@ -1,4 +1,4 @@
-import { ActivityIndicator, Pressable, Text } from "react-native";
+import { ActivityIndicator, Pressable, Text, type ViewStyle } from "react-native";
 import { ReactNode } from "react";
 
 type Variant = "primary" | "secondary" | "outline" | "destructive" | "ghost";
@@ -10,6 +10,8 @@ type Props = {
   variant?: Variant;
   children: ReactNode;
   leftIcon?: ReactNode;
+  style?: ViewStyle;
+  className?: string;
 };
 
 const containerByVariant: Record<Variant, string> = {
@@ -35,13 +37,16 @@ export function Button({
   variant = "primary",
   children,
   leftIcon,
+  style,
+  className,
 }: Props) {
   const isDisabled = disabled || loading;
   return (
     <Pressable
       onPress={onPress}
       disabled={isDisabled}
-      className={`min-h-[48px] flex-row items-center justify-center rounded-xl px-4 py-3 ${containerByVariant[variant]} ${isDisabled ? "opacity-50" : ""}`}
+      style={style}
+      className={`min-h-[48px] flex-row items-center justify-center rounded-xl px-4 py-3 ${containerByVariant[variant]} ${isDisabled ? "opacity-50" : ""} ${className ?? ""}`}
     >
       {loading ? (
         <ActivityIndicator color={variant === "primary" || variant === "destructive" ? "#f8fafc" : "#1a237e"} />

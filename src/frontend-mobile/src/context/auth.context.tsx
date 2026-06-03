@@ -111,7 +111,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           // sync opcional em modo sem Firebase
         }
       }
-      router.replace("/(app)/vehicles");
+      router.replace("/(app)/dashboard");
       return;
     }
     if (!auth) throw new Error("Firebase não configurado.");
@@ -120,7 +120,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const idToken = await auth.currentUser?.getIdToken();
       if (!idToken) throw new Error("Could not collect idToken!");
       await userModule.gateways.sync.exec({ idToken });
-      router.replace("/(app)/vehicles");
+      router.replace("/(app)/dashboard");
     } catch (err) {
       const error = err as AuthError;
       throw new Error(getAuthErrorMessage(error.code));
@@ -143,7 +143,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           // sync opcional em modo sem Firebase
         }
       }
-      router.replace("/(app)/vehicles");
+      router.replace("/(app)/dashboard");
       return;
     }
     if (!auth) throw new Error("Firebase não configurado.");
@@ -157,7 +157,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const idToken = await auth.currentUser?.getIdToken();
       if (!idToken) throw new Error("Could not collect idToken!");
       await userModule.gateways.sync.exec({ idToken, name });
-      router.replace("/(app)/vehicles");
+      router.replace("/(app)/dashboard");
     } catch (err) {
       const error = err as AuthError;
       throw new Error(getAuthErrorMessage(error.code));
@@ -178,7 +178,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (!firebaseIdToken) throw new Error("Could not collect idToken!");
 
         await userModule.gateways.sync.exec({ idToken: firebaseIdToken });
-        router.replace("/(app)/vehicles");
+        router.replace("/(app)/dashboard");
         return;
       } catch (err) {
         const error = err as AuthError | Error;
@@ -219,7 +219,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (!firebaseIdToken) throw new Error("Could not collect idToken!");
 
       await userModule.gateways.sync.exec({ idToken: firebaseIdToken });
-      router.replace("/(app)/vehicles");
+      router.replace("/(app)/dashboard");
     } catch (err) {
       const error = err as AuthError | Error;
       if ("code" in error && typeof error.code === "string") {

@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   Pressable,
   ScrollView,
   Text,
   View,
 } from "react-native";
+import { showToast } from "../components/ui/toast";
 import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from "react-native-maps";
 
 import { Badge } from "../components/ui/Badge";
@@ -97,14 +97,17 @@ export default function MapScreenNative() {
 
   const onStart = useCallback(async () => {
     if (!live.coords) {
-      Alert.alert("Localização indisponível", "Aguarde o GPS sincronizar.");
+      showToast({
+        message: "Aguarde o GPS sincronizar.",
+        tone: "error",
+      });
       return;
     }
     if (!vehicleId) {
-      Alert.alert(
-        "Sem veículo",
-        "Cadastre um veículo na web antes de iniciar uma jornada.",
-      );
+      showToast({
+        message: "Cadastre um veículo antes de iniciar uma jornada.",
+        tone: "error",
+      });
       return;
     }
     setBusy(true);
@@ -124,8 +127,8 @@ export default function MapScreenNative() {
       setJourneyId(res.body.id);
       setTrail([{ latitude: live.coords.latitude, longitude: live.coords.longitude }]);
       setJourneyHistory((current) => [res.body as JourneyHistory, ...current]);
-    } catch (err: any) {
-      Alert.alert("Erro", err?.message ?? "Não foi possível iniciar a jornada.");
+    } catch {
+      // Toast exibido pelo AxiosAdapter.
     } finally {
       setBusy(false);
     }
@@ -146,8 +149,8 @@ export default function MapScreenNative() {
         });
         setJourneyHistory(res.body);
       }
-    } catch (err: any) {
-      Alert.alert("Erro", err?.message ?? "Não foi possível encerrar.");
+    } catch {
+      // Toast exibido pelo AxiosAdapter.
     } finally {
       setBusy(false);
     }

@@ -77,6 +77,7 @@ export default function VehicleDetailsScreen() {
         options={{
           title: vehicle.placa,
           headerBackTitle: "Veículos",
+          headerShown: true,
         }}
       />
       <ScrollView

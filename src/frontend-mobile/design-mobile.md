@@ -66,7 +66,7 @@ Estilo: fundo branco, borda superior, ícone + label, estado ativo com fundo `ac
 | `/map` | `map` | Jornada GPS (nativo); preview coords na web |
 | `/vehicles` | `vehicles` | Lista + busca + KPIs (sem CRUD no mobile) |
 | `/incidents` | `incidents` | Lista + busca + filtro por status |
-| `/members` | — | Apenas web (admin) |
+| `/incidents` | Tab | Lista de incidentes (multas e sinistros) |
 | `/account` | `account` | Placeholder até integrar Firebase |
 
 ## 6) Componentes reutilizáveis

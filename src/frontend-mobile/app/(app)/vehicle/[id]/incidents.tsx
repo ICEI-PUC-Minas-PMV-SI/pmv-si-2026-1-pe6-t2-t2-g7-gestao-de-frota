@@ -24,6 +24,8 @@ import {
 } from "../../../../src/core/modules/incidents/incidents";
 import { vehicleModule, Vehicle } from "../../../../src/core/modules/vehicles/vehicles";
 import { useAuthorizedToken } from "../../../../src/hooks/useAuthorizedToken";
+import { notifySuccess, showToast } from "../../../../src/components/ui/toast";
+import { getApiErrorMessage } from "../../../../src/utils/apiError";
 
 const incidentTypes: IncidentType[] = ["sinistro", "multa"];
 const incidentSeverityOptions: IncidentSeverity[] = [
@@ -89,8 +91,8 @@ export default function VehicleIncidentsScreen() {
       ]);
       setVehicle(vehicleRes.body);
       setIncidents(incidentsRes.body);
-    } catch (err: any) {
-      setError(err?.message ?? "Erro ao carregar os incidentes.");
+    } catch (err: unknown) {
+      setError(getApiErrorMessage(err));
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -103,6 +105,10 @@ export default function VehicleIncidentsScreen() {
 
   async function onCreateIncident() {
     if (!vehicle) return;
+    if (!incidentForm.descricao.trim()) {
+      showToast({ message: "Informe a descrição do incidente.", tone: "error" });
+      return;
+    }
     setSavingIncident(true);
     try {
       const idToken = await getToken();
@@ -119,9 +125,10 @@ export default function VehicleIncidentsScreen() {
       });
       setIncidentForm(incidentInitialState);
       setIncidentOpen(false);
+      notifySuccess("Incidente registrado com sucesso.");
       await load();
-    } catch (err: any) {
-      setError(err?.message ?? "Não foi possível registrar o incidente.");
+    } catch {
+      // Toast exibido pelo AxiosAdapter.
     } finally {
       setSavingIncident(false);
     }

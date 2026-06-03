@@ -1,5 +1,6 @@
-import axios, { isAxiosError } from "axios";
+import axios from "axios";
 import { showToast } from "../../../components/ui/toast";
+import { getApiErrorMessage } from "../../../utils/apiError";
 import {
   HttpAdapter,
   HttpDelete,
@@ -24,40 +25,11 @@ function fromAxiosHeaders(headers: any): Headers {
   return new Headers(Object.entries(headers ?? {}) as [string, string][]);
 }
 
-function getAxiosErrorMessage(error: unknown) {
-  if (!isAxiosError(error)) {
-    return "Não foi possível concluir a requisição.";
-  }
-
-  const data = error.response?.data;
-
-  if (typeof data === "string" && data.trim()) {
-    return data;
-  }
-
-  if (Array.isArray(data?.message)) {
-    return data.message.filter(Boolean).join(" ");
-  }
-
-  if (typeof data?.message === "string" && data.message.trim()) {
-    return data.message;
-  }
-
-  if (typeof error.message === "string" && error.message.trim()) {
-    if (error.message === "Network Error") {
-      return "Falha de rede ao comunicar com o servidor.";
-    }
-    return error.message;
-  }
-
-  return "Não foi possível concluir a requisição.";
-}
-
 async function withToast<T>(request: () => Promise<HttpResponse<T>>) {
   try {
     return await request();
   } catch (error) {
-    showToast({ message: getAxiosErrorMessage(error), tone: "error" });
+    showToast({ message: getApiErrorMessage(error), tone: "error" });
     throw error;
   }
 }

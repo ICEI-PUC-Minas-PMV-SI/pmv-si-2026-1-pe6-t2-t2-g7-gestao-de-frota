@@ -9,27 +9,52 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        background: "#f8fafc",
-        foreground: "#1e293b",
-        card: "#ffffff",
-        "card-foreground": "#1e293b",
-        popover: "#ffffff",
-        "popover-foreground": "#1e293b",
-        primary: "#1a237e",
-        "primary-foreground": "#f8fafc",
-        secondary: "#e2e8f0",
-        "secondary-foreground": "#1e293b",
-        muted: "#e2e8f0",
-        "muted-foreground": "#475569",
-        accent: "#dbeafe",
-        "accent-foreground": "#1a237e",
-        destructive: "#dc2626",
-        "destructive-foreground": "#f8fafc",
-        border: "#cbd5e1",
-        input: "#e2e8f0",
-        ring: "#38bdf8",
+        background: "rgb(var(--color-background) / <alpha-value>)",
+        foreground: "rgb(var(--color-foreground) / <alpha-value>)",
+        card: {
+          DEFAULT: "rgb(var(--color-card) / <alpha-value>)",
+          foreground: "rgb(var(--color-card-foreground) / <alpha-value>)",
+        },
+        primary: {
+          DEFAULT: "rgb(var(--color-primary) / <alpha-value>)",
+          foreground: "rgb(var(--color-primary-foreground) / <alpha-value>)",
+        },
+        muted: {
+          DEFAULT: "rgb(var(--color-muted) / <alpha-value>)",
+          foreground: "rgb(var(--color-muted-foreground) / <alpha-value>)",
+        },
+        accent: {
+          DEFAULT: "rgb(var(--color-accent) / <alpha-value>)",
+          foreground: "rgb(var(--color-accent-foreground) / <alpha-value>)",
+        },
+        destructive: "rgb(var(--color-destructive) / <alpha-value>)",
+        border: "rgb(var(--color-border) / <alpha-value>)",
+        input: "rgb(var(--color-input) / <alpha-value>)",
+        ring: "rgb(var(--color-ring) / <alpha-value>)",
         success: "#16a34a",
         warning: "#ca8a04",
+        tab: {
+          bar: "rgb(var(--color-tab-bar) / <alpha-value>)",
+          active: "rgb(var(--color-tab-active) / <alpha-value>)",
+          inactive: "rgb(var(--color-tab-inactive) / <alpha-value>)",
+        },
+        toast: {
+          error: {
+            bg: "rgb(var(--color-toast-error-bg) / <alpha-value>)",
+            border: "rgb(var(--color-toast-error-border) / <alpha-value>)",
+            text: "rgb(var(--color-toast-error-text) / <alpha-value>)",
+          },
+          success: {
+            bg: "rgb(var(--color-toast-success-bg) / <alpha-value>)",
+            border: "rgb(var(--color-toast-success-border) / <alpha-value>)",
+            text: "rgb(var(--color-toast-success-text) / <alpha-value>)",
+          },
+          info: {
+            bg: "rgb(var(--color-toast-info-bg) / <alpha-value>)",
+            border: "rgb(var(--color-toast-info-border) / <alpha-value>)",
+            text: "rgb(var(--color-toast-info-text) / <alpha-value>)",
+          },
+        },
       },
       borderRadius: {
         sm: "6px",

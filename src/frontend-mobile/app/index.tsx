@@ -13,5 +13,5 @@ export default function Index() {
     );
   }
 
-  return user ? <Redirect href="/(app)/vehicles" /> : <Redirect href="/login" />;
+  return user ? <Redirect href="/(app)/dashboard" /> : <Redirect href="/login" />;
 }

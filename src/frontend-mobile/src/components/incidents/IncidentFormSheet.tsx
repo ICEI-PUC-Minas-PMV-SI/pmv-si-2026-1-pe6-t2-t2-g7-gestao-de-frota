@@ -2,10 +2,18 @@ import { useEffect, useState } from "react";
 import { Alert, Text, View } from "react-native";
 
 import { Button } from "../ui/Button";
+import { CurrencyInput } from "../ui/CurrencyInput";
+import { DateInput } from "../ui/DateInput";
 import { FormSheet } from "../ui/FormSheet";
 import { Input } from "../ui/Input";
 import { OptionChips } from "../ui/OptionChips";
+import {
+  isoToDateBrMask,
+  parseDateBrMaskToIso,
+  todayDateBrMask,
+} from "../../utils/inputMasks";
 import { useAuthorizedToken } from "../../hooks/useAuthorizedToken";
+import { notifySuccess, showToast } from "../ui/toast";
 import {
   incidentModule,
   type Incident,
@@ -46,10 +54,6 @@ const SEVERITY_OPTIONS: { value: IncidentSeverity; label: string }[] = [
   { value: "critica", label: SEVERITY_LABEL.critica },
 ];
 
-function todayIsoDate() {
-  return new Date().toISOString().slice(0, 10);
-}
-
 export function IncidentFormSheet({
   visible,
   incident,
@@ -64,29 +68,25 @@ export function IncidentFormSheet({
   const [status, setStatus] = useState<IncidentStatus>("aberto");
   const [severidade, setSeveridade] = useState<IncidentSeverity>("media");
   const [descricao, setDescricao] = useState("");
-  const [data, setData] = useState(todayIsoDate());
+  const [data, setData] = useState(todayDateBrMask());
   const [codigoInfracao, setCodigoInfracao] = useState("");
-  const [valor, setValor] = useState("");
+  const [valor, setValor] = useState<number | undefined>();
   const [localInfracao, setLocalInfracao] = useState("");
   const [natureza, setNatureza] = useState("");
   const [local, setLocal] = useState("");
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!visible) return;
-    setError(null);
     if (incident) {
       setVehicleId(incident.vehicleId);
       setTipo(incident.tipo);
       setStatus(incident.status);
       setSeveridade(incident.severidade);
       setDescricao(incident.descricao);
-      setData(incident.data?.slice(0, 10) ?? todayIsoDate());
+      setData(isoToDateBrMask(incident.data) || todayDateBrMask());
       setCodigoInfracao(incident.codigoInfracao ?? "");
-      setValor(
-        typeof incident.valor === "number" ? String(incident.valor) : "",
-      );
+      setValor(typeof incident.valor === "number" ? incident.valor : undefined);
       setLocalInfracao(incident.localInfracao ?? "");
       setNatureza(incident.natureza ?? "");
       setLocal(incident.local ?? "");
@@ -96,9 +96,9 @@ export function IncidentFormSheet({
       setStatus("aberto");
       setSeveridade("media");
       setDescricao("");
-      setData(todayIsoDate());
+      setData(todayDateBrMask());
       setCodigoInfracao("");
-      setValor("");
+      setValor(undefined);
       setLocalInfracao("");
       setNatureza("");
       setLocal("");
@@ -106,29 +106,53 @@ export function IncidentFormSheet({
   }, [visible, incident, vehicles]);
 
   async function onSubmit() {
-    setError(null);
     if (!vehicleId) {
-      setError("Selecione um veículo.");
+      showToast({ message: "Selecione um veículo.", tone: "error" });
       return;
     }
     if (!descricao.trim()) {
-      setError("Informe a descrição.");
+      showToast({ message: "Informe a descrição.", tone: "error" });
       return;
     }
 
-    const payload = {
+    const dataIso = parseDateBrMaskToIso(data);
+    if (!dataIso) {
+      showToast({
+        message: "Informe uma data válida (DD/MM/AAAA).",
+        tone: "error",
+      });
+      return;
+    }
+
+    const payload: {
+      vehicleId: string;
+      tipo: IncidentType;
+      status: IncidentStatus;
+      severidade: IncidentSeverity;
+      descricao: string;
+      data?: string;
+      codigoInfracao?: string;
+      valor?: number;
+      localInfracao?: string;
+      natureza?: string;
+      local?: string;
+    } = {
       vehicleId,
       tipo,
       status,
       severidade,
       descricao: descricao.trim(),
-      data: data ? new Date(data).toISOString() : undefined,
-      codigoInfracao: codigoInfracao.trim() || undefined,
-      valor: valor.trim() ? Number(valor) : undefined,
-      localInfracao: localInfracao.trim() || undefined,
-      natureza: natureza.trim() || undefined,
-      local: local.trim() || undefined,
+      data: dataIso,
     };
+
+    if (tipo === "multa") {
+      payload.codigoInfracao = codigoInfracao.trim() || undefined;
+      payload.valor = valor;
+      payload.localInfracao = localInfracao.trim() || undefined;
+    } else {
+      payload.natureza = natureza.trim() || undefined;
+      payload.local = local.trim() || undefined;
+    }
 
     setSaving(true);
     try {
@@ -142,12 +166,13 @@ export function IncidentFormSheet({
       } else {
         await incidentModule.gateways.create.exec({ idToken, ...payload });
       }
+      notifySuccess(
+        isEdit ? "Incidente atualizado com sucesso." : "Incidente registrado com sucesso.",
+      );
       onSaved();
       onClose();
-    } catch (err: unknown) {
-      setError(
-        err instanceof Error ? err.message : "Erro ao salvar incidente.",
-      );
+    } catch {
+      // Toast exibido pelo AxiosAdapter.
     } finally {
       setSaving(false);
     }
@@ -166,9 +191,6 @@ export function IncidentFormSheet({
       }
     >
       <View className="gap-y-4 pb-6">
-        {error ? (
-          <Text className="text-sm text-destructive">{error}</Text>
-        ) : null}
         {vehicles.length === 0 ? (
           <Text className="text-sm text-muted-foreground">
             Cadastre um veículo antes de registrar incidentes.
@@ -206,30 +228,47 @@ export function IncidentFormSheet({
           numberOfLines={3}
           style={{ minHeight: 80, textAlignVertical: "top" }}
         />
-        <Input
-          label="Data"
+        <DateInput
+          label="Data do incidente"
           value={data}
-          onChangeText={setData}
-          placeholder="AAAA-MM-DD"
+          onChangeValue={setData}
         />
-        <Input
-          label="Código infração (opcional)"
-          value={codigoInfracao}
-          onChangeText={setCodigoInfracao}
-        />
-        <Input
-          label="Valor (opcional)"
-          value={valor}
-          onChangeText={setValor}
-          keyboardType="decimal-pad"
-        />
-        <Input
-          label="Local infração (opcional)"
-          value={localInfracao}
-          onChangeText={setLocalInfracao}
-        />
-        <Input label="Natureza (opcional)" value={natureza} onChangeText={setNatureza} />
-        <Input label="Local (opcional)" value={local} onChangeText={setLocal} />
+        {tipo === "multa" ? (
+          <>
+            <Input
+              label="Código da infração"
+              value={codigoInfracao}
+              onChangeText={setCodigoInfracao}
+              placeholder="Ex.: 745-50"
+            />
+            <CurrencyInput
+              label="Valor (R$)"
+              value={valor}
+              onChangeValue={setValor}
+            />
+            <Input
+              label="Local da infração"
+              value={localInfracao}
+              onChangeText={setLocalInfracao}
+              placeholder="Onde ocorreu a multa"
+            />
+          </>
+        ) : (
+          <>
+            <Input
+              label="Natureza"
+              value={natureza}
+              onChangeText={setNatureza}
+              placeholder="ex: colisão, roubo, avaria"
+            />
+            <Input
+              label="Local"
+              value={local}
+              onChangeText={setLocal}
+              placeholder="Local do sinistro"
+            />
+          </>
+        )}
       </View>
     </FormSheet>
   );

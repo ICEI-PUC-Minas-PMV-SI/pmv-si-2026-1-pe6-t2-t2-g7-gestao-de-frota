@@ -1,11 +1,17 @@
-import { ReactNode } from "react";
 import {
-  Modal,
+  Dimensions,
   Pressable,
   ScrollView,
+  StyleSheet,
   Text,
   View,
 } from "react-native";
+import { ReactNode } from "react";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import { AnimatedBottomSheetShell } from "./AnimatedBottomSheetShell";
+
+const SHEET_MAX_HEIGHT = Dimensions.get("window").height * 0.9;
 
 type BottomSheetModalProps = {
   open: boolean;
@@ -22,46 +28,82 @@ export function BottomSheetModal({
   description,
   children,
 }: BottomSheetModalProps) {
+  const insets = useSafeAreaInsets();
+  const bottomPad = Math.max(insets.bottom, 16);
+  const scrollMaxHeight = SHEET_MAX_HEIGHT - bottomPad - 160;
+
   return (
-    <Modal
-      visible={open}
-      transparent
-      animationType="slide"
-      onRequestClose={onClose}
-    >
-      <View className="flex-1 justify-end bg-black/45">
-        <Pressable className="flex-1" onPress={onClose} />
-        <View className="max-h-[88%] rounded-t-[28px] border-t border-border bg-card px-5 pb-8 pt-4">
-          <View className="mb-4 items-center">
-            <View className="h-1.5 w-14 rounded-full bg-border" />
-          </View>
-          <View className="mb-5 flex-row items-start justify-between gap-4">
-            <View className="flex-1">
-              <Text className="text-lg font-semibold text-foreground">{title}</Text>
-              {description ? (
-                <Text className="mt-1 text-sm text-muted-foreground">
-                  {description}
-                </Text>
-              ) : null}
-            </View>
-            <Pressable
-              onPress={onClose}
-              className="rounded-full border border-border bg-background px-3 py-2"
-            >
-              <Text className="text-xs font-semibold uppercase text-muted-foreground">
-                Fechar
-              </Text>
-            </Pressable>
-          </View>
-          <ScrollView
-            className="flex-grow"
-            showsVerticalScrollIndicator={false}
-            keyboardShouldPersistTaps="handled"
-          >
-            {children}
-          </ScrollView>
+    <AnimatedBottomSheetShell open={open} onClose={onClose}>
+      <View
+        className="w-full rounded-t-[28px] border-t border-border bg-card"
+        style={[
+          styles.sheet,
+          {
+            maxHeight: SHEET_MAX_HEIGHT,
+            paddingBottom: bottomPad,
+          },
+        ]}
+      >
+        <View style={styles.handleWrap}>
+          <View className="h-1.5 w-14 rounded-full bg-border" />
         </View>
+        <View style={styles.header}>
+          <View className="min-w-0 flex-1">
+            <Text className="text-lg font-semibold text-foreground">{title}</Text>
+            {description ? (
+              <Text className="mt-1 text-sm text-muted-foreground">
+                {description}
+              </Text>
+            ) : null}
+          </View>
+          <Pressable
+            onPress={onClose}
+            className="rounded-full border border-border bg-background px-3 py-2"
+          >
+            <Text className="text-xs font-semibold uppercase text-muted-foreground">
+              Fechar
+            </Text>
+          </Pressable>
+        </View>
+        <ScrollView
+          style={[styles.scroll, { maxHeight: Math.max(scrollMaxHeight, 160) }]}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator
+          bounces
+          nestedScrollEnabled
+        >
+          {children}
+        </ScrollView>
       </View>
-    </Modal>
+    </AnimatedBottomSheetShell>
   );
 }
+
+const styles = StyleSheet.create({
+  sheet: {
+    width: "100%",
+    flexDirection: "column",
+    overflow: "hidden",
+  },
+  handleWrap: {
+    alignItems: "center",
+    marginBottom: 16,
+    marginTop: 8,
+    flexShrink: 0,
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "space-between",
+    gap: 16,
+    paddingHorizontal: 20,
+    marginBottom: 16,
+    flexShrink: 0,
+  },
+  scroll: {
+    flexGrow: 0,
+    flexShrink: 1,
+    minHeight: 0,
+    paddingHorizontal: 20,
+  },
+});

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Alert } from "react-native";
+import { showToast } from "../components/ui/toast";
 
 import { useAuthorizedToken } from "./useAuthorizedToken";
 import { useLiveLocation } from "./useLiveLocation";
@@ -176,17 +176,17 @@ export function useMapJourney() {
 
   const onStart = useCallback(async () => {
     if (!vehicleId) {
-      Alert.alert(
-        "Sem veículo",
-        "Cadastre um veículo na web antes de iniciar uma jornada.",
-      );
+      showToast({
+        message: "Cadastre um veículo antes de iniciar uma jornada.",
+        tone: "error",
+      });
       return;
     }
     if (plannedStops.length < MIN_PARADAS) {
-      Alert.alert(
-        "Paradas insuficientes",
-        `Marque pelo menos ${MIN_PARADAS} paradas no mapa.`,
-      );
+      showToast({
+        message: `Marque pelo menos ${MIN_PARADAS} paradas no mapa.`,
+        tone: "error",
+      });
       return;
     }
     setBusy(true);
@@ -221,10 +221,8 @@ export function useMapJourney() {
       setSimulationPath(pathPoints);
       setTrail(pathPoints.length ? [pathPoints[0]!] : []);
       setVehiclePosition(pathPoints[0] ?? null);
-    } catch (err: unknown) {
-      const message =
-        err instanceof Error ? err.message : "Não foi possível iniciar a jornada.";
-      Alert.alert("Erro", message);
+    } catch {
+      // Toast exibido pelo AxiosAdapter.
     } finally {
       setBusy(false);
     }
@@ -243,10 +241,8 @@ export function useMapJourney() {
       setGeoHint(null);
       setPositionError(null);
       simIndexRef.current = 0;
-    } catch (err: unknown) {
-      const message =
-        err instanceof Error ? err.message : "Não foi possível encerrar.";
-      Alert.alert("Erro", message);
+    } catch {
+      // Toast exibido pelo AxiosAdapter.
     } finally {
       setBusy(false);
     }
