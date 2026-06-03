@@ -36,6 +36,16 @@ module.exports = {
         md: "8px",
         lg: "10px",
         xl: "14px",
+        "2xl": "16px",
+      },
+      fontFamily: {
+        sans: ["Inter_400Regular", "System"],
+        medium: ["Inter_500Medium", "System"],
+        semibold: ["Inter_600SemiBold", "System"],
+      },
+      boxShadow: {
+        card: "0 1px 3px 0 rgb(15 23 42 / 0.06)",
+        tab: "0 -4px 24px -4px rgb(15 23 42 / 0.08)",
       },
     },
   },

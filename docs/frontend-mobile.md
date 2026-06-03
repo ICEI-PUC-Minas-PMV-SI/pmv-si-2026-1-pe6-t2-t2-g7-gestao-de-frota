@@ -7,7 +7,15 @@
 
 ### Wireframes
 
-[Inclua os wireframes das páginas principais da interface, mostrando a disposição dos elementos na página.]
+Wireframes das principais telas do aplicativo móvel:
+
+![Wireframe mobile 1](img/Gestao-frotas-imagens/mobile-images/Captura%20de%20tela%202026-05-27%20110731.png)
+![Wireframe mobile 2](img/Gestao-frotas-imagens/mobile-images/Captura%20de%20tela%202026-05-27%20110755.png)
+![Wireframe mobile 3](img/Gestao-frotas-imagens/mobile-images/Captura%20de%20tela%202026-05-27%20110804.png)
+![Wireframe mobile 4](img/Gestao-frotas-imagens/mobile-images/Captura%20de%20tela%202026-05-27%20110810.png)
+![Wireframe mobile 5](img/Gestao-frotas-imagens/mobile-images/Captura%20de%20tela%202026-05-27%20110816.png)
+![Wireframe mobile 6](img/Gestao-frotas-imagens/mobile-images/Captura%20de%20tela%202026-05-27%20110822.png)
+![Wireframe mobile 7](img/Gestao-frotas-imagens/mobile-images/Captura%20de%20tela%202026-05-27%20110834.png)
 
 ### Design Visual
 

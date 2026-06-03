@@ -45,6 +45,10 @@ Aplicativo móvel do projeto Gestão de Frota construído com **Expo Router** + 
 | `npx tsc --noEmit` | Type-check |
 | `npm run lint` | ESLint (`expo lint`) |
 
+## Design
+
+Guia visual e de UX: **[design-mobile.md](./design-mobile.md)** (alinhado ao [design.md do web](../frontend/design.md)).
+
 ## Estrutura
 
 ```
@@ -54,8 +58,11 @@ app/                 # Rotas (file-based)
   login.tsx, signup.tsx
   (app)/             # Protegido (redireciona para /login se deslogado)
     _layout.tsx      # Bottom tabs
-    homepage.tsx, map.tsx, vehicles.tsx, incidents.tsx, account.tsx
+    homepage.tsx, dashboard.tsx, map.tsx, vehicles.tsx, incidents.tsx, account.tsx
 src/
+  components/layout/ # AppTabBar, AppScreen
+  screens/           # MapJourneyScreen (.native)
+  theme/             # tokens, incidentes
   config/firebase.config.ts
   context/auth.context.tsx
   core/
@@ -69,6 +76,8 @@ src/
 ## Mapa & GPS
 
 A tela `/(app)/map` usa `expo-location` para obter coordenadas em tempo real e `react-native-maps` para renderizar (Google Maps no Android, Apple Maps no iOS). Para Android em build standalone, é necessário preencher `android.config.googleMaps.apiKey` em `app.json` com uma chave da Google Cloud Console (Maps SDK for Android).
+
+**Web (`npx expo start --web`):** `react-native-maps` não roda no navegador. A rota `app/(app)/map.tsx` delega para `src/screens/MapJourneyScreen` (`.tsx` na web, `.native.tsx` no celular). O Metro também substitui `react-native-maps` por um stub em builds web. Para mapa completo, use **Expo Go** no celular ou emulador.
 
 ## Backend
 

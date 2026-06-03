@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Contém o stacking do Leaflet para o FAB ficar acima na web. */
+.journey-map-leaflet-host {
+  z-index: 0;
+  isolation: isolate;
+}

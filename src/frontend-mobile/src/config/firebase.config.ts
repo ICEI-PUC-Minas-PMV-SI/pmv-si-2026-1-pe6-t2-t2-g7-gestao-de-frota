@@ -15,19 +15,31 @@ function trimEnv(value: string | undefined): string {
   return typeof value === "string" ? value.trim() : "";
 }
 
+/** Expo usa EXPO_PUBLIC_*; aceita NEXT_PUBLIC_* se você copiou do .env.local do web. */
+function publicEnv(expoKey: string, nextKey: string): string {
+  return trimEnv(process.env[expoKey]) || trimEnv(process.env[nextKey]);
+}
+
 function firebaseWebConfigComplete(): boolean {
   return (
-    Boolean(trimEnv(process.env.EXPO_PUBLIC_FIREBASE_API_KEY)) &&
-    Boolean(trimEnv(process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN)) &&
-    Boolean(trimEnv(process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID)) &&
-    Boolean(trimEnv(process.env.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET)) &&
-    Boolean(trimEnv(process.env.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID)) &&
-    Boolean(trimEnv(process.env.EXPO_PUBLIC_FIREBASE_APP_ID))
+    Boolean(publicEnv("EXPO_PUBLIC_FIREBASE_API_KEY", "NEXT_PUBLIC_FIREBASE_API_KEY")) &&
+    Boolean(publicEnv("EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN", "NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN")) &&
+    Boolean(publicEnv("EXPO_PUBLIC_FIREBASE_PROJECT_ID", "NEXT_PUBLIC_FIREBASE_PROJECT_ID")) &&
+    Boolean(
+      publicEnv("EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET", "NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET"),
+    ) &&
+    Boolean(
+      publicEnv(
+        "EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID",
+        "NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID",
+      ),
+    ) &&
+    Boolean(publicEnv("EXPO_PUBLIC_FIREBASE_APP_ID", "NEXT_PUBLIC_FIREBASE_APP_ID"))
   );
 }
 
 function firebaseWebApiKeyLooksValid(): boolean {
-  const k = trimEnv(process.env.EXPO_PUBLIC_FIREBASE_API_KEY);
+  const k = publicEnv("EXPO_PUBLIC_FIREBASE_API_KEY", "NEXT_PUBLIC_FIREBASE_API_KEY");
   if (!k) return false;
   return k.startsWith("AIza") && k.length >= 30;
 }
@@ -65,12 +77,21 @@ if (skipFirebaseAuth) {
   }
 } else {
   const firebaseConfig = {
-    apiKey: trimEnv(process.env.EXPO_PUBLIC_FIREBASE_API_KEY),
-    authDomain: trimEnv(process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN),
-    projectId: trimEnv(process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID),
-    storageBucket: trimEnv(process.env.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET),
-    messagingSenderId: trimEnv(process.env.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID),
-    appId: trimEnv(process.env.EXPO_PUBLIC_FIREBASE_APP_ID),
+    apiKey: publicEnv("EXPO_PUBLIC_FIREBASE_API_KEY", "NEXT_PUBLIC_FIREBASE_API_KEY"),
+    authDomain: publicEnv(
+      "EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN",
+      "NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN",
+    ),
+    projectId: publicEnv("EXPO_PUBLIC_FIREBASE_PROJECT_ID", "NEXT_PUBLIC_FIREBASE_PROJECT_ID"),
+    storageBucket: publicEnv(
+      "EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET",
+      "NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET",
+    ),
+    messagingSenderId: publicEnv(
+      "EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID",
+      "NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID",
+    ),
+    appId: publicEnv("EXPO_PUBLIC_FIREBASE_APP_ID", "NEXT_PUBLIC_FIREBASE_APP_ID"),
   };
   const app: FirebaseApp = getApps().length ? getApp() : initializeApp(firebaseConfig);
   auth = buildAuth(app);
