@@ -7,13 +7,14 @@ import {
   TextInput,
   View,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import {
   confirmDeleteIncident,
   IncidentFormSheet,
 } from "../../src/components/incidents/IncidentFormSheet";
 import { IncidentCard } from "../../src/components/incidents/IncidentCard";
-import { AppScreen } from "../../src/components/layout/AppScreen";
+import { useTabScreenBottomInset } from "../../src/components/layout/useTabScreenBottomInset";
 import { Badge } from "../../src/components/ui/Badge";
 import { Button } from "../../src/components/ui/Button";
 import { Card } from "../../src/components/ui/Card";
@@ -38,6 +39,8 @@ const STATUS_FILTERS: { value: "all" | IncidentStatus; label: string }[] = [
 ];
 
 export default function IncidentsScreen() {
+  const insets = useSafeAreaInsets();
+  const bottomInset = useTabScreenBottomInset();
   const getToken = useAuthorizedToken();
   const [incidents, setIncidents] = useState<Incident[]>([]);
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
@@ -124,21 +127,23 @@ export default function IncidentsScreen() {
 
   return (
     <>
-      <AppScreen
-        scroll={false}
-        padded={false}
-        header={
+      <View className="flex-1 bg-background">
+        <View style={{ paddingTop: insets.top }}>
           <ModuleHeader
             eyebrow="Operação"
             title="Incidentes"
             description="Multas e sinistros da frota — consulte, edite e registre novos casos."
           />
-        }
-      >
+        </View>
+
         <FlatList
+          className="flex-1"
           data={filtered}
           keyExtractor={(item) => item.id}
-          contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 16 }}
+          contentContainerStyle={{
+            paddingHorizontal: 20,
+            paddingBottom: bottomInset,
+          }}
           refreshControl={
             <RefreshControl
               refreshing={refreshing}
@@ -255,7 +260,7 @@ export default function IncidentsScreen() {
             </Card>
           }
         />
-      </AppScreen>
+      </View>
 
       <IncidentFormSheet
         visible={formOpen}

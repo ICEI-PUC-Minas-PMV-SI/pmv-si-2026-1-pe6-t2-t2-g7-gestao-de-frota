@@ -32,7 +32,7 @@ export function AppScreen({
         style={{ paddingTop: insets.top, paddingBottom: bottomInset }}
       >
         {header}
-        <View className={`flex-1 ${paddingClass}`}>{children}</View>
+        <View className={`min-h-0 flex-1 ${paddingClass}`}>{children}</View>
       </View>
     );
   }

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useContext } from "react";
-import { Dimensions, LayoutChangeEvent, Pressable, StyleSheet, View } from "react-native";
+import { Dimensions, LayoutChangeEvent, Platform, Pressable, StyleSheet, View } from "react-native";
 import {
   BottomTabBarHeightCallbackContext,
   BottomTabBarProps,
@@ -229,25 +229,26 @@ export function HighlightedTabBar({ state, navigation }: BottomTabBarProps) {
   const svgTop = Math.max(0, -bubbleTop);
   const tabRowTop =
     svgTop + BAR_RIM_Y + (svgHeight - BAR_RIM_Y - ICON_SIZE) / 2;
-  const barShadowFill =
-    theme === "light" ? "rgba(15, 23, 42, 0.1)" : "rgba(0, 0, 0, 0.16)";
-  const barShadowOffsetY = theme === "light" ? 5 : 3;
   const floatShadow =
     theme === "light"
-      ? {
-          shadowColor: "#0f172a",
-          shadowOffset: { width: 0, height: 8 } as const,
-          shadowOpacity: 0.08,
-          shadowRadius: 14,
-          elevation: 7,
-        }
-      : {
-          shadowColor: "#020617",
-          shadowOffset: { width: 0, height: 5 } as const,
-          shadowOpacity: 0.14,
-          shadowRadius: 12,
-          elevation: 4,
-        };
+      ? Platform.select({
+          ios: {
+            shadowColor: "#0f172a",
+            shadowOffset: { width: 0, height: 8 },
+            shadowOpacity: 0.08,
+            shadowRadius: 14,
+          },
+          default: {},
+        })
+      : Platform.select({
+          ios: {
+            shadowColor: "#020617",
+            shadowOffset: { width: 0, height: 5 },
+            shadowOpacity: 0.12,
+            shadowRadius: 10,
+          },
+          default: {},
+        });
 
   const handleLayout = (event: LayoutChangeEvent) => {
     onHeightChange?.(event.nativeEvent.layout.height);
@@ -282,15 +283,10 @@ export function HighlightedTabBar({ state, navigation }: BottomTabBarProps) {
       >
         <Svg
           width={barWidth}
-          height={svgHeight + barShadowOffsetY}
+          height={svgHeight}
           style={[styles.barSvg, { top: svgTop }]}
           pointerEvents="none"
         >
-          <AnimatedPath
-            animatedProps={animatedPathProps}
-            fill={barShadowFill}
-            transform={[{ translateY: barShadowOffsetY }]}
-          />
           <AnimatedPath
             animatedProps={animatedPathProps}
             fill={palette.tabBar}
@@ -308,11 +304,15 @@ export function HighlightedTabBar({ state, navigation }: BottomTabBarProps) {
             {
               top: bubbleTop,
               backgroundColor: palette.tabActive,
-              shadowColor: theme === "light" ? palette.tabActive : "#020617",
-              shadowOpacity: theme === "light" ? 0.28 : 0.18,
-              shadowRadius: theme === "light" ? 10 : 8,
-              elevation: theme === "light" ? 10 : 6,
               borderColor: theme === "light" ? "#ffffff" : "rgba(255,255,255,0.2)",
+              ...(Platform.OS === "ios"
+                ? {
+                    shadowColor: theme === "light" ? palette.tabActive : "#020617",
+                    shadowOpacity: theme === "light" ? 0.28 : 0.16,
+                    shadowRadius: theme === "light" ? 10 : 8,
+                    shadowOffset: { width: 0, height: 6 },
+                  }
+                : {}),
             },
           ]}
         >
@@ -411,10 +411,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 2,
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.28,
-    shadowRadius: 10,
-    elevation: 10,
     zIndex: 3,
   },
   tabsRow: {
