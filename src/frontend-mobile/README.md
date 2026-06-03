@@ -42,8 +42,40 @@ Aplicativo móvel do projeto Gestão de Frota construído com **Expo Router** + 
 | Script | Função |
 |---|---|
 | `npx expo start` | Inicia Metro + abre Expo Dev Tools |
+| `npm run web` | Expo Web (usado pelos testes Cypress) |
+| `npm run cy:open` | Abre o Cypress em modo interativo |
+| `npm run cy:run` | Executa a suíte E2E headless |
 | `npx tsc --noEmit` | Type-check |
 | `npm run lint` | ESLint (`expo lint`) |
+
+## Testes E2E (Cypress)
+
+Os testes rodam contra o **Expo Web** (`http://localhost:8081`), espelhando fluxos do frontend web com navegação por **tab bar** e modais nativos.
+
+**Pré-requisitos:** backend (`src/backend`) e Firebase configurados no `.env` (mesmo projeto do web).
+
+```sh
+# Terminal 1 — API
+cd ../backend && npm run start:dev
+
+# Terminal 2 — app mobile web
+npm run web
+
+# Terminal 3 — Cypress
+npm run cy:open   # ou npm run cy:run
+```
+
+Porta alternativa: `CYPRESS_BASE_URL=http://localhost:19006 npm run cy:run`
+
+Suíte em `cypress/e2e/`:
+- `public-pages.cy.ts` — login/signup
+- `auth-edge-cases.cy.ts` — erros de autenticação
+- `dashboard-navigation.cy.ts` — tabs e painel
+- `vehicles-management.cy.ts` — CRUD de veículo
+- `incidents-management.cy.ts` — incidentes
+- `account-management.cy.ts` — perfil e logout
+- `map-journey.cy.ts` — jornada no mapa (paradas, simulação e conclusão)
+- `full-journey.cy.ts` — smoke end-to-end
 
 ## Design
 

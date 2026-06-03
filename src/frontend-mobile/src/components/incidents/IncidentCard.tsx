@@ -57,12 +57,16 @@ export function IncidentCard({
       <View className="mt-4 flex-row gap-2">
         <Pressable
           onPress={onEdit}
+          accessibilityRole="button"
+          accessibilityLabel="Editar incidente"
           className="flex-1 items-center rounded-lg border border-border py-2.5"
         >
           <Text className="text-sm font-medium text-foreground">Editar</Text>
         </Pressable>
         <Pressable
           onPress={onDelete}
+          accessibilityRole="button"
+          accessibilityLabel="Excluir incidente"
           className="flex-1 items-center rounded-lg border border-destructive/40 py-2.5"
         >
           <Text className="text-sm font-medium text-destructive">Excluir</Text>

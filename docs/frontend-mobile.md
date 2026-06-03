@@ -124,6 +124,7 @@ Resumo de integrações:
 - **Navegação**: `@react-navigation/native` + `@react-navigation/bottom-tabs`;
 - **Animações**: `react-native-reanimated` ~4 + `react-native-gesture-handler`;
 - **Feedback tátil**: `expo-haptics`;
+- **Testes E2E**: Cypress 14 + `cypress-real-events`;
 - **Qualidade de código**: ESLint (eslint-config-expo), Prettier (prettier-plugin-tailwindcss);
 - **Build e distribuição**: Expo EAS Build.
 
@@ -194,13 +195,115 @@ Implantação sugerida para o app móvel com **Expo EAS Build**:
 
 ## Testes
 
-[Descreva a estratégia de teste, incluindo os tipos de teste a serem realizados (unitários, integração, carga, etc.) e as ferramentas a serem utilizadas.]
+A estratégia atual prioriza **testes end-to-end (E2E)** para validar jornadas reais do usuário no app móvel, espelhando a abordagem adotada no frontend Web. Os cenários exercitam autenticação, navegação por abas, formulários em bottom sheets, integração com a API NestJS e o fluxo completo de jornada no mapa.
 
-1. Crie casos de teste para cobrir todos os requisitos funcionais e não funcionais da aplicação.
-2. Implemente testes unitários para testar unidades individuais de código, como funções e classes.
-3. Realize testes de integração para verificar a interação correta entre os componentes da aplicação.
-4. Execute testes de carga para avaliar o desempenho da aplicação sob carga significativa.
-5. Utilize ferramentas de teste adequadas, como frameworks de teste e ferramentas de automação de teste, para agilizar o processo de teste.
+### Escopo e ambiente de execução
+
+Os testes rodam contra o **Expo Web** (`http://localhost:8081`), e não em emulador Android/iOS. Essa escolha permite reutilizar o Cypress e validar a mesma lógica de negócio (hooks, gateways HTTP, autenticação Firebase) com viewport mobile (390×844 px), simulando a experiência em smartphone no navegador.
+
+**Pré-requisitos para execução local:**
+
+1. Backend NestJS em execução (`src/backend`, porta padrão `3030`);
+2. Variáveis de ambiente do mobile preenchidas em `src/frontend-mobile/.env` (mesmo projeto Firebase do web);
+3. Expo Web servindo o app (`npm run web` em `src/frontend-mobile`).
+
+**Comandos:**
+
+```bash
+cd src/frontend-mobile
+
+# Terminal 1 — backend
+cd ../backend && pnpm run start:dev
+
+# Terminal 2 — app mobile web
+npm run web
+
+# Terminal 3 — Cypress
+npm run cy:open   # modo interativo
+npm run cy:run    # headless (CI/local)
+```
+
+Porta alternativa do Expo: `CYPRESS_BASE_URL=http://localhost:19006 npm run cy:run`.
+
+### Ferramentas adotadas
+
+| Ferramenta | Uso |
+|------------|-----|
+| **Cypress 14** | Orquestração dos testes E2E, interceptação de rede e asserções |
+| **cypress-real-events** | Digitação e clique em inputs do React Native Web (campos que aparecem como `disabled` para o Cypress nativo) |
+| **Helpers em `cypress/support/app-helpers.ts`** | Fluxos reutilizáveis: cadastro, login, navegação por tab bar, CRUD de veículo/incidente e jornada no mapa |
+
+Configuração em `cypress.config.mjs` (viewport mobile, `baseUrl`, spec pattern). A pasta `cypress/` possui `tsconfig.json` próprio e está excluída do `tsc` do Expo.
+
+### Casos de teste E2E (resumo)
+
+Suíte em `src/frontend-mobile/cypress/e2e/`:
+
+| Arquivo | Cobertura |
+|---------|-----------|
+| `public-pages.cy.ts` | Acesso a login/signup e validação básica dos formulários públicos |
+| `auth-edge-cases.cy.ts` | Senha divergente no cadastro, senha incorreta no login e redirecionamento de rota protegida |
+| `dashboard-navigation.cy.ts` | Cadastro, navegação pelas abas (Painel, Frota, Mapa, Incidentes, Conta) e elementos do painel |
+| `vehicles-management.cy.ts` | Cadastro de veículo, edição pelo card da frota e abertura do detalhe (**Exibir**) |
+| `incidents-management.cy.ts` | Criação de incidente vinculado a veículo e edição de descrição |
+| `account-management.cy.ts` | Atualização de nome na conta e logout pela aba **Conta** |
+| `map-journey.cy.ts` | Jornada completa no mapa: paradas, início, simulação, conclusão na API e validação no histórico do veículo |
+| `full-journey.cy.ts` | Smoke test autenticado: conta, frota, incidente, mapa, conta e logout |
+
+### Cobertura funcional por módulo
+
+- **Páginas públicas**: login, signup e transição para área autenticada (`/dashboard` após cadastro).
+- **Painel / navegação**: tab bar inferior, KPIs e seção de jornadas recentes.
+- **Frota**: cadastro e edição via bottom sheet; detalhe do veículo com incidentes e jornadas.
+- **Incidentes**: registro em sheet, vínculo com veículo e edição.
+- **Conta**: atualização de perfil e encerramento de sessão.
+- **Mapa / jornadas**: seleção de veículo, marcação de paradas (GPS + clique no Leaflet), início da jornada, simulação automática de rota, finalização via API e status **Concluída** no histórico.
+
+### Adaptações mobile em relação ao web
+
+Os testes do web (`src/frontend/cypress/`) serviram de referência, com ajustes para a UI mobile:
+
+- **Navegação**: tab bar (`aria-label`: Painel, Frota, Mapa, Incidentes, Conta) em vez de sidebar;
+- **Pós-login**: redirecionamento para `/dashboard` (não `/homepage`);
+- **Formulários**: bottom sheets (`AnimatedBottomSheetShell`, `BottomSheetModal`) em veículos, incidentes e painel de jornada no mapa;
+- **Mapa**: FAB **Abrir painel de jornada**, paradas via **Minha posição** e cliques no `.leaflet-container` (Leaflet na web);
+- **Geolocalização**: mock de `navigator.geolocation` via helper `stubGeolocation()` antes de abrir o mapa;
+- **Seletores**: `nativeID` nos campos (`#login-email`, `#vehicle-marca`, `#incident-descricao`, etc.) e `accessibilityRole="button"` em ações críticas;
+- **Inputs RN Web**: `cypress-real-events` (`realClick`, `realType`) para campos não editáveis pelo `.type()` padrão.
+
+### Helpers principais (`app-helpers.ts`)
+
+| Helper | Função |
+|--------|--------|
+| `signUpViaUi` / `loginViaUi` | Autenticação pela interface |
+| `goToTab` / `goToModule` | Navegação pela tab bar |
+| `createVehicleViaUi` / `createIncidentViaUi` | Cadastros via bottom sheet |
+| `stubGeolocation` | Simula GPS no Expo Web |
+| `addMapStops` | Adiciona paradas no mapa (GPS + clique) |
+| `startMapJourney` / `waitForMapJourneyCompletion` | Inicia e aguarda fim da simulação |
+| `assertVehicleHasCompletedJourney` | Valida jornada **Concluída** no histórico do veículo |
+
+### Observações de execução
+
+- Cada spec limpa `localStorage`, `sessionStorage` e `indexedDB` entre testes (`cypress/support/e2e.ts`), isolando sessões Firebase.
+- Animações CSS/transitions são desabilitadas durante os testes para reduzir flakiness.
+- O cenário de jornada intercepta o OSRM com fallback (`503`) para encurtar a simulação (~40 s) em vez de aguardar rotas longas da API pública.
+- A validação pós-jornada consulta o histórico em **Frota → Exibir → Jornadas**, pois o painel não recarrega automaticamente ao trocar de aba.
+- Testes unitários e de integração isolados ainda não fazem parte da suíte; a cobertura atual concentra-se em E2E.
+- Artefatos Cypress (`cypress/screenshots/`, `cypress/videos/`) estão no `.gitignore` do projeto mobile.
+
+### Estrutura de arquivos de teste
+
+```
+src/frontend-mobile/
+  cypress.config.mjs
+  cypress/
+    e2e/              # Specs (*.cy.ts)
+    support/
+      e2e.ts          # Hooks globais e limpeza de storage
+      app-helpers.ts  # Helpers de fluxo mobile
+    tsconfig.json
+```
 
 # Referências
 
@@ -209,5 +312,6 @@ Implantação sugerida para o app móvel com **Expo EAS Build**:
 - Expo Router Documentation: https://docs.expo.dev/router/introduction
 - NativeWind Documentation: https://www.nativewind.dev/docs/overview
 - Firebase Authentication Documentation: https://firebase.google.com/docs/auth
+- Cypress Documentation: https://docs.cypress.io
 - TypeScript Documentation: https://www.typescriptlang.org/docs
 

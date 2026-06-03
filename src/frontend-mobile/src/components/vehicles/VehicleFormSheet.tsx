@@ -102,15 +102,17 @@ export function VehicleFormSheet({ visible, vehicle, onClose, onSaved }: Props) 
       }
     >
       <View className="gap-y-4 pb-6">
-        <Input label="Marca" value={marca} onChangeText={setMarca} placeholder="Fiat" />
+        <Input label="Marca" nativeID="vehicle-marca" value={marca} onChangeText={setMarca} placeholder="Fiat" />
         <Input
           label="Modelo"
+          nativeID="vehicle-modelo"
           value={modelo}
           onChangeText={setModelo}
           placeholder="Uno"
         />
         <Input
           label="Ano"
+          nativeID="vehicle-ano"
           value={ano}
           onChangeText={setAno}
           keyboardType="number-pad"
@@ -118,6 +120,7 @@ export function VehicleFormSheet({ visible, vehicle, onClose, onSaved }: Props) 
         />
         <Input
           label="Placa"
+          nativeID="vehicle-placa"
           value={placa}
           onChangeText={setPlaca}
           autoCapitalize="characters"
@@ -125,6 +128,7 @@ export function VehicleFormSheet({ visible, vehicle, onClose, onSaved }: Props) 
         />
         <Input
           label="URL da foto"
+          nativeID="vehicle-fotoUrl"
           value={fotoUrl}
           onChangeText={setFotoUrl}
           autoCapitalize="none"
@@ -132,6 +136,7 @@ export function VehicleFormSheet({ visible, vehicle, onClose, onSaved }: Props) 
         />
         <Input
           label="Tanque (L)"
+          nativeID="vehicle-tamanhoTanque"
           value={tamanhoTanque}
           onChangeText={setTamanhoTanque}
           keyboardType="decimal-pad"
@@ -139,6 +144,7 @@ export function VehicleFormSheet({ visible, vehicle, onClose, onSaved }: Props) 
         />
         <Input
           label="Consumo médio (km/L)"
+          nativeID="vehicle-consumoMedio"
           value={consumoMedio}
           onChangeText={setConsumoMedio}
           keyboardType="decimal-pad"

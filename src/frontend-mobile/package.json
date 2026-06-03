@@ -8,7 +8,9 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run"
   },
   "dependencies": {
     "@expo-google-fonts/inter": "^0.4.2",
@@ -53,6 +55,9 @@
   },
   "devDependencies": {
     "@types/react": "~19.1.0",
+    "cypress-real-events": "^1.15.0",
+    "cypress": "^14.5.4",
+    "cypress-real-events": "^1.15.0",
     "eslint": "^9.25.0",
     "eslint-config-expo": "~10.0.0",
     "prettier-plugin-tailwindcss": "^0.8.0",

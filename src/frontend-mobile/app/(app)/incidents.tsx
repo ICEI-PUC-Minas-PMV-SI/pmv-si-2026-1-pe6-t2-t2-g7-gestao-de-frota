@@ -196,6 +196,7 @@ export default function IncidentsScreen() {
               ) : null}
 
               <TextInput
+                nativeID="incident-search"
                 value={search}
                 onChangeText={setSearch}
                 placeholder="Buscar por placa, tipo ou descrição..."
