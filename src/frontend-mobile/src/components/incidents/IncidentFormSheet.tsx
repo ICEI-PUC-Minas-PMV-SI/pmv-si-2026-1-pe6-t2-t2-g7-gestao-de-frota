@@ -7,6 +7,7 @@ import { DateInput } from "../ui/DateInput";
 import { FormSheet } from "../ui/FormSheet";
 import { Input } from "../ui/Input";
 import { OptionChips } from "../ui/OptionChips";
+import { SelectField } from "../ui/SelectField";
 import {
   isoToDateBrMask,
   parseDateBrMaskToIso,
@@ -196,11 +197,12 @@ export function IncidentFormSheet({
             Cadastre um veículo antes de registrar incidentes.
           </Text>
         ) : (
-          <OptionChips
+          <SelectField
             label="Veículo"
+            placeholder="Selecione o veículo"
             options={vehicles.map((v) => ({
               value: v.id,
-              label: `${v.placa} · ${v.marca}`,
+              label: `${v.placa} · ${v.marca} ${v.modelo}`.trim(),
             }))}
             value={vehicleId}
             onChange={setVehicleId}
