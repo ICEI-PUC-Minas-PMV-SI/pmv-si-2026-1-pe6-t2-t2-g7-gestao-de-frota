@@ -126,7 +126,7 @@ export function useFleetData() {
           (a, b) =>
             new Date(b.iniciadaEm).getTime() - new Date(a.iniciadaEm).getTime(),
         )
-        .slice(0, 5),
+        .slice(0, 3),
     [journeys],
   );
 

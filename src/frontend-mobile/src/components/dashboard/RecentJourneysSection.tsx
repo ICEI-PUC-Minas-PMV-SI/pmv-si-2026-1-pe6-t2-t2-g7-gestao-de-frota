@@ -10,18 +10,33 @@ import { Card } from "../ui/Card";
 
 type JourneyWithVehicle = JourneyHistory & { vehicle?: Vehicle };
 
+const RECENT_JOURNEYS_LIMIT = 3;
+
 type Props = {
   journeys: JourneyWithVehicle[];
   stats: JourneyStats;
 };
 
 export function RecentJourneysSection({ journeys, stats }: Props) {
+  const hasMore = stats.total > RECENT_JOURNEYS_LIMIT;
+
   return (
     <View>
-      <View className="mb-3 flex-row items-center justify-between">
-        <Text className="text-sm font-semibold text-foreground">Suas jornadas</Text>
+      <View className="mb-3 flex-row items-start justify-between gap-3">
+        <View className="flex-1">
+          <Text className="text-sm font-semibold text-foreground">
+            Suas últimas 3 jornadas
+          </Text>
+          {hasMore ? (
+            <Text className="mt-1 text-xs text-muted-foreground">
+              {stats.total} jornadas no total
+            </Text>
+          ) : null}
+        </View>
         <Link href="/(app)/map">
-          <Text className="text-xs font-medium text-primary">Ir para o mapa</Text>
+          <Text className="text-xs font-medium text-primary">
+            {hasMore ? "Ver todas no mapa" : "Ir para o mapa"}
+          </Text>
         </Link>
       </View>
 
