@@ -229,6 +229,25 @@ export function HighlightedTabBar({ state, navigation }: BottomTabBarProps) {
   const svgTop = Math.max(0, -bubbleTop);
   const tabRowTop =
     svgTop + BAR_RIM_Y + (svgHeight - BAR_RIM_Y - ICON_SIZE) / 2;
+  const barShadowFill =
+    theme === "light" ? "rgba(15, 23, 42, 0.1)" : "rgba(0, 0, 0, 0.16)";
+  const barShadowOffsetY = theme === "light" ? 5 : 3;
+  const floatShadow =
+    theme === "light"
+      ? {
+          shadowColor: "#0f172a",
+          shadowOffset: { width: 0, height: 8 } as const,
+          shadowOpacity: 0.08,
+          shadowRadius: 14,
+          elevation: 7,
+        }
+      : {
+          shadowColor: "#020617",
+          shadowOffset: { width: 0, height: 5 } as const,
+          shadowOpacity: 0.14,
+          shadowRadius: 12,
+          elevation: 4,
+        };
 
   const handleLayout = (event: LayoutChangeEvent) => {
     onHeightChange?.(event.nativeEvent.layout.height);
@@ -243,6 +262,7 @@ export function HighlightedTabBar({ state, navigation }: BottomTabBarProps) {
       <View
         style={[
           styles.floatHost,
+          floatShadow,
           {
             paddingBottom: floatBottom,
             paddingHorizontal: BAR_HORIZONTAL_MARGIN,
@@ -262,10 +282,15 @@ export function HighlightedTabBar({ state, navigation }: BottomTabBarProps) {
       >
         <Svg
           width={barWidth}
-          height={svgHeight}
+          height={svgHeight + barShadowOffsetY}
           style={[styles.barSvg, { top: svgTop }]}
           pointerEvents="none"
         >
+          <AnimatedPath
+            animatedProps={animatedPathProps}
+            fill={barShadowFill}
+            transform={[{ translateY: barShadowOffsetY }]}
+          />
           <AnimatedPath
             animatedProps={animatedPathProps}
             fill={palette.tabBar}
@@ -283,7 +308,10 @@ export function HighlightedTabBar({ state, navigation }: BottomTabBarProps) {
             {
               top: bubbleTop,
               backgroundColor: palette.tabActive,
-              shadowColor: palette.tabActive,
+              shadowColor: theme === "light" ? palette.tabActive : "#020617",
+              shadowOpacity: theme === "light" ? 0.28 : 0.18,
+              shadowRadius: theme === "light" ? 10 : 8,
+              elevation: theme === "light" ? 10 : 6,
               borderColor: theme === "light" ? "#ffffff" : "rgba(255,255,255,0.2)",
             },
           ]}

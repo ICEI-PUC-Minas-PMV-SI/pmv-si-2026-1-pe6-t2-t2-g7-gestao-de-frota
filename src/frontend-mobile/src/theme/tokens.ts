@@ -5,7 +5,7 @@ export const palettes = {
   light: {
     primary: "#1a237e",
     tabActive: "#1a237e",
-    tabInactive: "#94a3b8",
+    tabInactive: "#6b7694",
     tabBar: "#ffffff",
     tabBarBorder: "#94a3b8",
     headerBg: "#f8fafc",
@@ -16,7 +16,7 @@ export const palettes = {
   dark: {
     primary: "#38bdf8",
     tabActive: "#38bdf8",
-    tabInactive: "#94a3b8",
+    tabInactive: "#94a3c4",
     tabBar: "#1e293b",
     tabBarBorder: "#475569",
     headerBg: "#0f172a",
