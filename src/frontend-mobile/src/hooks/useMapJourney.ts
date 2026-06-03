@@ -5,6 +5,7 @@ import { useAuthorizedToken } from "./useAuthorizedToken";
 import { useLiveLocation } from "./useLiveLocation";
 import { journeyModule } from "../core/modules/journeys/journeys";
 import { vehicleModule } from "../core/modules/vehicles/vehicles";
+import type { Vehicle } from "../core/modules/vehicles/vehicles";
 import {
   densifyStops,
   fetchDrivingPath,
@@ -24,6 +25,8 @@ export function useMapJourney() {
   const getToken = useAuthorizedToken();
   const live = useLiveLocation(true);
   const [vehicleId, setVehicleId] = useState<string | null>(null);
+  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
+  const [loadingVehicles, setLoadingVehicles] = useState(true);
   const [journeyId, setJourneyId] = useState<string | null>(null);
   const [plannedStops, setPlannedStops] = useState<MapPoint[]>([]);
   const [routePreview, setRoutePreview] = useState<MapPoint[]>([]);
@@ -40,12 +43,16 @@ export function useMapJourney() {
 
   useEffect(() => {
     (async () => {
+      setLoadingVehicles(true);
       try {
         const idToken = await getToken();
         const res = await vehicleModule.gateways.list.exec({ idToken });
-        if (res.body[0]) setVehicleId(res.body[0].id);
+        setVehicles(res.body);
+        setVehicleId((current) => current ?? res.body[0]?.id ?? null);
       } catch {
-        // ignore
+        setVehicles([]);
+      } finally {
+        setLoadingVehicles(false);
       }
     })();
   }, [getToken]);
@@ -87,9 +94,7 @@ export function useMapJourney() {
     const path = simulationPath;
 
     simIndexRef.current = 0;
-    setGeoHint(
-      "Simulação: o veículo percorre a rota OSRM entre as paradas (como no painel web).",
-    );
+    setGeoHint(null);
     setPositionError(null);
 
     async function advance() {
@@ -177,7 +182,7 @@ export function useMapJourney() {
   const onStart = useCallback(async () => {
     if (!vehicleId) {
       showToast({
-        message: "Cadastre um veículo antes de iniciar uma jornada.",
+        message: "Selecione um veículo para iniciar a jornada.",
         tone: "error",
       });
       return;
@@ -265,6 +270,10 @@ export function useMapJourney() {
     vehiclePosition,
     geoHint,
     positionError,
+    vehicles,
+    vehicleId,
+    loadingVehicles,
+    setVehicleId,
     addPlannedStop,
     addCurrentLocationStop,
     removeLastPlannedStop,

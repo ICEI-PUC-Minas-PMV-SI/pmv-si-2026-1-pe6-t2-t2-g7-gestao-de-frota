@@ -18,6 +18,10 @@ export default function MapJourneyScreen() {
     vehiclePosition,
     geoHint,
     positionError,
+    vehicles,
+    vehicleId,
+    loadingVehicles,
+    setVehicleId,
     addPlannedStop,
     addCurrentLocationStop,
     removeLastPlannedStop,
@@ -133,6 +137,10 @@ export default function MapJourneyScreen() {
           hasGps={hasGps}
           geoHint={geoHint}
           positionError={positionError}
+          vehicles={vehicles}
+          vehicleId={vehicleId}
+          loadingVehicles={loadingVehicles}
+          onVehicleChange={setVehicleId}
           onStart={onStart}
           onStop={onStop}
           onAddCurrentLocation={addCurrentLocationStop}

@@ -12,6 +12,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { useTheme } from "../../context/theme.context";
 import type { RoutePreviewStatus } from "../../hooks/useMapJourney";
+import type { Vehicle } from "../../core/modules/vehicles/vehicles";
 import { surfaceFor } from "../../theme/surfaceColors";
 import { AnimatedBottomSheetShell } from "../ui/AnimatedBottomSheetShell";
 import { JourneyMapFabVisual } from "./VehicleMapMarker";
@@ -30,6 +31,10 @@ type Props = {
   hasGps: boolean;
   geoHint: string | null;
   positionError: string | null;
+  vehicles: Vehicle[];
+  vehicleId: string | null;
+  loadingVehicles: boolean;
+  onVehicleChange: (vehicleId: string) => void;
   onStart: () => void;
   onStop: () => void;
   onAddCurrentLocation: () => void;

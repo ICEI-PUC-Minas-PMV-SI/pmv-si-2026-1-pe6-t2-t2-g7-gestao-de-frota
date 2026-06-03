@@ -19,7 +19,6 @@ import { Button } from "../../src/components/ui/Button";
 import { Card } from "../../src/components/ui/Card";
 import { Input } from "../../src/components/ui/Input";
 import {
-  confirmDeleteVehicle,
   VehicleFormSheet,
 } from "../../src/components/vehicles/VehicleFormSheet";
 import { VehicleDetailSheet } from "../../src/components/vehicles/VehicleDetailSheet";
@@ -86,6 +85,7 @@ export default function VehiclesScreen() {
   const [detailSubView, setDetailSubView] = useState<"incidents" | "journeys" | null>(
     null,
   );
+  const [vehicleToDelete, setVehicleToDelete] = useState<Vehicle | null>(null);
 
   const load = useCallback(async () => {
     try {
@@ -147,6 +147,7 @@ export default function VehiclesScreen() {
         idToken,
         vehicleId: vehicle.id,
       });
+      setVehicleToDelete(null);
       notifySuccess("Veículo excluído com sucesso.");
       await load();
     } catch {
@@ -356,9 +357,7 @@ export default function VehiclesScreen() {
                     variant="destructive"
                     loading={deletingVehicleId === vehicle.id}
                     disabled={Boolean(deletingVehicleId)}
-                    onPress={() =>
-                      confirmDeleteVehicle(vehicle, () => void onDeleteVehicle(vehicle))
-                    }
+                    onPress={() => setVehicleToDelete(vehicle)}
                   >
                     Excluir
                   </Button>
@@ -389,6 +388,30 @@ export default function VehiclesScreen() {
         initialSubView={detailSubView}
         onClose={closeVehicleDetail}
       />
+
+      <BottomSheetModal
+        open={Boolean(vehicleToDelete)}
+        onClose={() => setVehicleToDelete(null)}
+        title="Excluir veículo"
+        description={
+          vehicleToDelete
+            ? `Remover ${vehicleToDelete.marca} ${vehicleToDelete.modelo} (${vehicleToDelete.placa})?`
+            : undefined
+        }
+      >
+        <View className="gap-y-3">
+          <Button
+            variant="destructive"
+            loading={Boolean(vehicleToDelete && deletingVehicleId === vehicleToDelete.id)}
+            onPress={() => vehicleToDelete && void onDeleteVehicle(vehicleToDelete)}
+          >
+            Excluir veículo
+          </Button>
+          <Button variant="outline" onPress={() => setVehicleToDelete(null)}>
+            Cancelar
+          </Button>
+        </View>
+      </BottomSheetModal>
 
       <BottomSheetModal
         open={Boolean(incidentModalVehicle)}

@@ -3,8 +3,10 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { useTheme } from "../../context/theme.context";
 import type { RoutePreviewStatus } from "../../hooks/useMapJourney";
+import type { Vehicle } from "../../core/modules/vehicles/vehicles";
 import { surfaceFor } from "../../theme/surfaceColors";
 import { Button } from "../ui/Button";
+import { SelectField } from "../ui/SelectField";
 
 const ROUTE_STATUS_LABEL: Record<RoutePreviewStatus, string> = {
   idle: "Marque 2+ paradas para calcular rota",
@@ -22,6 +24,10 @@ type Props = {
   hasGps: boolean;
   geoHint: string | null;
   positionError: string | null;
+  vehicles: Vehicle[];
+  vehicleId: string | null;
+  loadingVehicles: boolean;
+  onVehicleChange: (vehicleId: string) => void;
   onStart: () => void;
   onStop: () => void;
   onAddCurrentLocation: () => void;
@@ -38,6 +44,10 @@ export function JourneyMapControls({
   hasGps,
   geoHint,
   positionError,
+  vehicles,
+  vehicleId,
+  loadingVehicles,
+  onVehicleChange,
   onStart,
   onStop,
   onAddCurrentLocation,
@@ -66,6 +76,28 @@ export function JourneyMapControls({
 
       {!journeyId ? (
         <>
+          {loadingVehicles ? (
+            <Text style={[styles.muted, { color: colors.mutedForeground }]}>
+              Carregando veículos...
+            </Text>
+          ) : vehicles.length === 0 ? (
+            <Text style={[styles.muted, { color: colors.mutedForeground }]}>
+              Cadastre um veículo na aba Frota para iniciar uma jornada.
+            </Text>
+          ) : (
+            <SelectField
+              label="Veículo da jornada"
+              placeholder="Selecione o veículo"
+              options={vehicles.map((vehicle) => ({
+                value: vehicle.id,
+                label: `${vehicle.marca} ${vehicle.modelo} - ${vehicle.placa}`,
+              }))}
+              value={vehicleId ?? ""}
+              onChange={onVehicleChange}
+              disabled={busy}
+            />
+          )}
+
           <Text style={[styles.body, { color: colors.mutedForeground }]}>
             Toque no mapa para marcar paradas (mín. 2). A rota segue as ruas via
             OSRM.

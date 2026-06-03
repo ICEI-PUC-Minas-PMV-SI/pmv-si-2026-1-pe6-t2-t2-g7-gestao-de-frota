@@ -22,6 +22,10 @@ export default function MapJourneyScreen() {
     vehiclePosition,
     geoHint,
     positionError,
+    vehicles,
+    vehicleId,
+    loadingVehicles,
+    setVehicleId,
     addPlannedStop,
     addCurrentLocationStop,
     removeLastPlannedStop,
@@ -276,7 +280,6 @@ export default function MapJourneyScreen() {
         <ModuleHeader
           eyebrow="Operação em campo"
           title="Mapa"
-          description="Rota OSRM entre paradas e simulação do veículo, como no painel web."
         />
       </View>
 
@@ -328,6 +331,10 @@ export default function MapJourneyScreen() {
           hasGps={hasGps}
           geoHint={geoHint}
           positionError={positionError}
+          vehicles={vehicles}
+          vehicleId={vehicleId}
+          loadingVehicles={loadingVehicles}
+          onVehicleChange={setVehicleId}
           onStart={onStart}
           onStop={onStop}
           onAddCurrentLocation={addCurrentLocationStop}
