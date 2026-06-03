@@ -10,6 +10,7 @@ import {
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Ionicons } from "@expo/vector-icons";
 
 import { useTabScreenBottomInset } from "../../src/components/layout/useTabScreenBottomInset";
 
@@ -41,6 +42,8 @@ const incidentSeverityOptions: IncidentSeverity[] = [
   "critica",
 ];
 const VEHICLE_PAGE_SIZE = 3;
+/** Azul suave para ícones de ação secundária nos cards de veículo. */
+const VEHICLE_ACTION_ICON_COLOR = "#5c6bc0";
 
 type IncidentFormState = {
   vehicleId: string | null;
@@ -321,34 +324,33 @@ export default function VehiclesScreen() {
             </View>
 
             <View className="mt-5 gap-y-3">
-              <View className="flex-row gap-3">
-                <View className="flex-1">
-                  <Button
-                    variant="outline"
-                    onPress={() => openVehicleDetail(vehicle)}
-                  >
-                    Abrir veículo
-                  </Button>
-                </View>
-                <View className="flex-1">
-                  <Button
-                    variant="outline"
-                    onPress={() => {
-                      setIncidentForm({
-                        ...incidentInitialState,
-                        vehicleId: vehicle.id,
-                      });
-                      setIncidentModalVehicle(vehicle);
-                    }}
-                  >
-                    Novo incidente
-                  </Button>
-                </View>
-              </View>
+              <Button
+                variant="outline"
+                onPress={() => openVehicleDetail(vehicle)}
+                leftIcon={
+                  <Ionicons
+                    name="eye-outline"
+                    size={18}
+                    color={VEHICLE_ACTION_ICON_COLOR}
+                  />
+                }
+              >
+                Exibir
+              </Button>
 
               <View className="flex-row gap-3">
                 <View className="flex-1">
-                  <Button variant="outline" onPress={() => openVehicleForm(vehicle)}>
+                  <Button
+                    variant="outline"
+                    onPress={() => openVehicleForm(vehicle)}
+                    leftIcon={
+                      <Ionicons
+                        name="pencil-outline"
+                        size={18}
+                        color={VEHICLE_ACTION_ICON_COLOR}
+                      />
+                    }
+                  >
                     Editar
                   </Button>
                 </View>
@@ -367,7 +369,7 @@ export default function VehiclesScreen() {
               <Text className="text-sm text-muted-foreground">
                 {vehicleIncidents.length === 0
                   ? "Nenhum incidente registrado."
-                  : `${vehicleIncidents.length} incidente(s) registrado(s). Abra o veículo para ver tudo.`}
+                  : `${vehicleIncidents.length} incidente(s) registrado(s). Exiba o veículo para ver tudo.`}
               </Text>
             </View>
           </Card>

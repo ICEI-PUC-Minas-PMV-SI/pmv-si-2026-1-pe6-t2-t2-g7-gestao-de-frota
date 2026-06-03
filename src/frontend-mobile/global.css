@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
 /* Contém o stacking do Leaflet para o FAB ficar acima na web. */
 .journey-map-leaflet-host {
   z-index: 0;

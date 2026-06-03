@@ -1,5 +1,12 @@
-import { useEffect, useMemo, useContext } from "react";
-import { Dimensions, LayoutChangeEvent, Platform, Pressable, StyleSheet, View } from "react-native";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import {
+  LayoutChangeEvent,
+  Platform,
+  Pressable,
+  StyleSheet,
+  useWindowDimensions,
+  View,
+} from "react-native";
 import {
   BottomTabBarHeightCallbackContext,
   BottomTabBarProps,
@@ -176,13 +183,23 @@ function buildCurvedTabBarPath(
   return parts.join(" ");
 }
 
+function horizontalMarginFor(windowWidth: number): number {
+  if (windowWidth <= 0) return BAR_HORIZONTAL_MARGIN;
+  return Math.min(BAR_HORIZONTAL_MARGIN, Math.max(10, Math.round(windowWidth * 0.04)));
+}
+
 export function HighlightedTabBar({ state, navigation }: BottomTabBarProps) {
   const insets = useSafeAreaInsets();
   const onHeightChange = useContext(BottomTabBarHeightCallbackContext);
   const { theme } = useTheme();
   const palette = paletteFor(theme);
-  const screenWidth = Dimensions.get("window").width;
-  const barWidth = screenWidth - BAR_HORIZONTAL_MARGIN * 2;
+  const { width: windowWidth } = useWindowDimensions();
+  const [measuredBarWidth, setMeasuredBarWidth] = useState(0);
+  const horizontalMargin = horizontalMarginFor(windowWidth);
+  const barWidth =
+    measuredBarWidth > 0
+      ? measuredBarWidth
+      : Math.max(0, windowWidth - horizontalMargin * 2);
   const floatBottom = Math.max(insets.bottom, 8) + FLOAT_BOTTOM_GAP;
   const svgHeight = NOTCH_DIP_Y + BAR_BODY + 6;
 
@@ -216,6 +233,10 @@ export function HighlightedTabBar({ state, navigation }: BottomTabBarProps) {
       SPRING,
     );
   }, [centerX, focusedRouteIndex, tabCount, barWidth]);
+
+  useEffect(() => {
+    setMeasuredBarWidth(0);
+  }, [windowWidth, horizontalMargin]);
 
   const animatedPathProps = useAnimatedProps(() => ({
     d: buildCurvedTabBarPath(barWidth, svgHeight, centerX.value),
@@ -254,6 +275,26 @@ export function HighlightedTabBar({ state, navigation }: BottomTabBarProps) {
     onHeightChange?.(event.nativeEvent.layout.height);
   };
 
+  const handleBarShellLayout = useCallback((event: LayoutChangeEvent) => {
+    const nextWidth = event.nativeEvent.layout.width;
+    if (nextWidth <= 0) return;
+    setMeasuredBarWidth((current) =>
+      Math.abs(current - nextWidth) > 0.5 ? nextWidth : current,
+    );
+  }, []);
+
+  if (barWidth <= 0) {
+    return (
+      <View
+        style={[styles.absoluteHost, { paddingBottom: floatBottom, paddingHorizontal: horizontalMargin }]}
+        onLayout={handleLayout}
+        pointerEvents="box-none"
+      >
+        <View style={styles.barShell} onLayout={handleBarShellLayout} />
+      </View>
+    );
+  }
+
   return (
     <View
       style={styles.absoluteHost}
@@ -266,7 +307,7 @@ export function HighlightedTabBar({ state, navigation }: BottomTabBarProps) {
           floatShadow,
           {
             paddingBottom: floatBottom,
-            paddingHorizontal: BAR_HORIZONTAL_MARGIN,
+            paddingHorizontal: horizontalMargin,
           },
         ]}
         pointerEvents="box-none"
@@ -279,11 +320,14 @@ export function HighlightedTabBar({ state, navigation }: BottomTabBarProps) {
             paddingTop: svgTop,
           },
         ]}
+        onLayout={handleBarShellLayout}
         pointerEvents="box-none"
       >
         <Svg
-          width={barWidth}
+          width="100%"
           height={svgHeight}
+          viewBox={`0 0 ${barWidth} ${svgHeight}`}
+          preserveAspectRatio="none"
           style={[styles.barSvg, { top: svgTop }]}
           pointerEvents="none"
         >
@@ -329,7 +373,6 @@ export function HighlightedTabBar({ state, navigation }: BottomTabBarProps) {
           style={[
             styles.tabsRow,
             {
-              width: barWidth,
               top: tabRowTop,
               height: ICON_SIZE,
               paddingHorizontal: tabCenterInset,
@@ -388,19 +431,24 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
+    width: "100%",
     backgroundColor: "transparent",
   },
   floatHost: {
+    width: "100%",
     overflow: "visible",
     backgroundColor: "transparent",
   },
   barShell: {
+    width: "100%",
     overflow: "visible",
     backgroundColor: "transparent",
   },
   barSvg: {
     position: "absolute",
     left: 0,
+    right: 0,
+    width: "100%",
   },
   bubble: {
     position: "absolute",
@@ -416,6 +464,7 @@ const styles = StyleSheet.create({
   tabsRow: {
     position: "absolute",
     left: 0,
+    right: 0,
     flexDirection: "row",
     alignItems: "center",
     zIndex: 2,

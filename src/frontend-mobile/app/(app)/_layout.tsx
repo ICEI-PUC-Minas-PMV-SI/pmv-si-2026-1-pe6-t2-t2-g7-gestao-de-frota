@@ -30,6 +30,8 @@ export default function AppLayout() {
         headerShown: false,
         sceneStyle: {
           backgroundColor: palette.sceneBg,
+          flex: 1,
+          width: "100%",
         },
         tabBarShowLabel: false,
         tabBarStyle: {

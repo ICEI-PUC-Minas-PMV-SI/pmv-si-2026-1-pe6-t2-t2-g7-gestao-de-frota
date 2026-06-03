@@ -17,13 +17,43 @@ type Props = {
   stats: JourneyStats;
 };
 
+function JourneyStatCard({
+  label,
+  value,
+  className,
+}: {
+  label: string;
+  value: string | number;
+  className?: string;
+}) {
+  return (
+    <Card className={`px-4 py-4 ${className ?? ""}`}>
+      <Text
+        className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground"
+        numberOfLines={2}
+      >
+        {label}
+      </Text>
+      <Text
+        className="mt-1 text-2xl font-semibold text-foreground"
+        numberOfLines={1}
+        adjustsFontSizeToFit
+        minimumFontScale={0.75}
+      >
+        {value}
+      </Text>
+    </Card>
+  );
+}
+
 export function RecentJourneysSection({ journeys, stats }: Props) {
   const hasMore = stats.total > RECENT_JOURNEYS_LIMIT;
+  const kmLabel = stats.totalKm.toFixed(0);
 
   return (
     <View>
       <View className="mb-3 flex-row items-start justify-between gap-3">
-        <View className="flex-1">
+        <View className="min-w-0 flex-1">
           <Text className="text-sm font-semibold text-foreground">
             Suas últimas 3 jornadas
           </Text>
@@ -33,36 +63,33 @@ export function RecentJourneysSection({ journeys, stats }: Props) {
             </Text>
           ) : null}
         </View>
-        <Link href="/(app)/map">
+        <Link href="/(app)/map" className="shrink-0">
           <Text className="text-xs font-medium text-primary">
             {hasMore ? "Ver todas no mapa" : "Ir para o mapa"}
           </Text>
         </Link>
       </View>
 
-      <View className="mb-3 flex-row gap-3">
-        <Card className="flex-1 py-4">
-          <Text className="text-[11px] uppercase tracking-wider text-muted-foreground">
-            Total
-          </Text>
-          <Text className="mt-1 text-2xl font-semibold text-foreground">
-            {stats.total}
-          </Text>
-        </Card>
-        <Card className="flex-1 py-4">
-          <Text className="text-[11px] uppercase tracking-wider text-muted-foreground">
-            Em andamento
-          </Text>
-          <Text className="mt-1 text-2xl font-semibold text-foreground">
-            {stats.inProgress}
-          </Text>
-        </Card>
-        <Card className="flex-1 py-4">
-          <Text className="text-[11px] uppercase tracking-wider text-muted-foreground">
+      <View className="mb-3 gap-3">
+        <View className="flex-row justify-between gap-3">
+          <JourneyStatCard label="Total" value={stats.total} className="w-[48%]" />
+          <JourneyStatCard
+            label="Em andamento"
+            value={stats.inProgress}
+            className="w-[48%]"
+          />
+        </View>
+        <Card className="flex-row items-center justify-between gap-4 px-4 py-4">
+          <Text className="shrink text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
             Km rodados
           </Text>
-          <Text className="mt-1 text-2xl font-semibold text-foreground">
-            {stats.totalKm.toFixed(0)}
+          <Text
+            className="text-2xl font-semibold text-foreground"
+            numberOfLines={1}
+            adjustsFontSizeToFit
+            minimumFontScale={0.75}
+          >
+            {kmLabel}
           </Text>
         </Card>
       </View>
