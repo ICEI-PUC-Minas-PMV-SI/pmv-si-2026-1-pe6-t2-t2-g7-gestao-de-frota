@@ -275,7 +275,7 @@ export function useMapJourney() {
     } finally {
       setBusy(false);
     }
-  }, [journeyId, getToken]);
+  }, [journeyId, getToken, simulationPath.length]);
 
   const routePolyline = journeyId
     ? simulationPath
