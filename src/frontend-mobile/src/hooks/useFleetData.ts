@@ -6,6 +6,7 @@ import { incidentModule, Incident } from "../core/modules/incidents/incidents";
 import { vehicleModule, Vehicle } from "../core/modules/vehicles/vehicles";
 import { useAuthorizedToken } from "./useAuthorizedToken";
 import { notifyApiError } from "../components/ui/toast";
+import { getApiErrorMessage } from "../utils/apiError";
 
 export function useFleetData() {
   const getToken = useAuthorizedToken();
@@ -48,7 +49,7 @@ export function useFleetData() {
       setRefreshedAt(new Date());
     } catch (err: unknown) {
       const message =
-        err instanceof Error ? err.message : "Erro ao carregar dados da frota.";
+        getApiErrorMessage(err) || "Erro ao carregar dados da frota.";
       setError(message);
       notifyApiError(err, "Erro ao carregar dados da frota.");
     } finally {
