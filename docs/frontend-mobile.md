@@ -91,23 +91,24 @@ Fonte principal: **Inter** (`@expo-google-fonts/inter`), equivalente mobile ao G
 
 ## Fluxo de Dados
 
-O app móvel segue o mesmo fluxo de autenticação e consumo de API do frontend Web:
+Fluxo principal da aplicação móvel:
 
-1. Usuário acessa as telas públicas (`/login` ou `/signup`);
-2. Na autenticação (e-mail/senha ou Google via `expo-auth-session`), o Firebase retorna a sessão e o **ID Token**;
-3. O app persiste o token de forma segura no dispositivo via `expo-secure-store` e chama o endpoint de sincronização de conta (`POST /account/sync`) no backend;
-4. O componente `AuthGate` verifica o estado de autenticação e redireciona para `/(app)/homepage` ou para `/login` conforme necessário;
-5. Em toda a área autenticada, as requisições ao backend são enviadas via **axios** com o cabeçalho `Authorization: Bearer <token>`, obtido em tempo real pelo `getIdToken()` do Firebase;
-6. O token é renovado automaticamente pelo listener `onIdTokenChanged` do Firebase SDK;
-7. No módulo de mapa (`/(app)/map`), o app captura a localização do dispositivo via `expo-location` e registra posições na API (`POST /journey/:id/positions`) durante jornadas ativas;
-8. No logout, a sessão é encerrada no Firebase e o token armazenado localmente é removido do `expo-secure-store`.
+1. Usuário acessa telas públicas (`/login`, `/signup`) ou é redirecionado pela rota inicial (`/`);
+2. Na autenticação (e-mail/senha ou Google via `expo-auth-session` no nativo / `signInWithPopup` na web), o Firebase retorna sessão e ID Token;
+3. O app persiste a sessão localmente via Firebase Auth (`AsyncStorage` no nativo) e chama o endpoint de sincronização de conta no backend (`POST /account/sync`);
+4. Em área autenticada (`/(app)`), o layout das abas redireciona visitantes não autenticados para `/login`; requisições ao backend em `EXPO_PUBLIC_API_URL` usam header `Authorization: Bearer <token>` obtido em tempo real por `getIdToken()`;
+5. Telas autenticadas carregam dados no cliente por hooks (`useFleetData`, `useAccountProfile`, `useMapJourney`) e gateways modulares — não há SSR;
+6. Componentes e formulários atualizam dados por gateways/`axios` conforme ações do usuário (CRUD, filtros, pull-to-refresh, atualização de status);
+7. No módulo de mapa (`/(app)/map`), o app captura localização via `expo-location` (ou Geolocation API na web), consome OSRM para pré-visualização de rota e registra posições na API (`POST /journey/:id/positions`) durante jornadas ativas;
+8. No logout, sessão é encerrada no Firebase (`signOut`) e o usuário é redirecionado para `/login`.
 
 Resumo de integrações:
 
-- **Autenticação**: Firebase Authentication (SDK `firebase` v12 + `expo-auth-session` para OAuth Google);
-- **Armazenamento seguro local**: `expo-secure-store` (token e dados de sessão);
-- **API de negócio**: backend da aplicação via `axios` (veículos, incidentes, membros, conta, jornadas, telemetria, analytics);
-- **Geolocalização**: `expo-location` + `react-native-maps` (nativo iOS/Android).
+- **Autenticação**: Firebase Auth (SDK v12 + `expo-auth-session` para OAuth Google);
+- **API de negócio**: backend da aplicação (veículos, incidentes, conta, jornadas);
+- **Geolocalização e mapas**: `expo-location` + `react-native-maps` + OSRM (com fallback quando indisponível).
+
+![Fluxo de dados Mobile](img/Gestao-frotas-imagens/fluxo-dados-mobile.jpg)
 
 ## Tecnologias Utilizadas
 
