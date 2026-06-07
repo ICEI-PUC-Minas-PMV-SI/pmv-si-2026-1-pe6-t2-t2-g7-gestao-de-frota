@@ -19,7 +19,7 @@
 | 04/05 - 10/05 | Desenvolvimento de Aplicações Móveis - Unidade 2 | ✅ | Refinamento dos testes | Refinamento da estrutura de testes E2E |
 | 11/05 - 17/05 | Desenvolvimento de Aplicações Móveis - Unidade 2 | ✅  | Preparação inicial do projeto mobile | Desenvolvimento inicial e configuração do projeto mobile |
 | 18/05 - 24/05 | Fundamentos de Projeto e Análise de Algoritmos - Unidade 1 | ✅ | Elaboração das telas do aplicativo mobile | Desenvolvimento das telas de login, cadastro, veiculos |
-| 25/05 - 31/05 | Fundamentos de Projeto e Análise de Algoritmos - Unidade 2 | ✅ | Finalização das telas | Criação das telas de incidentes, multas e sinistros, juntamento com uma integração mais suave com a interface de veículos  |
+| 25/05 - 31/05 | Fundamentos de Projeto e Análise de Algoritmos - Unidade 2 | ✅ | Finalização das telas | Criação das telas de incidentes, multas e sinistros, juntamente com uma integração mais suave com a interface de veículos  |
 | 01/06 - 07/06 |  | ✅ | Validação final do mobile | Checagem final do resultado do aplicativo e validação dos testes |
 | 08/06 - 14/06 |  | ⬜ |  |  |
 
