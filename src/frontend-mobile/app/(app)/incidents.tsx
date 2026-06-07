@@ -20,6 +20,7 @@ import { Button } from "../../src/components/ui/Button";
 import { Card } from "../../src/components/ui/Card";
 import { ModuleHeader } from "../../src/components/ui/ModuleHeader";
 import { ScreenLoader } from "../../src/components/ui/ScreenLoader";
+import { notifySuccess } from "../../src/components/ui/toast";
 import {
   incidentModule,
   type Incident,
@@ -115,9 +116,10 @@ export default function IncidentsScreen() {
         idToken,
         incidentId: incident.id,
       });
+      notifySuccess("Incidente excluído com sucesso.");
       await load();
     } catch {
-      // Toast no adapter.
+      // Toast exibido pelo AxiosAdapter.
     }
   }
 
