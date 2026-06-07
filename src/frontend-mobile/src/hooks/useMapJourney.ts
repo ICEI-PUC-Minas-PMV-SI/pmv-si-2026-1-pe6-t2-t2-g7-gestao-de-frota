@@ -40,6 +40,7 @@ export function useMapJourney() {
   const [busy, setBusy] = useState(false);
 
   const simIndexRef = useRef(0);
+  const positionErrorToastRef = useRef(false);
 
   useEffect(() => {
     (async () => {
@@ -58,10 +59,13 @@ export function useMapJourney() {
     })();
   }, [getToken]);
 
+  const gpsToastShownRef = useRef(false);
   useEffect(() => {
-    if (live.status === "denied") {
+    if (live.status === "denied" && !gpsToastShownRef.current) {
+      gpsToastShownRef.current = true;
       showToast({ message: "Permissão de localização negada.", tone: "error" });
-    } else if (live.status === "error" && live.error) {
+    } else if (live.status === "error" && live.error && !gpsToastShownRef.current) {
+      gpsToastShownRef.current = true;
       showToast({ message: live.error, tone: "error" });
     }
   }, [live.status, live.error]);
@@ -122,10 +126,14 @@ export function useMapJourney() {
           longitude: pt.longitude,
         });
         setPositionError(null);
+        positionErrorToastRef.current = false;
       } catch (err: unknown) {
         const msg = err instanceof Error ? err.message : "Erro ao registrar posição.";
         setPositionError(msg);
-        showToast({ message: msg, tone: "error" });
+        if (!positionErrorToastRef.current) {
+          positionErrorToastRef.current = true;
+          showToast({ message: msg, tone: "error" });
+        }
       }
     }
 
@@ -248,6 +256,7 @@ export function useMapJourney() {
     if (!journeyId) return;
     setBusy(true);
     try {
+      simIndexRef.current = simulationPath.length; // prevent auto-complete race
       const idToken = await getToken();
       await journeyModule.gateways.complete.exec({ idToken, journeyId });
       setJourneyId(null);
