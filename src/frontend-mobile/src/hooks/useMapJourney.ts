@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { showToast } from "../components/ui/toast";
+import { notifyApiError, notifySuccess, showToast } from "../components/ui/toast";
 
 import { useAuthorizedToken } from "./useAuthorizedToken";
 import { useLiveLocation } from "./useLiveLocation";
@@ -49,13 +49,22 @@ export function useMapJourney() {
         const res = await vehicleModule.gateways.list.exec({ idToken });
         setVehicles(res.body);
         setVehicleId((current) => current ?? res.body[0]?.id ?? null);
-      } catch {
+      } catch (err: unknown) {
         setVehicles([]);
+        notifyApiError(err, "Não foi possível carregar os veículos.");
       } finally {
         setLoadingVehicles(false);
       }
     })();
   }, [getToken]);
+
+  useEffect(() => {
+    if (live.status === "denied") {
+      showToast({ message: "Permissão de localização negada.", tone: "error" });
+    } else if (live.status === "error" && live.error) {
+      showToast({ message: live.error, tone: "error" });
+    }
+  }, [live.status, live.error]);
 
   useEffect(() => {
     if (journeyId || plannedStops.length < MIN_PARADAS) {
@@ -114,9 +123,9 @@ export function useMapJourney() {
         });
         setPositionError(null);
       } catch (err: unknown) {
-        setPositionError(
-          err instanceof Error ? err.message : "Erro ao registrar posição.",
-        );
+        const msg = err instanceof Error ? err.message : "Erro ao registrar posição.";
+        setPositionError(msg);
+        showToast({ message: msg, tone: "error" });
       }
     }
 
@@ -133,13 +142,14 @@ export function useMapJourney() {
             setGeoHint(
               "Simulação concluída e jornada finalizada automaticamente.",
             );
+            notifySuccess("Jornada concluída com sucesso.");
             setJourneyId(null);
             setSimulationPath([]);
             setVehiclePosition(null);
-          } catch {
-            setGeoHint(
-              "Simulação concluída, mas não foi possível finalizar a jornada na API.",
-            );
+          } catch (err: unknown) {
+            const msg = "Simulação concluída, mas não foi possível finalizar a jornada na API.";
+            setGeoHint(msg);
+            notifyApiError(err, msg);
           }
         })();
         return;
@@ -226,6 +236,7 @@ export function useMapJourney() {
       setSimulationPath(pathPoints);
       setTrail(pathPoints.length ? [pathPoints[0]!] : []);
       setVehiclePosition(pathPoints[0] ?? null);
+      notifySuccess("Jornada iniciada.");
     } catch {
       // Toast exibido pelo AxiosAdapter.
     } finally {
@@ -246,6 +257,7 @@ export function useMapJourney() {
       setGeoHint(null);
       setPositionError(null);
       simIndexRef.current = 0;
+      notifySuccess("Jornada concluída com sucesso.");
     } catch {
       // Toast exibido pelo AxiosAdapter.
     } finally {
