@@ -17,10 +17,10 @@
 | 20/04 - 26/04 | Computação Ubíqua e Pervasiva e IoT - Unidade 2 | ✅ | Implementação do frontend | Testes unitários da nova interface aplicada ao projeto |
 | 27/04 - 03/05 | Desenvolvimento de Aplicações Móveis - Unidade 1 | ✅ | Planejamento, execução e evidência de testes | Execução de testes E2E|
 | 04/05 - 10/05 | Desenvolvimento de Aplicações Móveis - Unidade 2 | ✅ | Revisão final | Revisão final da documentação e testes|
-| 11/05 - 17/05 | Desenvolvimento de Aplicações Móveis - Unidade 2 | ⬜ |  |  |
-| 18/05 - 24/05 | Fundamentos de Projeto e Análise de Algoritmos - Unidade 1 | ⬜ |  |  |
-| 25/05 - 31/05 | Fundamentos de Projeto e Análise de Algoritmos - Unidade 2 | ⬜ |  |  |
-| 01/06 - 07/06 |  | ⬜ |  |  |
-| 08/06 - 14/06 |  | ⬜ |  |  |
+| 11/05 - 17/05 | Desenvolvimento de Aplicações Móveis - Unidade 2 | ✅ | Definição de funcionalidades mobile | Revisão de requisitos a serem implementados no mobile |
+| 18/05 - 24/05 | Fundamentos de Projeto e Análise de Algoritmos - Unidade 1 | ✅ | Arquitetura inicial mobile | Estruturação inicial do fronted mobile |
+| 25/05 - 31/05 | Fundamentos de Projeto e Análise de Algoritmos - Unidade 2 | ✅ | Implementação funcionalidades mobile | Desenvolvimento frontend mobile |
+| 01/06 - 07/06 | Finalização do projeto | ✅ | Execução de testes e2e | Execução de testes no cypress e evidências |
+| 08/06 - 14/06 | Apresentação do projeto | ⬜ | Apresentação final do projeto |  |
 
 **Legenda:** ✅ Estudou | ⬜ Não estudou
