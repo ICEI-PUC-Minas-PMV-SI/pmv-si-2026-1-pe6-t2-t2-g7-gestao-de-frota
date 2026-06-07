@@ -17,9 +17,9 @@
 | 20/04 - 26/04 | Computação Ubíqua e Pervasiva e IoT - Unidade 2 |  ✅ | Finalização da implementação do frontend | Implementação das novas telas e refatoração total da interface do frontend já existente |
 | 27/04 - 03/05 | Desenvolvimento de Aplicações Móveis - Unidade 1 |  ✅ | Criação de testes | Criação de testes E2E juntamente com colegas usando cypress |
 | 04/05 - 10/05 | Desenvolvimento de Aplicações Móveis - Unidade 2 | ✅ | Refinamento dos testes | Refinamento da estrutura de testes E2E |
-| 11/05 - 17/05 | Desenvolvimento de Aplicações Móveis - Unidade 2 | ⬜ |  |  |
-| 18/05 - 24/05 | Fundamentos de Projeto e Análise de Algoritmos - Unidade 1 | ⬜ |  |  |
-| 25/05 - 31/05 | Fundamentos de Projeto e Análise de Algoritmos - Unidade 2 | ⬜ |  |  |
+| 11/05 - 17/05 | Desenvolvimento de Aplicações Móveis - Unidade 2 | ✅  | Preparação inicial do projeto mobile | Desenvolvimento inicial e configuração do projeto mobile |
+| 18/05 - 24/05 | Fundamentos de Projeto e Análise de Algoritmos - Unidade 1 | ✅ | Elaboração das telas do aplicativo mobile | Desenvolvimento das telas de login, cadastro, veiculos e incidentes |
+| 25/05 - 31/05 | Fundamentos de Projeto e Análise de Algoritmos - Unidade 2 | ✅ | Validação final do mobile | Checagem final do resultado do aplicativo e validação dos testes  |
 | 01/06 - 07/06 |  | ⬜ |  |  |
 | 08/06 - 14/06 |  | ⬜ |  |  |
 
