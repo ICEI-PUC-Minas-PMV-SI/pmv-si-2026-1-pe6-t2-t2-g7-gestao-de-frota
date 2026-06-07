@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { notifyApiError, notifySuccess, showToast } from "../components/ui/toast";
+import { getApiErrorMessage } from "../utils/apiError";
 
 import { useAuthorizedToken } from "./useAuthorizedToken";
 import { useLiveLocation } from "./useLiveLocation";
@@ -61,12 +62,15 @@ export function useMapJourney() {
 
   const gpsToastShownRef = useRef(false);
   useEffect(() => {
-    if (live.status === "denied" && !gpsToastShownRef.current) {
+    const message =
+      live.status === "denied"
+        ? "Permissão de localização negada."
+        : live.status === "error" && live.error
+          ? live.error
+          : null;
+    if (message && !gpsToastShownRef.current) {
       gpsToastShownRef.current = true;
-      showToast({ message: "Permissão de localização negada.", tone: "error" });
-    } else if (live.status === "error" && live.error && !gpsToastShownRef.current) {
-      gpsToastShownRef.current = true;
-      showToast({ message: live.error, tone: "error" });
+      showToast({ message, tone: "error" });
     }
   }, [live.status, live.error]);
 
@@ -128,12 +132,11 @@ export function useMapJourney() {
         setPositionError(null);
         positionErrorToastRef.current = false;
       } catch (err: unknown) {
-        const msg = err instanceof Error ? err.message : "Erro ao registrar posição.";
+        const msg = getApiErrorMessage(err) || "Erro ao registrar posição.";
         setPositionError(msg);
-        if (!positionErrorToastRef.current) {
-          positionErrorToastRef.current = true;
-          showToast({ message: msg, tone: "error" });
-        }
+        if (positionErrorToastRef.current) return;
+        positionErrorToastRef.current = true;
+        showToast({ message: msg, tone: "error" });
       }
     }
 

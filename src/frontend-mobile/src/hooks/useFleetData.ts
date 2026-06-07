@@ -51,7 +51,7 @@ export function useFleetData() {
       const message =
         getApiErrorMessage(err) || "Erro ao carregar dados da frota.";
       setError(message);
-      notifyApiError(err, "Erro ao carregar dados da frota.");
+      notifyApiError(err, message);
     } finally {
       setLoading(false);
       setRefreshing(false);
