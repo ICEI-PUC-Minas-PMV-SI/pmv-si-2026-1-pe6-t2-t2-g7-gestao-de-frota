@@ -17,9 +17,9 @@
 | 20/04 - 26/04 | Computação Ubíqua e Pervasiva e IoT - Unidade 2 | ✅ | Implementação do frontend | Implementação do frontend |
 | 27/04 - 03/05 | Desenvolvimento de Aplicações Móveis - Unidade 1 | ✅ | Planejamento da aplicação mobile em escopo e ferramentas | Planejamento da aplicação mobile em escopo e ferramentas |
 | 04/05 - 10/05 | Desenvolvimento de Aplicações Móveis - Unidade 2 | ✅ | Prototipagem inicial de aplicação mobile | Prototipagem inicial de aplicação mobile |
-| 11/05 - 17/05 | Desenvolvimento de Aplicações Móveis - Unidade 2 | ⬜ | | |
-| 18/05 - 24/05 | Fundamentos de Projeto e Análise de Algoritmos - Unidade 1 | ⬜ | | |
-| 25/05 - 31/05 | Fundamentos de Projeto e Análise de Algoritmos - Unidade 2 | ⬜ | | |
+| 11/05 - 17/05 | Desenvolvimento de Aplicações Móveis - Unidade 2 | ✅ | Implementação do escopo da aplicação e exploração de mais ferramentas | Implementação do escopo da aplicação e exploração de mais ferramentas |
+| 18/05 - 24/05 | Fundamentos de Projeto e Análise de Algoritmos - Unidade 1 | ✅ | Revisão no fluxo necessário | Revisão no fluxo necessário |
+| 25/05 - 31/05 | Fundamentos de Projeto e Análise de Algoritmos - Unidade 2 | ✅ | Ajustes finais no fluxo de erros e cenários improváveis | Ajustes finais no fluxo de erros e cenários improváveis |
 | 01/06 - 07/06 | | ⬜ | | |
 | 08/06 - 14/06 | | ⬜ | | |
 
