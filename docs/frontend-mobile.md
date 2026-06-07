@@ -305,6 +305,20 @@ src/frontend-mobile/
     tsconfig.json
 ```
 
+### Evidências de teste
+
+![Cypress](img/Testes-mobile/Cypress.png)
+![Specs](img/Testes-mobile/Specs.png)
+![Account Management](img/Testes-mobile/Account%20Management.png)
+![Auth](img/Testes-mobile/Auth.png)
+![Dashboard](img/Testes-mobile/dashboard.png)
+![Jornada](img/Testes-mobile/jornada.png)
+![Incidente](img/Testes-mobile/incidente.png)
+![Mapa Jornada](img/Testes-mobile/mapa-jornada.png)
+![Páginas Públicas](img/Testes-mobile/public-pages.png)
+![Gestão de veículos](img/Testes-mobile/vehicles-management.png)
+
+
 # Referências
 
 - React Native Documentation: https://reactnative.dev/docs/getting-started
