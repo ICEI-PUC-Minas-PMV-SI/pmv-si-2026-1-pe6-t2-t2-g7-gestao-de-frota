@@ -133,12 +133,21 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   return (
     <ThemeContext.Provider value={value}>
-      <AnimatedThemeRoot
-        style={[themeVarsFor(theme), { flex: 1 }, animatedStyle]}
-        className="flex-1 bg-background"
-      >
-        {children}
-      </AnimatedThemeRoot>
+      {/*
+        As variáveis do tema precisam ficar num View comum do NativeWind para
+        que a herança de CSS vars chegue às telas. Aplicá-las direto no
+        Animated.View (reanimated) faz o reanimated interceptar o `style` e o
+        NativeWind nunca registra as vars — por isso o texto saía preto/ilegível
+        no dark. O Animated.View interno cuida só do fade.
+      */}
+      <View style={themeVarsFor(theme)} className="flex-1 bg-background">
+        <AnimatedThemeRoot
+          style={[{ flex: 1 }, animatedStyle]}
+          className="flex-1 bg-background"
+        >
+          {children}
+        </AnimatedThemeRoot>
+      </View>
     </ThemeContext.Provider>
   );
 }

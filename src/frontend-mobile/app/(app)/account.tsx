@@ -111,7 +111,7 @@ export default function AccountScreen() {
             <Text className="mt-2 text-sm text-muted-foreground">{user?.email ?? "—"}</Text>
             <Text
               className={`mt-1 text-xs font-medium ${
-                user?.emailVerified ? "text-emerald-600" : "text-amber-600"
+                user?.emailVerified ? "text-success" : "text-warning"
               }`}
             >
               {user?.emailVerified ? "E-mail verificado" : "E-mail não verificado"}

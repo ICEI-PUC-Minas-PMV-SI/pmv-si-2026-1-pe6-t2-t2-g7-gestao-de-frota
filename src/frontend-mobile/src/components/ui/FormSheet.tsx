@@ -10,6 +10,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ReactNode } from "react";
 
+import { useTheme } from "../../context/theme.context";
+import { surfaceFor } from "../../theme/surfaceColors";
 import { AnimatedBottomSheetShell } from "./AnimatedBottomSheetShell";
 
 const SHEET_MAX_HEIGHT = Dimensions.get("window").height * 0.9;
@@ -31,6 +33,7 @@ export function FormSheet({
   children,
   footer,
 }: Props) {
+  const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const bottomPad = Math.max(insets.bottom, 16);
   /** Cabeçalho + handle + rodapé opcional — área rolável recebe o restante até 90% da tela. */
@@ -62,7 +65,7 @@ export function FormSheet({
             ) : null}
           </View>
           <Pressable onPress={onClose} hitSlop={12} accessibilityLabel="Fechar">
-            <Ionicons name="close" size={24} color="#64748b" />
+            <Ionicons name="close" size={24} color={surfaceFor(theme).mutedForeground} />
           </Pressable>
         </View>
         <ScrollView

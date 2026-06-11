@@ -4,18 +4,18 @@ export type Tone = "neutral" | "primary" | "success" | "warning" | "destructive"
 
 const tones: Record<Tone, string> = {
   neutral: "bg-muted border border-border",
-  primary: "bg-accent border border-[#bfdbfe]",
-  success: "bg-[#dcfce7]",
-  warning: "bg-[#fef3c7]",
-  destructive: "bg-[#fee2e2]",
+  primary: "bg-accent border border-border",
+  success: "bg-tone-success-bg",
+  warning: "bg-tone-warning-bg",
+  destructive: "bg-tone-danger-bg",
 };
 
 const textTones: Record<Tone, string> = {
   neutral: "text-muted-foreground",
   primary: "text-accent-foreground",
-  success: "text-[#166534]",
-  warning: "text-[#92400e]",
-  destructive: "text-[#991b1b]",
+  success: "text-tone-success-fg",
+  warning: "text-tone-warning-fg",
+  destructive: "text-tone-danger-fg",
 };
 
 export function Badge({

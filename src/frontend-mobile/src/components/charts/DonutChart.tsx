@@ -2,6 +2,9 @@ import { useMemo } from "react";
 import { Text, View } from "react-native";
 import Svg, { Circle } from "react-native-svg";
 
+import { useTheme } from "../../context/theme.context";
+import { surfaceFor } from "../../theme/surfaceColors";
+
 export type DonutSegment = {
   label: string;
   value: number;
@@ -23,6 +26,8 @@ export function DonutChart({
   centerLabel,
   centerSubLabel,
 }: Props) {
+  const { theme } = useTheme();
+  const surface = surfaceFor(theme);
   const arcs = useMemo(() => {
     const sum = segments.reduce((acc, s) => acc + s.value, 0);
     const radius = (size - strokeWidth) / 2;
@@ -56,7 +61,7 @@ export function DonutChart({
             cx={cx}
             cy={cy}
             r={radius}
-            stroke="#cbd5e1"
+            stroke={surface.border}
             strokeWidth={strokeWidth}
             fill="none"
             opacity={0.35}

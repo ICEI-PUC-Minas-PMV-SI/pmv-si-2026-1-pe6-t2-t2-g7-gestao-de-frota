@@ -18,12 +18,12 @@ export function AuthField({ label, error, ...props }: AuthFieldProps) {
           : {})}
         className={`rounded-2xl border bg-background px-4 py-3.5 text-base text-foreground ${
           error
-            ? "border-red-500/60 bg-red-500/5"
+            ? "border-destructive/60 bg-destructive/5"
             : "border-border"
         }`}
         {...props}
       />
-      {error ? <Text className="text-xs text-red-500">{error}</Text> : null}
+      {error ? <Text className="text-xs text-destructive">{error}</Text> : null}
     </View>
   );
 }

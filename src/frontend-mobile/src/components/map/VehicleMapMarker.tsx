@@ -4,6 +4,7 @@ import Svg, { Circle, Path } from "react-native-svg";
 
 import { useTheme } from "../../context/theme.context";
 import { paletteFor } from "../../theme/tokens";
+import { surfaceFor } from "../../theme/surfaceColors";
 
 export const MAP_FAB_HEIGHT = 52;
 
@@ -23,6 +24,7 @@ export function JourneyMapFabVisual({
   active,
   subtitle = "Planejar rota",
 }: FabProps) {
+  const { theme } = useTheme();
   const accent = active ? "#16a34a" : color;
 
   return (
@@ -48,7 +50,10 @@ export function JourneyMapFabVisual({
 
         <View style={styles.fabCopy}>
           <Text style={[styles.fabTitle, { color: accent }]}>Jornada</Text>
-          <Text style={styles.fabSubtitle} numberOfLines={1}>
+          <Text
+            style={[styles.fabSubtitle, { color: surfaceFor(theme).mutedForeground }]}
+            numberOfLines={1}
+          >
             {subtitle}
           </Text>
         </View>
@@ -161,7 +166,6 @@ const styles = StyleSheet.create({
     marginTop: 1,
     fontSize: 11,
     fontWeight: "500",
-    color: "#64748b",
   },
   fabChevron: {
     width: 26,

@@ -18,6 +18,8 @@ import type { Vehicle } from "../../core/modules/vehicles/vehicles";
 import { useAuthorizedToken } from "../../hooks/useAuthorizedToken";
 import { notifySuccess, showToast } from "../ui/toast";
 import { getApiErrorMessage } from "../../utils/apiError";
+import { useTheme } from "../../context/theme.context";
+import { paletteFor } from "../../theme/tokens";
 
 const incidentTypes: IncidentType[] = ["sinistro", "multa"];
 const incidentSeverityOptions: IncidentSeverity[] = [
@@ -67,6 +69,8 @@ type Props = {
 
 export function VehicleIncidentsSheet({ open, vehicle, onClose, onChanged }: Props) {
   const getToken = useAuthorizedToken();
+  const { theme } = useTheme();
+  const palette = paletteFor(theme);
   const [incidents, setIncidents] = useState<Incident[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -143,7 +147,7 @@ export function VehicleIncidentsSheet({ open, vehicle, onClose, onChanged }: Pro
       >
         {loading ? (
           <View className="items-center py-10">
-            <ActivityIndicator color="#1a237e" />
+            <ActivityIndicator color={palette.spinner} />
           </View>
         ) : (
           <View className="gap-y-4 pb-4">
@@ -164,7 +168,7 @@ export function VehicleIncidentsSheet({ open, vehicle, onClose, onChanged }: Pro
               </Button>
             </View>
 
-            {error ? <Text className="text-sm text-red-500">{error}</Text> : null}
+            {error ? <Text className="text-sm text-destructive">{error}</Text> : null}
 
             {incidents.length === 0 ? (
               <Card>
@@ -176,6 +180,7 @@ export function VehicleIncidentsSheet({ open, vehicle, onClose, onChanged }: Pro
               <View className="-mx-5">
                 <DataTable
                   headers={["Tipo", "Status", "Data"]}
+                  iconColor={palette.primary}
                   rows={incidents.map((incident) => ({
                     key: incident.id,
                     values: [
@@ -315,6 +320,7 @@ function MetricCard({ label, value }: { label: string; value: string }) {
 function DataTable({
   headers,
   rows,
+  iconColor,
 }: {
   headers: string[];
   rows: {
@@ -326,6 +332,7 @@ function DataTable({
     };
     onPress: () => void;
   }[];
+  iconColor: string;
 }) {
   return (
     <View className="overflow-hidden border-y border-border bg-card">
@@ -362,7 +369,7 @@ function DataTable({
             <Badge tone={row.badge.tone}>{row.badge.label}</Badge>
             <View className="flex-row items-center gap-1">
               <Text className="text-xs font-medium text-primary">Ver detalhes</Text>
-              <Ionicons name="chevron-forward" size={14} color="#1a237e" />
+              <Ionicons name="chevron-forward" size={14} color={iconColor} />
             </View>
           </View>
         </Pressable>

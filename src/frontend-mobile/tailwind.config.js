@@ -27,12 +27,29 @@ module.exports = {
           DEFAULT: "rgb(var(--color-accent) / <alpha-value>)",
           foreground: "rgb(var(--color-accent-foreground) / <alpha-value>)",
         },
-        destructive: "rgb(var(--color-destructive) / <alpha-value>)",
+        destructive: {
+          DEFAULT: "rgb(var(--color-destructive) / <alpha-value>)",
+          foreground: "rgb(var(--color-destructive-foreground) / <alpha-value>)",
+        },
         border: "rgb(var(--color-border) / <alpha-value>)",
         input: "rgb(var(--color-input) / <alpha-value>)",
         ring: "rgb(var(--color-ring) / <alpha-value>)",
         success: "#16a34a",
         warning: "#ca8a04",
+        tone: {
+          success: {
+            bg: "rgb(var(--color-tone-success-bg) / <alpha-value>)",
+            fg: "rgb(var(--color-tone-success-fg) / <alpha-value>)",
+          },
+          warning: {
+            bg: "rgb(var(--color-tone-warning-bg) / <alpha-value>)",
+            fg: "rgb(var(--color-tone-warning-fg) / <alpha-value>)",
+          },
+          danger: {
+            bg: "rgb(var(--color-tone-danger-bg) / <alpha-value>)",
+            fg: "rgb(var(--color-tone-danger-fg) / <alpha-value>)",
+          },
+        },
         tab: {
           bar: "rgb(var(--color-tab-bar) / <alpha-value>)",
           active: "rgb(var(--color-tab-active) / <alpha-value>)",

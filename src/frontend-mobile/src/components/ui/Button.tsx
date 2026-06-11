@@ -1,6 +1,9 @@
 import { ActivityIndicator, Pressable, Text, type ViewStyle } from "react-native";
 import { ReactNode } from "react";
 
+import { useTheme } from "../../context/theme.context";
+import { surfaceFor } from "../../theme/surfaceColors";
+
 type Variant = "primary" | "secondary" | "outline" | "destructive" | "ghost";
 
 type Props = {
@@ -16,7 +19,7 @@ type Props = {
 
 const containerByVariant: Record<Variant, string> = {
   primary: "bg-primary border border-primary",
-  secondary: "bg-secondary border border-secondary",
+  secondary: "bg-muted border border-border",
   outline: "bg-card border border-border",
   destructive: "bg-destructive border border-destructive",
   ghost: "bg-transparent",
@@ -24,7 +27,7 @@ const containerByVariant: Record<Variant, string> = {
 
 const textByVariant: Record<Variant, string> = {
   primary: "text-primary-foreground",
-  secondary: "text-secondary-foreground",
+  secondary: "text-foreground",
   outline: "text-foreground",
   destructive: "text-destructive-foreground",
   ghost: "text-primary",
@@ -40,7 +43,13 @@ export function Button({
   style,
   className,
 }: Props) {
+  const { theme } = useTheme();
+  const surface = surfaceFor(theme);
   const isDisabled = disabled || loading;
+  const spinnerColor =
+    variant === "primary" || variant === "destructive"
+      ? surface.primaryForeground
+      : surface.primary;
   return (
     <Pressable
       onPress={onPress}
@@ -50,7 +59,7 @@ export function Button({
       className={`min-h-[48px] flex-row items-center justify-center rounded-xl px-4 py-3 ${containerByVariant[variant]} ${isDisabled ? "opacity-50" : ""} ${className ?? ""}`}
     >
       {loading ? (
-        <ActivityIndicator color={variant === "primary" || variant === "destructive" ? "#f8fafc" : "#1a237e"} />
+        <ActivityIndicator color={spinnerColor} />
       ) : (
         <>
           {leftIcon}

@@ -14,6 +14,7 @@ export const surfaceColors = {
     destructiveForeground: "#ffffff",
     success: "#16a34a",
     successBg: "#dcfce7",
+    warning: "#b45309",
     accent: "#dbeafe",
   },
   dark: {
@@ -28,6 +29,7 @@ export const surfaceColors = {
     destructiveForeground: "#0f172a",
     success: "#4ade80",
     successBg: "#14532d",
+    warning: "#fbbf24",
     accent: "#334155",
   },
 } as const;

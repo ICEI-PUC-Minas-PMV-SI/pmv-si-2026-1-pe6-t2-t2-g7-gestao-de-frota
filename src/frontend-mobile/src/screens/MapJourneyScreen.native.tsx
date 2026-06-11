@@ -5,8 +5,11 @@ import type { default as MapViewType } from "react-native-maps";
 import { JourneyMapOverlay } from "../components/map/JourneyMapOverlay";
 import { MapVehicleMarker as VehicleMapMarker } from "../components/map/VehicleMapMarker";
 import { useMapJourney } from "../hooks/useMapJourney";
+import { useTheme } from "../context/theme.context";
+import { paletteFor } from "../theme/tokens";
 
 export default function MapJourneyScreen() {
+  const { theme } = useTheme();
   const mapRef = useRef<MapViewType | null>(null);
   const {
     live,
@@ -48,7 +51,7 @@ export default function MapJourneyScreen() {
   if (live.status === "asking" || (live.status === "idle" && !live.coords)) {
     return (
       <View className="flex-1 items-center justify-center bg-background">
-        <ActivityIndicator color="#1a237e" />
+        <ActivityIndicator color={paletteFor(theme).spinner} />
         <Text className="mt-3 text-sm text-muted-foreground">
           Obtendo localização...
         </Text>

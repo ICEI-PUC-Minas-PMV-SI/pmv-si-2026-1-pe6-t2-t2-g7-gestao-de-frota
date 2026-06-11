@@ -30,6 +30,8 @@ import {
   IncidentType,
 } from "../../src/core/modules/incidents/incidents";
 import { vehicleModule, Vehicle } from "../../src/core/modules/vehicles/vehicles";
+import { useTheme } from "../../src/context/theme.context";
+import { paletteFor } from "../../src/theme/tokens";
 import { useAuthorizedToken } from "../../src/hooks/useAuthorizedToken";
 import { notifySuccess, showToast } from "../../src/components/ui/toast";
 import { getApiErrorMessage } from "../../src/utils/apiError";
@@ -42,8 +44,6 @@ const incidentSeverityOptions: IncidentSeverity[] = [
   "critica",
 ];
 const VEHICLE_PAGE_SIZE = 3;
-/** Azul suave para ícones de ação secundária nos cards de veículo. */
-const VEHICLE_ACTION_ICON_COLOR = "#5c6bc0";
 
 type IncidentFormState = {
   vehicleId: string | null;
@@ -67,6 +67,8 @@ export default function VehiclesScreen() {
   const insets = useSafeAreaInsets();
   const bottomInset = useTabScreenBottomInset();
   const router = useRouter();
+  const { theme } = useTheme();
+  const palette = paletteFor(theme);
   const { openVehicle, view } = useLocalSearchParams<{
     openVehicle?: string;
     view?: string;
@@ -205,7 +207,7 @@ export default function VehiclesScreen() {
   if (loading) {
     return (
       <View className="flex-1 items-center justify-center bg-background">
-        <ActivityIndicator color="#1a237e" />
+        <ActivityIndicator color={palette.spinner} />
       </View>
     );
   }
@@ -268,7 +270,7 @@ export default function VehiclesScreen() {
 
             {screenError ? (
               <Card>
-                <Text className="text-sm text-red-500">{screenError}</Text>
+                <Text className="text-sm text-destructive">{screenError}</Text>
               </Card>
             ) : null}
 
@@ -331,7 +333,7 @@ export default function VehiclesScreen() {
                   <Ionicons
                     name="eye-outline"
                     size={18}
-                    color={VEHICLE_ACTION_ICON_COLOR}
+                    color={palette.primary}
                   />
                 }
               >
@@ -347,7 +349,7 @@ export default function VehiclesScreen() {
                       <Ionicons
                         name="pencil-outline"
                         size={18}
-                        color={VEHICLE_ACTION_ICON_COLOR}
+                        color={palette.primary}
                       />
                     }
                   >

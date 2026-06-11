@@ -52,8 +52,8 @@ export default function SignupScreen() {
     >
       <View className="gap-y-6">
         {error ? (
-          <View className="rounded-2xl border border-red-500/20 bg-red-500/10 px-4 py-3">
-            <Text className="text-sm text-red-500">{error}</Text>
+          <View className="rounded-2xl border border-destructive/20 bg-destructive/10 px-4 py-3">
+            <Text className="text-sm text-destructive">{error}</Text>
           </View>
         ) : null}
 

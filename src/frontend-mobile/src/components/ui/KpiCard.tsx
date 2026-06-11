@@ -2,19 +2,34 @@ import { Pressable, Text, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 
+import { useTheme } from "../../context/theme.context";
+import { surfaceFor, type SurfaceColors } from "../../theme/surfaceColors";
+
 type KpiTone = "primary" | "amber" | "red" | "emerald";
 
 const toneStyles: Record<
   KpiTone,
-  { iconBg: string; iconColor: string; valueColor: string }
+  { iconBg: string; iconColor: (s: SurfaceColors) => string; valueColor: string }
 > = {
-  primary: { iconBg: "bg-accent", iconColor: "#1a237e", valueColor: "text-primary" },
-  amber: { iconBg: "bg-[#fef3c7]", iconColor: "#b45309", valueColor: "text-[#b45309]" },
-  red: { iconBg: "bg-[#fee2e2]", iconColor: "#dc2626", valueColor: "text-[#dc2626]" },
+  primary: {
+    iconBg: "bg-accent",
+    iconColor: (s) => s.primary,
+    valueColor: "text-primary",
+  },
+  amber: {
+    iconBg: "bg-tone-warning-bg",
+    iconColor: (s) => s.warning,
+    valueColor: "text-tone-warning-fg",
+  },
+  red: {
+    iconBg: "bg-tone-danger-bg",
+    iconColor: (s) => s.destructive,
+    valueColor: "text-tone-danger-fg",
+  },
   emerald: {
-    iconBg: "bg-[#dcfce7]",
-    iconColor: "#16a34a",
-    valueColor: "text-[#16a34a]",
+    iconBg: "bg-tone-success-bg",
+    iconColor: (s) => s.success,
+    valueColor: "text-tone-success-fg",
   },
 };
 
@@ -37,14 +52,16 @@ export function KpiCard({
   tone = "primary",
   href,
 }: Props) {
+  const { theme } = useTheme();
   const styles = toneStyles[tone];
+  const iconColor = styles.iconColor(surfaceFor(theme));
   const content = (
     <View className="min-h-[148px] w-full flex-1 justify-between rounded-xl border border-border bg-card p-4 shadow-card">
       <View className="min-w-0">
         <View
           className={`mb-3 h-9 w-9 items-center justify-center rounded-lg ${styles.iconBg}`}
         >
-          <Ionicons name={icon} size={18} color={styles.iconColor} />
+          <Ionicons name={icon} size={18} color={iconColor} />
         </View>
         <Text
           className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground"

@@ -7,10 +7,13 @@ import { JourneyMapOverlay } from "../components/map/JourneyMapOverlay";
 import { ModuleHeader } from "../components/ui/ModuleHeader";
 import { useMapJourney } from "../hooks/useMapJourney";
 import { loadLeaflet } from "../lib/loadLeaflet.web";
+import { useTheme } from "../context/theme.context";
+import { paletteFor } from "../theme/tokens";
 
 const DEFAULT_CENTER: [number, number] = [-14.235, -51.9253];
 
 export default function MapJourneyScreen() {
+  const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const {
     live,
@@ -254,7 +257,7 @@ export default function MapJourneyScreen() {
   if (isLoading) {
     return (
       <View className="flex-1 items-center justify-center bg-background">
-        <ActivityIndicator color="#1a237e" />
+        <ActivityIndicator color={paletteFor(theme).spinner} />
         <Text className="mt-3 text-sm text-muted-foreground">
           Obtendo localização...
         </Text>
@@ -285,8 +288,8 @@ export default function MapJourneyScreen() {
 
       <View className="relative min-h-0 flex-1">
         {mapError ? (
-          <View className="absolute left-5 right-5 top-3 z-10 rounded-xl border border-destructive/30 bg-[#fee2e2] px-4 py-3">
-            <Text className="text-sm text-[#991b1b]">{mapError}</Text>
+          <View className="absolute left-5 right-5 top-3 z-10 rounded-xl border border-destructive/30 bg-tone-danger-bg px-4 py-3">
+            <Text className="text-sm text-tone-danger-fg">{mapError}</Text>
           </View>
         ) : null}
         <div
@@ -315,7 +318,7 @@ export default function MapJourneyScreen() {
               zIndex: 5,
             }}
           >
-            <ActivityIndicator color="#1a237e" />
+            <ActivityIndicator color={paletteFor(theme).spinner} />
             <Text className="mt-2 text-sm text-muted-foreground">
               Carregando mapa...
             </Text>

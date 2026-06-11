@@ -9,6 +9,8 @@ import { incidentModule, Incident } from "../../core/modules/incidents/incidents
 import { vehicleModule, Vehicle } from "../../core/modules/vehicles/vehicles";
 import { useAuthorizedToken } from "../../hooks/useAuthorizedToken";
 import { getApiErrorMessage } from "../../utils/apiError";
+import { useTheme } from "../../context/theme.context";
+import { paletteFor } from "../../theme/tokens";
 import { VehicleIncidentsSheet } from "./VehicleIncidentsSheet";
 import { VehicleJourneysSheet } from "./VehicleJourneysSheet";
 
@@ -28,6 +30,8 @@ export function VehicleDetailSheet({
   onClose,
 }: Props) {
   const getToken = useAuthorizedToken();
+  const { theme } = useTheme();
+  const palette = paletteFor(theme);
   const [detail, setDetail] = useState<Vehicle | null>(null);
   const [incidents, setIncidents] = useState<Incident[]>([]);
   const [journeys, setJourneys] = useState<JourneyHistory[]>([]);
@@ -94,7 +98,7 @@ export function VehicleDetailSheet({
       >
         {loading && !detail ? (
           <View className="items-center py-10">
-            <ActivityIndicator color="#1a237e" />
+            <ActivityIndicator color={palette.spinner} />
           </View>
         ) : current ? (
           <View className="gap-y-4 pb-4">
@@ -112,7 +116,7 @@ export function VehicleDetailSheet({
 
             {error ? (
               <Card className="p-4">
-                <Text className="text-sm text-red-500">{error}</Text>
+                <Text className="text-sm text-destructive">{error}</Text>
               </Card>
             ) : null}
 
@@ -165,12 +169,14 @@ export function VehicleDetailSheet({
                   icon="warning-outline"
                   title="Incidentes"
                   subtitle={`${incidents.length} registro(s)`}
+                  iconColor={palette.primary}
                   onPress={() => setIncidentsOpen(true)}
                 />
                 <SectionCard
                   icon="git-compare-outline"
                   title="Jornadas"
                   subtitle={`${journeys.length} registro(s)`}
+                  iconColor={palette.primary}
                   onPress={() => setJourneysOpen(true)}
                 />
               </View>
@@ -213,11 +219,13 @@ function SectionCard({
   icon,
   title,
   subtitle,
+  iconColor,
   onPress,
 }: {
   icon: keyof typeof Ionicons.glyphMap;
   title: string;
   subtitle: string;
+  iconColor: string;
   onPress: () => void;
 }) {
   return (
@@ -225,14 +233,14 @@ function SectionCard({
       onPress={onPress}
       className="flex-1 rounded-2xl border border-border bg-card p-4"
     >
-      <View className="h-11 w-11 items-center justify-center rounded-2xl bg-[#eff6ff]">
-        <Ionicons name={icon} size={20} color="#1a237e" />
+      <View className="h-11 w-11 items-center justify-center rounded-2xl bg-accent">
+        <Ionicons name={icon} size={20} color={iconColor} />
       </View>
       <Text className="mt-4 text-base font-semibold text-foreground">{title}</Text>
       <Text className="mt-1 text-sm text-muted-foreground">{subtitle}</Text>
       <View className="mt-4 flex-row items-center gap-1">
         <Text className="text-xs font-medium text-primary">Ver mais</Text>
-        <Ionicons name="chevron-forward" size={14} color="#1a237e" />
+        <Ionicons name="chevron-forward" size={14} color={iconColor} />
       </View>
     </Pressable>
   );
