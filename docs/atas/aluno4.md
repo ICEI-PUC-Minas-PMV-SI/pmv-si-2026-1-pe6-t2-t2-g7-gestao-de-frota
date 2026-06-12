@@ -21,6 +21,6 @@
 | 18/05 - 24/05 | Fundamentos de Projeto e Análise de Algoritmos - Unidade 1 | ✅ | Elaboração das telas do aplicativo mobile | Desenvolvimento das telas de login, cadastro, veiculos |
 | 25/05 - 31/05 | Fundamentos de Projeto e Análise de Algoritmos - Unidade 2 | ✅ | Finalização das telas | Criação das telas de incidentes, multas e sinistros, juntamente com uma integração mais suave com a interface de veículos  |
 | 01/06 - 07/06 |  | ✅ | Validação final do mobile | Checagem final do resultado do aplicativo e validação dos testes |
-| 08/06 - 14/06 |  | ⬜ |  |  |
+| 08/06 - 14/06 |  | ✅ | Apresentação e Gravação | Participar ativamente da apresentação do projeto, gravar e editar o vídeo de apresentação do projeto |
 
 **Legenda:** ✅ Estudou | ⬜ Não estudou
