@@ -21,6 +21,6 @@
 | 18/05 - 24/05 | Fundamentos de Projeto e Análise de Algoritmos - Unidade 1 | ✅ | Estruturação inicial do fronted mobile | Estruturação inicial do fronted mobile |
 | 25/05 - 31/05 | Fundamentos de Projeto e Análise de Algoritmos - Unidade 2 | ✅ | Desenvolvimento frontend mobile | Desenvolvimento frontend mobile |
 | 01/06 - 07/06 | Finalização da aplicação | ✅ | Atualização da documentação | Atualização da documentação e revisão dos testes |
-| 08/06 - 14/06 | Apresentação do projeto | ⬜ |  |  |
+| 08/06 - 14/06 | Apresentação do projeto | ✅ | Apresentação do projeto | Montar o Slide da Arquitetura e realizar a apresentação final. |
 
 **Legenda:** ✅ Estudou | ⬜ Não estudou
