@@ -1,4 +1,4 @@
-<img width="522" height="847" alt="image" src="https://github.com/user-attachments/assets/fc92d63d-893d-47e2-b074-2037d551b02e" /># ATA de Acompanhamento - João Alberto Raymundo Borges
+
 
 ## Registro de Atividades Semanais
 
