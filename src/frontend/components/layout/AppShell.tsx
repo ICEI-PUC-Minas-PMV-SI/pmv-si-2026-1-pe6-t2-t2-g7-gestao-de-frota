@@ -12,28 +12,21 @@ type AppTheme = "light" | "dark";
 export function AppShell({ children }: { children: React.ReactNode }) {
   const { user, loading, logout } = useAuth();
   const router = useRouter();
-  const [collapsed, setCollapsed] = useState(() => {
-    if (typeof window === "undefined") {
-      return false;
-    }
+  const [collapsed, setCollapsed] = useState(false);
+  const [theme, setTheme] = useState<AppTheme>("light");
 
+  useEffect(() => {
     try {
-      return localStorage.getItem(STORAGE_KEY) === "1";
+      if (localStorage.getItem(STORAGE_KEY) === "1") {
+        setCollapsed(true);
+      }
+      if (localStorage.getItem(THEME_STORAGE_KEY) === "dark") {
+        setTheme("dark");
+      }
     } catch {
-      return false;
+      /* ignore */
     }
-  });
-  const [theme, setTheme] = useState<AppTheme>(() => {
-    if (typeof window === "undefined") {
-      return "light";
-    }
-    try {
-      const stored = localStorage.getItem(THEME_STORAGE_KEY);
-      return stored === "dark" ? "dark" : "light";
-    } catch {
-      return "light";
-    }
-  });
+  }, []);
 
   useEffect(() => {
     if (!loading && !user) {

@@ -63,20 +63,20 @@ export default function home({
   title?: string
 }) {
   const words = title.split(" ")
-  const [presetIndex, setPresetIndex] = useState(() => {
-    if (typeof window === "undefined") return DEFAULT_PRESET_INDEX
+  const [presetIndex, setPresetIndex] = useState(DEFAULT_PRESET_INDEX)
+  const [showPalette, setShowPalette] = useState(false)
+  const preset = colorPresets[presetIndex]
+
+  useEffect(() => {
     try {
       const saved = Number(localStorage.getItem(COLOR_PRESET_STORAGE_KEY))
       if (Number.isInteger(saved) && saved >= 0 && saved < colorPresets.length) {
-        return saved
+        setPresetIndex(saved)
       }
     } catch {
       /* ignore */
     }
-    return DEFAULT_PRESET_INDEX
-  })
-  const [showPalette, setShowPalette] = useState(false)
-  const preset = colorPresets[presetIndex]
+  }, [])
 
   useEffect(() => {
     try {
