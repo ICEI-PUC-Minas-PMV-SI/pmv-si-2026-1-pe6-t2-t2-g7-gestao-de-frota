@@ -1,6 +1,6 @@
 # 📊 Relatório de Contribuições do Projeto
 
-**Última atualização:** 24/08/2026 00:10
+**Última atualização:** 31/08/2026 00:23
 
 ---
 
@@ -14,7 +14,7 @@
 | Nícolas                       |        26 |        92 |        89 |          5 |             16 |               4 |
 | Nícolas Cleiton Basilio Viana |        36 |     43052 |      3388 |        291 |             18 |               4 |
 | Vitor Sales                   |        21 |      1502 |        43 |         44 |             21 |               9 |
-| github-actions[bot]           |        97 |       804 |       764 |          3 |             97 |               1 |
+| github-actions[bot]           |        98 |       807 |       769 |          3 |             98 |               1 |
 | github-classroom[bot]         |         1 |      2152 |         0 |         45 |              1 |              13 |
 | gregorystevao19               |        49 |     36833 |      5653 |        414 |             22 |               5 |
 | monezero                      |        14 |     22583 |      1046 |         99 |              2 |               2 |
@@ -22,9 +22,11 @@
 
 ## 📅 Contribuições Semanais (Todo o Semestre)
 
-**2026-08-10**: github-actions[bot]: 2
+**2026-08-17**: github-actions[bot]: 1
 
-**2026-08-03**: github-actions[bot]: 1
+**2026-08-10**: github-actions[bot]: 1
+
+**2026-08-03**: github-actions[bot]: 2
 
 **2026-07-27**: github-actions[bot]: 1
 
@@ -65,8 +67,6 @@
 **2026-03-23**: Vitor Sales: 2, github-actions[bot]: 3, gregorystevao19: 5
 
 **2026-03-16**: Grégory Stevão: 2, Nícolas: 1, Nícolas Cleiton Basilio Viana: 3, gregorystevao19: 2
-
-**2026-03-09**: Grégory Stevão: 2, João Borges: 1, João Pedro Reis Martins: 1, Nícolas: 2, Vitor Sales: 3
 
 
 
