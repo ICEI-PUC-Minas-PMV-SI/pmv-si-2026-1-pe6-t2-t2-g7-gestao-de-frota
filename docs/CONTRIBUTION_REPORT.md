@@ -1,6 +1,6 @@
 # 📊 Relatório de Contribuições do Projeto
 
-**Última atualização:** 26/10/2026 00:20
+**Última atualização:** 02/11/2026 00:14
 
 ---
 
@@ -14,13 +14,15 @@
 | Nícolas                       |        26 |        92 |        89 |          5 |             16 |               4 |
 | Nícolas Cleiton Basilio Viana |        36 |     43052 |      3388 |        291 |             18 |               4 |
 | Vitor Sales                   |        21 |      1502 |        43 |         44 |             21 |               9 |
-| github-actions[bot]           |       106 |       845 |       807 |          3 |            106 |               1 |
+| github-actions[bot]           |       107 |       849 |       811 |          3 |            107 |               1 |
 | github-classroom[bot]         |         1 |      2152 |         0 |         45 |              1 |              13 |
 | gregorystevao19               |        49 |     36833 |      5653 |        414 |             22 |               5 |
 | monezero                      |        14 |     22583 |      1046 |         99 |              2 |               2 |
 
 
 ## 📅 Contribuições Semanais (Todo o Semestre)
+
+**2026-10-26**: github-actions[bot]: 1
 
 **2026-10-19**: github-actions[bot]: 1
 
@@ -40,9 +42,9 @@
 
 **2026-08-17**: github-actions[bot]: 1
 
-**2026-08-10**: github-actions[bot]: 1
+**2026-08-10**: github-actions[bot]: 2
 
-**2026-08-03**: github-actions[bot]: 2
+**2026-08-03**: github-actions[bot]: 1
 
 **2026-07-27**: github-actions[bot]: 1
 
@@ -65,8 +67,6 @@
 **2026-05-25**: github-actions[bot]: 2, gregorystevao19: 1
 
 **2026-05-18**: github-actions[bot]: 1
-
-**2026-05-11**: João Pedro Reis Martins: 1, github-actions[bot]: 3, monezero: 2
 
 
 
